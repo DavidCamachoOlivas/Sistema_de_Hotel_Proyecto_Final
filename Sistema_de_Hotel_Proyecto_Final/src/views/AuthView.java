@@ -161,18 +161,27 @@ public class AuthView extends JFrame{
 					frame.repaint();
 					flag1=true;
 				}
-				if(flag1&&flag2) {
-					//------------falta hacer la validación------------------
-					//boolean user_auth = model.access(usuario,contraseña);
-					if(flag1&&flag2/*user_auth*/) {
-						JOptionPane.showMessageDialog(AuthView.this, "Usuario ingresado con exito.");
-						dispose();
-						HomeController controller = new HomeController();
-						controller.home();
+				if(flag1 && flag2) {
+					
+					
+					boolean user_auth = false;
+					try {
+						user_auth = functions.conectado(usuario,contraseña);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} 
+					 
+					if(user_auth) {
+						frame.dispose();
+						JOptionPane.showMessageDialog(frame, "Bienvenido.");
+						
+					}else {
+						JOptionPane.showMessageDialog(frame, "Error al acceder","verifique su información",JOptionPane.WARNING_MESSAGE);
 					}
-					else {
-						JOptionPane.showMessageDialog(AuthView.this, "Usuario o contraseña incorrectas","Error al acceder",JOptionPane.WARNING_MESSAGE);
-					}
+					 
+					
+					
 				}
 				
 			}
