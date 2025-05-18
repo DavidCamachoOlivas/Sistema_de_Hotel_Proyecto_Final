@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controllers.AuthController;
+import controllers.ClientsController;
 import controllers.HomeController;
 import models.AuthModel;
 import models.HomeModel;
@@ -26,7 +27,7 @@ public class HomeView extends JFrame{
 	
 	public void home() {
 		frame = new JFrame();
-		frame.setTitle("Inicio de sesión");
+		frame.setTitle("Hotel Ancla de Paz");
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
 		frame.setBounds(0,0,1400,800);
@@ -35,25 +36,25 @@ public class HomeView extends JFrame{
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#071A2B"));//FBF3E6
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Home");
-		lblTitle.setBounds(300,200,450,70);
+		JLabel lblTitle = new JLabel("Inicio");
+		lblTitle.setBounds(100,50,450,70);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
 		lblTitle.setForeground(Color.decode("#071A2B"));
 		lblTitle.setOpaque(true);
 		lblTitle.setBackground(Color.green);
 		panel.add(lblTitle);
 		
-		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(70,470,850,70);
-		btnLogin.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnLogin.setForeground(Color.decode("#FFFFFF"));
-		btnLogin.setBackground(Color.decode("#071A2B"));
-		panel.add(btnLogin);
+		JButton btnLogout = new JButton("Cerrar sesión");
+		btnLogout.setBounds(1100,50,350,70);
+		btnLogout.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnLogout.setForeground(Color.decode("#FFFFFF"));
+		btnLogout.setBackground(Color.decode("#071A2B"));
+		panel.add(btnLogout);
 		
-		btnLogin.addActionListener(new ActionListener() {
+		btnLogout.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -64,5 +65,52 @@ public class HomeView extends JFrame{
 			}
 			
 		});
+		
+		JButton btnRooms = new JButton("Habitaciones");
+		btnRooms.setBounds(100,200,350,70);
+		btnRooms.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnRooms.setForeground(Color.decode("#FFFFFF"));
+		btnRooms.setBackground(Color.decode("#071A2B"));
+		panel.add(btnRooms);
+		
+		JButton btnRoomTypes = new JButton("Tipos de habitaciones");
+		btnRoomTypes.setBounds(500,200,350,70);
+		btnRoomTypes.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnRoomTypes.setForeground(Color.decode("#FFFFFF"));
+		btnRoomTypes.setBackground(Color.decode("#071A2B"));
+		panel.add(btnRoomTypes);
+		
+		JButton btnRentals = new JButton("Rentas");
+		btnRentals.setBounds(1000,200,350,70);
+		btnRentals.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnRentals.setForeground(Color.decode("#FFFFFF"));
+		btnRentals.setBackground(Color.decode("#071A2B"));
+		panel.add(btnRentals);
+		
+		JButton btnClients = new JButton("Clientes");
+		btnClients.setBounds(100,300,350,70);
+		btnClients.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnClients.setForeground(Color.decode("#FFFFFF"));
+		btnClients.setBackground(Color.decode("#071A2B"));
+		panel.add(btnClients);
+		
+		btnClients.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ClientsController client = new ClientsController();
+				frame.dispose();
+				client.clients();
+			}
+			
+		});
+		
+		JButton btnTariffs = new JButton("Tarifas");
+		btnTariffs.setBounds(500,300,350,70);
+		btnTariffs.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnTariffs.setForeground(Color.decode("#FFFFFF"));
+		btnTariffs.setBackground(Color.decode("#071A2B"));
+		panel.add(btnTariffs);
 	}
 }

@@ -42,7 +42,7 @@ public class AuthView extends JFrame{
 		
 		
 		frame = new JFrame();
-		frame.setTitle("Inicio de sesión");
+		frame.setTitle("Hotel Ancla de Paz");
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
 		frame.setBounds(0,0,1400,800);
@@ -174,10 +174,12 @@ public class AuthView extends JFrame{
 					 
 					if(user_auth) {
 						frame.dispose();
-						JOptionPane.showMessageDialog(frame, "Bienvenido.");
+						//JOptionPane.showMessageDialog(frame, "Bienvenido.");
 						
 					}else {
-						JOptionPane.showMessageDialog(frame, "Error al acceder","verifique su información",JOptionPane.WARNING_MESSAGE);
+						tfEmail.setBorder(BorderFactory.createLineBorder(Color.red,2));
+						tfPassw.setBorder(BorderFactory.createLineBorder(Color.red,2));
+						//JOptionPane.showMessageDialog(frame, "Error al acceder","verifique su información",JOptionPane.WARNING_MESSAGE);
 					}
 					 
 					
