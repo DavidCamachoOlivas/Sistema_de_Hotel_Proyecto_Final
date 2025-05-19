@@ -1,5 +1,36 @@
 package controllers;
 
+import views.ClientsView;
+import views.RoomsView;
+
 public class RoomsController {
 
+	public RoomsView view;
+	
+	public RoomsController() {
+		
+		view = new RoomsView();
+	}
+	
+	
+	
+	public void rooms(){
+		view.rooms();
+	}
+	
+	public void createRoom() {
+		view.createRoom();
+	}
+	
+	public void editRoom() {
+		view.editRoom();
+	}
+	
+	public void consultRoom() {
+		view.consultRoom();
+	}
+	
+	public void deleteRoom() {
+		view.deleteConfirm();
+	}
 }
