@@ -283,5 +283,11 @@ public class ClientsView {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
+		
+		JLabel title = new JLabel("Confirmar eliminación ");
+		title.setBounds(100,100,400,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		title.setVisible(true);
+		panel.add(title);
 	}
 }

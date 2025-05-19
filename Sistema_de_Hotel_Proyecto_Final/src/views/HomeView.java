@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.RentalsController;
+import controllers.RoomsController;
 import models.AuthModel;
 import models.HomeModel;
 
@@ -73,6 +75,18 @@ public class HomeView extends JFrame{
 		btnRooms.setBackground(Color.decode("#071A2B"));
 		panel.add(btnRooms);
 		
+		btnRooms.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomsController rooms = new RoomsController();
+				frame.dispose();
+				rooms.rooms();
+			}
+			
+		});
+		
 		JButton btnRoomTypes = new JButton("Tipos de habitaciones");
 		btnRoomTypes.setBounds(500,200,350,70);
 		btnRoomTypes.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
@@ -86,6 +100,18 @@ public class HomeView extends JFrame{
 		btnRentals.setForeground(Color.decode("#FFFFFF"));
 		btnRentals.setBackground(Color.decode("#071A2B"));
 		panel.add(btnRentals);
+		
+		btnRentals.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RentalsController rental = new RentalsController();
+				frame.dispose();
+				rental.rentals();
+			}
+			
+		});
 		
 		JButton btnClients = new JButton("Clientes");
 		btnClients.setBounds(100,300,350,70);
