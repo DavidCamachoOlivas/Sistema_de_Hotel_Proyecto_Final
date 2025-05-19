@@ -17,6 +17,7 @@ import controllers.HomeController;
 import controllers.RentalsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
+import controllers.TariffsController;
 import models.AuthModel;
 import models.HomeModel;
 
@@ -151,5 +152,17 @@ public class HomeView extends JFrame{
 		btnTariffs.setForeground(Color.decode("#FFFFFF"));
 		btnTariffs.setBackground(Color.decode("#071A2B"));
 		panel.add(btnTariffs);
+		
+		btnTariffs.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController tariffs = new TariffsController();
+				frame.dispose();
+				tariffs.tariffs();
+			}
+			
+		});
 	}
 }

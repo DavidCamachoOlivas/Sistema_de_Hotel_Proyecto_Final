@@ -303,9 +303,9 @@ public class ClientsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController rooms = new ClientsController();
+				ClientsController client = new ClientsController();
 				frame.dispose();
-				rooms.successDelete();
+				client.successDelete();
 			}
 			
 		});
