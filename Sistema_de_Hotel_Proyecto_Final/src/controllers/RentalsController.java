@@ -34,5 +34,12 @@ public class RentalsController {
 		view.successDelete();
 	}
 	
+	public void successDownload() {
+		view.succesDownload();
+	}
+	
+	public void errorDelete() {
+		view.errorDelete();
+	}
 	
 }

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.RoomsController;
 import controllers.TariffsController;
 import models.ClientsModel;
 import models.TariffsModel;
@@ -271,6 +272,25 @@ public class TariffsView {
 			}
 			
 		});
+		
+		JButton lblDownload = new JButton("Descargar .pdf");
+		lblDownload.setBounds(1100,500,300,70);
+		lblDownload.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		lblDownload.setForeground(Color.decode("#FFFFFF"));
+		lblDownload.setBackground(Color.decode("#071A2B"));
+		panel.add(lblDownload);
+		
+		lblDownload.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController tariff = new TariffsController();
+				frame.dispose();
+				tariff.successDownload();
+			}
+			
+		});
 	}
 	
 	public void deleteConfirm() {
@@ -322,7 +342,9 @@ public class TariffsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				TariffsController tariff = new TariffsController();
 				frame.dispose();
+				tariff.errorDelete();
 			}
 			
 		});
@@ -346,5 +368,43 @@ public class TariffsView {
 		title.setVisible(true);
 		panel.add(title);
 		
+	}
+	
+	public void succesDownload() {
+		frame = new JFrame();
+		frame.setSize(700, 500);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
+		
+		JPanel panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
+		panel.setLayout(null);
+		
+		JLabel title = new JLabel("PDF descargado con exito");
+		title.setBounds(50,100,600,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		title.setVisible(true);
+		panel.add(title);
+	}
+	
+	public void errorDelete() {
+		frame = new JFrame();
+		frame.setSize(700, 500);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
+		
+		JPanel panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
+		panel.setLayout(null);
+		
+		JLabel title = new JLabel("Hubo un error en la eliminación");
+		title.setBounds(50,100,600,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		title.setVisible(true);
+		panel.add(title);
 	}
 }

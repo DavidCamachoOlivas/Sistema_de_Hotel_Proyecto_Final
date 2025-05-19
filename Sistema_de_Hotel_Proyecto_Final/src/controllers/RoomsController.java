@@ -37,4 +37,12 @@ public class RoomsController {
 	public void successDelete() {
 		view.successDelete();
 	}
+	
+	public void successDownload() {
+		view.succesDownload();
+	}
+	
+	public void errorDelete() {
+		view.errorDelete();
+	}
 }
