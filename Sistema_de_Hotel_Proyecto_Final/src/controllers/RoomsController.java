@@ -33,4 +33,8 @@ public class RoomsController {
 	public void deleteRoom() {
 		view.deleteConfirm();
 	}
+	
+	public void successDelete() {
+		view.successDelete();
+	}
 }

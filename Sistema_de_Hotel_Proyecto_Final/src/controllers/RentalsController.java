@@ -29,4 +29,10 @@ public class RentalsController {
 	public void deleteConfirm() {
 		view.deleteConfirm();
 	}
+	
+	public void successDelete() {
+		view.successDelete();
+	}
+	
+	
 }

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.RoomTypesController;
 import models.ClientsModel;
 
 public class ClientsView {
@@ -158,7 +159,7 @@ public class ClientsView {
 		panel.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Crear cliente");
+		JLabel lblTitle = new JLabel("Añadir cliente");
 		lblTitle.setBounds(100,50,450,70);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
 		lblTitle.setForeground(Color.decode("#071A2B"));
@@ -289,5 +290,63 @@ public class ClientsView {
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
 		panel.add(title);
+		
+		JButton accept = new JButton("Aceptar");
+		accept.setBounds(350,350,300,70);
+		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		accept.setForeground(Color.decode("#FFFFFF"));
+		accept.setBackground(Color.decode("#071A2B"));
+		panel.add(accept);
+		
+		accept.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ClientsController rooms = new ClientsController();
+				frame.dispose();
+				rooms.successDelete();
+			}
+			
+		});
+		
+		JButton deny = new JButton("Cancelar");
+		deny.setBounds(50,350,300,70);
+		deny.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		deny.setForeground(Color.decode("#FFFFFF"));
+		deny.setBackground(Color.decode("#071A2B"));
+		panel.add(deny);
+		
+		deny.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				frame.dispose();
+			}
+			
+		});
 	}
+	
+	public void successDelete() {
+		frame = new JFrame();
+		frame.setSize(700, 500);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
+		
+		JPanel panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
+		panel.setLayout(null);
+		
+		JLabel title = new JLabel("Cliente eliminado con exito");
+		title.setBounds(50,100,600,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		title.setVisible(true);
+		panel.add(title);
+		
+	}
+	
+	
 }

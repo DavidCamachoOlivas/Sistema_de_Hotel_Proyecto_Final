@@ -15,6 +15,7 @@ import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
 import controllers.RentalsController;
+import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.AuthModel;
 import models.HomeModel;
@@ -93,6 +94,18 @@ public class HomeView extends JFrame{
 		btnRoomTypes.setForeground(Color.decode("#FFFFFF"));
 		btnRoomTypes.setBackground(Color.decode("#071A2B"));
 		panel.add(btnRoomTypes);
+		
+		btnRoomTypes.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rooms = new RoomTypesController();
+				frame.dispose();
+				rooms.roomTypes();
+			}
+			
+		});
 		
 		JButton btnRentals = new JButton("Rentas");
 		btnRentals.setBounds(1000,200,350,70);
