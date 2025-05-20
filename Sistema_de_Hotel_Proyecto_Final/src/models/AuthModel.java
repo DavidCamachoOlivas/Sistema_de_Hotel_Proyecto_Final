@@ -31,7 +31,6 @@ public class AuthModel {
 	    	
 	       for (String linea : listaRedis) {
 			
-	            System.out.println(linea);
 	            String[] datos = linea.split(",");
 	            String pass = "";
 	            String user = "";
