@@ -25,8 +25,6 @@ public class AuthModel {
 	        System.err.println("ERROR: No se pudo conectar con la base de datos");
 	        return false;
 	    }
-		
-
 	    try{
 	    	
 	       for (String linea : listaRedis) {
