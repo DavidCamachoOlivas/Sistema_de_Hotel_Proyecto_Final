@@ -32,9 +32,9 @@ public class HomeView extends JFrame{
 	public void home() {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
-		frame.setBounds(0,0,1400,800);
+		frame.setBounds(0,0,1280,720);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -52,7 +52,7 @@ public class HomeView extends JFrame{
 		panel.add(lblTitle);
 		
 		JButton btnLogout = new JButton("Cerrar sesión");
-		btnLogout.setBounds(1100,50,350,70);
+		btnLogout.setBounds(900,50,350,70);
 		btnLogout.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnLogout.setForeground(Color.decode("#FFFFFF"));
 		btnLogout.setBackground(Color.decode("#071A2B"));
@@ -109,7 +109,7 @@ public class HomeView extends JFrame{
 		});
 		
 		JButton btnRentals = new JButton("Rentas");
-		btnRentals.setBounds(1000,200,350,70);
+		btnRentals.setBounds(900,200,350,70);
 		btnRentals.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnRentals.setForeground(Color.decode("#FFFFFF"));
 		btnRentals.setBackground(Color.decode("#071A2B"));
