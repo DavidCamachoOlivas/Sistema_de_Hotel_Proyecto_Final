@@ -30,9 +30,9 @@ public class RentalsView {
 	public void rentals() {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
-		frame.setBounds(0,0,1400,800);
+		frame.setBounds(0,0,1280,720);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -51,7 +51,7 @@ public class RentalsView {
 		panel.add(lblTitle);
 		
 		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(1100,50,300,70);
+		btnHome.setBounds(900,50,300,70);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
 		btnHome.setBackground(Color.decode("#071A2B"));
@@ -149,9 +149,9 @@ public class RentalsView {
 	public void createRental() {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
-		frame.setBounds(0,0,1400,800);
+		frame.setBounds(0,0,1280,720);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -170,7 +170,7 @@ public class RentalsView {
 		panel.add(lblTitle);
 		
 		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(1100,50,300,70);
+		btnHome.setBounds(900,50,300,70);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
 		btnHome.setBackground(Color.decode("#071A2B"));
@@ -192,9 +192,9 @@ public class RentalsView {
 	public void editRental() {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
-		frame.setBounds(0,0,1400,800);
+		frame.setBounds(0,0,1280,720);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -213,7 +213,7 @@ public class RentalsView {
 		panel.add(lblTitle);
 		
 		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(1100,50,300,70);
+		btnHome.setBounds(900,50,300,70);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
 		btnHome.setBackground(Color.decode("#071A2B"));
@@ -235,9 +235,9 @@ public class RentalsView {
 	public void consultRental() {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setResizable(false);
-		frame.setBounds(0,0,1400,800);
+		frame.setBounds(0,0,1280,720);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
@@ -256,7 +256,7 @@ public class RentalsView {
 		panel.add(lblTitle);
 		
 		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(1100,50,300,70);
+		btnHome.setBounds(900,50,300,70);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
 		btnHome.setBackground(Color.decode("#071A2B"));
@@ -275,7 +275,7 @@ public class RentalsView {
 		});
 		
 		JButton lblDownload = new JButton("Descargar .pdf");
-		lblDownload.setBounds(1100,500,300,70);
+		lblDownload.setBounds(900,500,300,70);
 		lblDownload.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		lblDownload.setForeground(Color.decode("#FFFFFF"));
 		lblDownload.setBackground(Color.decode("#071A2B"));
