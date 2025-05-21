@@ -1,52 +1,62 @@
 package models;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import redis.clients.jedis.Jedis;
-import views.AuthView;
 import views.HomeView;
 
-
 public class AuthModel {
-	
-	public AuthModel() {
-		
-	}
-	public boolean conectado(String u, String p) throws IOException  {
-		
-		Jedis jedis = new Jedis("splendid-hound-18755.upstash.io", 6379, true);
-		jedis.auth("AUlDAAIjcDEzNTBiYmZkMTg2OTY0N2YyYmE4NDVhY2VjM2NhMjk0N3AxMA");
 
-		List<String> listaRedis = jedis.lrange("cuenta", 0, 3);
-		
-		  if (!jedis.isConnected()) {
-	        System.err.println("ERROR: No se pudo conectar con la base de datos");
-	        return false;
-	    }
-	    try{
-	    	
-	       for (String linea : listaRedis) {
-			
-	            String[] datos = linea.split(",");
-	            String pass = "";
-	            String user = "";
-	            
-	            if (datos.length < 3) {
-	            user = datos[0].trim();
-	            pass = datos[1].trim();
-	            }
-	            if (user.equals(u) && pass.equals(p)) {
-	            	HomeView entrada = new HomeView();
-	            	entrada.home();
-	                return true;
-	            }
-	       }
-	    }
-	    finally{
-	    	
-	    }
-	    return false;
-	}
+
+    public AuthModel() {
+    }
+
+
+    public boolean conectado(String u, String p) {
+    	String host ="jdbc:mysql://bitkivwdlwgq7uzzeiqj-mysql.services.clever-cloud.com:3306/bitkivwdlwgq7uzzeiqj?useSSL=true&serverTimezone=UTC";
+    	String user = "uxjfozsve2kbttru";
+    	String pass = "EQ0NmMdpuPp3V7ukbIqE";
+        Connection conn = null;
+        Statement stmt = null;
+        String sql = "SELECT email, password FROM user";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(host, user, pass);
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                String userDB = rs.getString("email").trim();
+                String passDB = rs.getString("password").trim();
+                if (userDB.equals(u) && passDB.equals(p)) {
+                    new HomeView().home();
+                    rs.close();
+                    return true;
+                }
+            }
+            rs.close();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            
+            try {
+                if (stmt != null) {
+                	stmt.close();
+                }
+                if (conn != null) {
+                	conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return false;
+    }
 }

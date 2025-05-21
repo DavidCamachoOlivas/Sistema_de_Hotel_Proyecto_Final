@@ -131,7 +131,7 @@ import models.AuthModel;
 			
 			
 			btnAccess.addActionListener(new ActionListener() {
-	
+				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
@@ -168,12 +168,7 @@ import models.AuthModel;
 						
 						
 						boolean user_auth = false;
-						try {
-							user_auth = functions.conectado(usuario,contraseña);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} 
+						user_auth = functions.conectado(usuario,contraseña); 
 						 
 						if(user_auth) {
 							frame.dispose();
