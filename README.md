@@ -8,9 +8,9 @@ También incorpora un sistema de autenticación con inicio de sesión, registro 
 
 🔐 Credenciales de Acceso Para poder ingresar al sistema, puedes usar las siguientes credenciales predeterminadas:
 
-Usuario: diegocareagacel@gmail.com
+Usuario: admin@gmail.com
 
-Contraseña: Colores
+Contraseña: admin123
 
 🔍 Características Principales 🏠 Panel de Habitaciones Consulta, creación, edición y eliminación de habitaciones.
 
