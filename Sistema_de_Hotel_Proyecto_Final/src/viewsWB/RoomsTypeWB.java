@@ -1,246 +1,236 @@
 package viewsWB;
 
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.Rectangle;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.Image;
+
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JButton;
 
 public class RoomsTypeWB extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private static final long serialVersionUID = 1L;
+    private JPanel mainPanel;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RoomsTypeWB frame = new RoomsTypeWB();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+            try {
+            	RoomsTypeWB frame = new RoomsTypeWB();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
-	/**
-	 * Create the frame.
-	 */
-	public RoomsTypeWB() {
-		
-		setResizable(false);
-		setBounds(new Rectangle(0, 0, 720, 1280));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1280, 720);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 252, 247));
-		contentPane.setBounds(new Rectangle(0, 0, 720, 1280));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    /**
+     * Create the frame.
+     */
+    public RoomsTypeWB() {
+        setResizable(false);
+        setBounds(new Rectangle(0, 0, 720, 1280));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 1280, 720);
+        mainPanel = new JPanel();
+        mainPanel.setBackground(new Color(255, 252, 247));
+        mainPanel.setBounds(new Rectangle(0, 0, 720, 1280));
+        mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(7, 26, 43));
-		panel.setBounds(-26, 0, 1290, 130);
-		contentPane.add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel_4 = new JLabel("Tipo de habitaciones");
-		lblNewLabel_4.setForeground(Color.WHITE);
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel_4.setBounds(238, 40, 490, 66);
-		panel.add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setBounds(157, 21, 128, 75);
-		Image img = new ImageIcon("src/flecha.png").getImage().getScaledInstance(76, 58, Image.SCALE_SMOOTH);
-		lblNewLabel_5.setIcon(new ImageIcon(img));
-		panel.add(lblNewLabel_5);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(130, 169, 310, 381);
-		contentPane.add(panel_1);
-		panel_1.setBorder(BorderFactory.createLineBorder(Color.black));  
-		panel_1.setLayout(new GridLayout(2, 0, 0, 0));
-		
-		JPanel panel_2 = new JPanel();
-		Image icon = new ImageIcon("src/cama.png").getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
-		ImageIcon backgroundIcon = new ImageIcon(icon);
-		JLabel backgroundLabel = new JLabel(backgroundIcon);
-		backgroundLabel.setBounds(0, 0, 900, 500);
-		panel_2.setOpaque(false);
-		panel_2.setBounds(0, 0, 900, 500);
+        setContentPane(mainPanel);
+        mainPanel.setLayout(null);
+        
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(7, 26, 43));
+        headerPanel.setBounds(0, 0, 1290, 119);
+        mainPanel.add(headerPanel);
+        headerPanel.setLayout(null);
+        
+        JLabel roomTypeTitleLabel = new JLabel("Tipo de habitaciones");
+        roomTypeTitleLabel.setForeground(Color.WHITE);
+        roomTypeTitleLabel.setFont(new Font("Tahoma", Font.BOLD, 40));
+        roomTypeTitleLabel.setBounds(238, 21, 490, 66);
+        headerPanel.add(roomTypeTitleLabel);
+        
+        JLabel backArrowLabel = new JLabel();
+        backArrowLabel.setBounds(157, 21, 128, 75);
+        Image backIcon = new ImageIcon("src/flecha.png").getImage().getScaledInstance(76, 58, Image.SCALE_SMOOTH);
+        backArrowLabel.setIcon(new ImageIcon(backIcon));
+        headerPanel.add(backArrowLabel);
 
-		backgroundLabel.add(panel_2);
-		panel_1.add(backgroundLabel);
-		
-		JPanel panel_5 = new JPanel();
-		panel_1.add(panel_5);
-		panel_5.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Habitación de lujo");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel.setBounds(10, 31, 271, 46);
-		panel_5.add(lblNewLabel);
-		
-		JLabel lblNewLabel_3 = new JLabel("$2.000 MXN por noche");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_3.setBounds(10, 77, 182, 30);
-		panel_5.add(lblNewLabel_3);
-		
-		JButton btnNewButton = new JButton("Eliminar");
-		btnNewButton.setBackground(new Color(153, 89, 45));
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBounds(10, 118, 89, 49);
-		panel_5.add(btnNewButton);
-		
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.setBackground(Color.WHITE);
-		btnEditar.setBounds(110, 118, 89, 49);
-		panel_5.add(btnEditar);
-		
-		JButton btnDetalles = new JButton("Detalles");
-		btnDetalles.setForeground(Color.WHITE);
-		btnDetalles.setBackground(new Color(7, 26, 43));
-		btnDetalles.setBounds(209, 118, 89, 49);
-		panel_5.add(btnDetalles);
-		
-		JPanel panel_1_1 = new JPanel();
-		panel_1_1.setBounds(468, 169, 310, 381);
-		contentPane.add(panel_1_1);
-		panel_1_1.setBorder(BorderFactory.createLineBorder(Color.black));  
-		panel_1_1.setLayout(new GridLayout(2, 0, 0, 0));
-		
-		JPanel panel_6 = new JPanel();
-		Image icon2 = new ImageIcon("src/suite.png").getImage().getScaledInstance(500, 200, Image.SCALE_SMOOTH);
-		ImageIcon backgroundIcon2 = new ImageIcon(icon2);
-		JLabel backgroundLabel2 = new JLabel(backgroundIcon2);
-		backgroundLabel2.setBounds(0, 0, 900, 500);
-		panel_6.setOpaque(false);
-		panel_6.setBounds(0, 0, 900, 500);
-		
-		backgroundLabel2.add(panel_6);	
-		panel_1_1.add(backgroundLabel2);
-		
-		JPanel panel_3 = new JPanel();
-		panel_1_1.add(panel_3);
-		panel_3.setLayout(null);
-		
-		JLabel lblNewLabel_1 = new JLabel("Habitación de lujo");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel_1.setBounds(10, 29, 271, 46);
-		panel_3.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_3_1 = new JLabel("$2.000 MXN por noche");
-		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_3_1.setBounds(10, 74, 182, 30);
-		panel_3.add(lblNewLabel_3_1);
-		
-		JButton btnNewButton_1 = new JButton("Eliminar");
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setBackground(new Color(153, 89, 45));
-		btnNewButton_1.setBounds(10, 115, 89, 49);
-		panel_3.add(btnNewButton_1);
-		
-		JButton btnEditar_1 = new JButton("Editar");
-		btnEditar_1.setBackground(Color.WHITE);
-		btnEditar_1.setBounds(109, 115, 89, 49);
-		panel_3.add(btnEditar_1);
-		
-		JButton btnDetalles_1 = new JButton("Detalles");
-		btnDetalles_1.setForeground(Color.WHITE);
-		btnDetalles_1.setBackground(new Color(7, 26, 43));
-		btnDetalles_1.setBounds(209, 115, 89, 49);
-		panel_3.add(btnDetalles_1);
-		
-		JPanel panel_1_2 = new JPanel();
-		panel_1_2.setBounds(811, 169, 310, 381);
-		contentPane.add(panel_1_2);
-		panel_1_2.setBorder(BorderFactory.createLineBorder(Color.black));  
-		panel_1_2.setLayout(new GridLayout(2, 0, 0, 0));
-		
-		JPanel panel_4 = new JPanel();
-		Image icon3 = new ImageIcon("src/normal.png").getImage().getScaledInstance(500, 200, Image.SCALE_SMOOTH);
-		ImageIcon backgroundIcon3 = new ImageIcon(icon3);
-		JLabel backgroundLabel3 = new JLabel(backgroundIcon3);
-		backgroundLabel3.setBounds(0, 0, 900, 500);
-		panel_2.setOpaque(false);
-		panel_2.setBounds(0, 0, 900, 500);
+        JPanel standardRoomPanel = new JPanel();
+        standardRoomPanel.setBounds(130, 169, 310, 381);
+        mainPanel.add(standardRoomPanel);
+        standardRoomPanel.setBorder(BorderFactory.createLineBorder(Color.black));  
+        standardRoomPanel.setLayout(new GridLayout(2, 0, 0, 0));
+        
+        JPanel standardImagePanel = new JPanel();
+        Image standardIcon = new ImageIcon("src/cama.png").getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
+        JLabel standardImageLabel = new JLabel(new ImageIcon(standardIcon));
+        standardImageLabel.setBounds(0, 0, 900, 500);
+        standardImagePanel.setOpaque(false);
+        standardImagePanel.setBounds(0, 0, 900, 500);
+        standardImageLabel.add(standardImagePanel);
+        standardRoomPanel.add(standardImageLabel);
+        
+        JPanel standardInfoPanel = new JPanel();
+        standardRoomPanel.add(standardInfoPanel);
+        standardInfoPanel.setLayout(null);
+        
+        JLabel standardRoomLabel = new JLabel("Habitación estándar");
+        standardRoomLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
+        standardRoomLabel.setBounds(10, 31, 271, 46);
+        standardInfoPanel.add(standardRoomLabel);
+        
+        JLabel standardPriceLabel = new JLabel("$1,000 MXN por noche");
+        standardPriceLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        standardPriceLabel.setBounds(10, 77, 182, 30);
+        standardInfoPanel.add(standardPriceLabel);
+        
+        JButton deleteButtonStandard = new JButton("Eliminar");
+        deleteButtonStandard.setBackground(new Color(153, 89, 45));
+        deleteButtonStandard.setForeground(Color.WHITE);
+        deleteButtonStandard.setBounds(10, 118, 89, 49);
+        standardInfoPanel.add(deleteButtonStandard);
+        
+        JButton editButtonStandard = new JButton("Editar");
+        editButtonStandard.setBackground(Color.WHITE);
+        editButtonStandard.setBounds(110, 118, 89, 49);
+        standardInfoPanel.add(editButtonStandard);
+        
+        JButton detailsButtonStandard = new JButton("Detalles");
+        detailsButtonStandard.setForeground(Color.WHITE);
+        detailsButtonStandard.setBackground(new Color(7, 26, 43));
+        detailsButtonStandard.setBounds(209, 118, 89, 49);
+        standardInfoPanel.add(detailsButtonStandard);
 
-		backgroundLabel3.add(panel_4);
-		panel_1_2.add(backgroundLabel3);
-		
-		JPanel panel_7 = new JPanel();
-		panel_1_2.add(panel_7);
-		panel_7.setLayout(null);
-		
-		JLabel lblNewLabel_2 = new JLabel("Habitación de lujo");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 26));
-		lblNewLabel_2.setBounds(10, 29, 271, 46);
-		panel_7.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3_2 = new JLabel("$2.000 MXN por noche");
-		lblNewLabel_3_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_3_2.setBounds(10, 74, 182, 30);
-		panel_7.add(lblNewLabel_3_2);
-		
-		JButton btnNewButton_1_1 = new JButton("Eliminar");
-		btnNewButton_1_1.setForeground(Color.WHITE);
-		btnNewButton_1_1.setBackground(new Color(153, 89, 45));
-		btnNewButton_1_1.setBounds(10, 114, 89, 49);
-		panel_7.add(btnNewButton_1_1);
-		
-		JButton btnEditar_1_1 = new JButton("Editar");
-		btnEditar_1_1.setBackground(Color.WHITE);
-		btnEditar_1_1.setBounds(109, 114, 89, 49);
-		panel_7.add(btnEditar_1_1);
-		
-		JButton btnDetalles_1_1 = new JButton("Detalles");
-		btnDetalles_1_1.setForeground(Color.WHITE);
-		btnDetalles_1_1.setBackground(new Color(7, 26, 43));
-		btnDetalles_1_1.setBounds(209, 114, 89, 49);
-		panel_7.add(btnDetalles_1_1);
-		
-		JButton btnEditar_2 = new JButton("1");
-		btnEditar_2.setBackground(Color.WHITE);
-		btnEditar_2.setBounds(514, 561, 44, 44);
-		contentPane.add(btnEditar_2);
-		
-		JButton btnEditar_2_1 = new JButton("2");
-		btnEditar_2_1.setBackground(Color.WHITE);
-		btnEditar_2_1.setBounds(568, 561, 44, 44);
-		contentPane.add(btnEditar_2_1);
-		
-		JButton btnEditar_2_1_1 = new JButton("3");
-		btnEditar_2_1_1.setBackground(Color.WHITE);
-		btnEditar_2_1_1.setBounds(622, 561, 44, 44);
-		contentPane.add(btnEditar_2_1_1);
-		
-		JButton btnEditar_2_1_2 = new JButton("...");
-		btnEditar_2_1_2.setBackground(Color.WHITE);
-		btnEditar_2_1_2.setBounds(676, 561, 44, 44);
-		contentPane.add(btnEditar_2_1_2);
-		
-		JButton btnNuevoTipo = new JButton("Nuevo tipo");
-		btnNuevoTipo.setFont(new Font("Tahoma", Font.BOLD, 25));
-		btnNuevoTipo.setForeground(Color.WHITE);
-		btnNuevoTipo.setBackground(new Color(7, 26, 43));
-		btnNuevoTipo.setBounds(395, 621, 459, 49);
-		contentPane.add(btnNuevoTipo);
-	}
+        JPanel deluxeRoomPanel = new JPanel();
+        deluxeRoomPanel.setBounds(468, 169, 310, 381);
+        mainPanel.add(deluxeRoomPanel);
+        deluxeRoomPanel.setBorder(BorderFactory.createLineBorder(Color.black));  
+        deluxeRoomPanel.setLayout(new GridLayout(2, 0, 0, 0));
+        
+        JPanel deluxeImagePanel = new JPanel();
+        Image deluxeIcon = new ImageIcon("src/suite.png").getImage().getScaledInstance(500, 200, Image.SCALE_SMOOTH);
+        JLabel deluxeImageLabel = new JLabel(new ImageIcon(deluxeIcon));
+        deluxeImageLabel.setBounds(0, 0, 900, 500);
+        deluxeImagePanel.setOpaque(false);
+        deluxeImagePanel.setBounds(0, 0, 900, 500);
+        deluxeImageLabel.add(deluxeImagePanel);
+        deluxeRoomPanel.add(deluxeImageLabel);
+        
+        JPanel deluxeInfoPanel = new JPanel();
+        deluxeRoomPanel.add(deluxeInfoPanel);
+        deluxeInfoPanel.setLayout(null);
+        
+        JLabel deluxeRoomLabel = new JLabel("Habitación de lujo");
+        deluxeRoomLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
+        deluxeRoomLabel.setBounds(10, 29, 271, 46);
+        deluxeInfoPanel.add(deluxeRoomLabel);
+        
+        JLabel deluxePriceLabel = new JLabel("$2,000 MXN por noche");
+        deluxePriceLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        deluxePriceLabel.setBounds(10, 74, 182, 30);
+        deluxeInfoPanel.add(deluxePriceLabel);
+        
+        JButton deleteButtonDeluxe = new JButton("Eliminar");
+        deleteButtonDeluxe.setForeground(Color.WHITE);        
+        deleteButtonDeluxe.setBackground(new Color(153, 89, 45));
+        deleteButtonDeluxe.setBounds(10, 115, 89, 49);
+        deluxeInfoPanel.add(deleteButtonDeluxe);
+        
+        JButton editButtonDeluxe = new JButton("Editar");
+        editButtonDeluxe.setBackground(Color.WHITE);
+        editButtonDeluxe.setBounds(109, 115, 89, 49);
+        deluxeInfoPanel.add(editButtonDeluxe);
+        
+        JButton detailsButtonDeluxe = new JButton("Detalles");
+        detailsButtonDeluxe.setForeground(Color.WHITE);
+        detailsButtonDeluxe.setBackground(new Color(7, 26, 43));
+        detailsButtonDeluxe.setBounds(209, 115, 89, 49);
+        deluxeInfoPanel.add(detailsButtonDeluxe);
 
+        JPanel suiteRoomPanel = new JPanel();
+        suiteRoomPanel.setBounds(811, 169, 310, 381);
+        mainPanel.add(suiteRoomPanel);
+        suiteRoomPanel.setBorder(BorderFactory.createLineBorder(Color.black));  
+        suiteRoomPanel.setLayout(new GridLayout(2, 0, 0, 0));
+        
+        JPanel suiteImagePanel = new JPanel();
+        Image suiteIcon = new ImageIcon("src/normal.png").getImage().getScaledInstance(500, 200, Image.SCALE_SMOOTH);
+        JLabel suiteImageLabel = new JLabel(new ImageIcon(suiteIcon));
+        suiteImageLabel.setBounds(0, 0, 900, 500);
+        suiteImagePanel.setOpaque(false);
+        suiteImagePanel.setBounds(0, 0, 900, 500);
+        suiteImageLabel.add(suiteImagePanel);
+        suiteRoomPanel.add(suiteImageLabel);
+        
+        JPanel suiteInfoPanel = new JPanel();
+        suiteRoomPanel.add(suiteInfoPanel);
+        suiteInfoPanel.setLayout(null);
+        
+        JLabel suiteRoomLabel = new JLabel("Suite");
+        suiteRoomLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
+        suiteRoomLabel.setBounds(10, 29, 271, 46);
+        suiteInfoPanel.add(suiteRoomLabel);
+        
+        JLabel suitePriceLabel = new JLabel("$3,000 MXN por noche");
+        suitePriceLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        suitePriceLabel.setBounds(10, 74, 182, 30);
+        suiteInfoPanel.add(suitePriceLabel);
+        
+        JButton deleteButtonSuite = new JButton("Eliminar");
+        deleteButtonSuite.setForeground(Color.WHITE);
+        deleteButtonSuite.setBackground(new Color(153, 89, 45));
+        deleteButtonSuite.setBounds(10, 114, 89, 49);
+        suiteInfoPanel.add(deleteButtonSuite);
+        
+        JButton editButtonSuite = new JButton("Editar");
+        editButtonSuite.setBackground(Color.WHITE);
+        editButtonSuite.setBounds(109, 114, 89, 49);
+        suiteInfoPanel.add(editButtonSuite);
+        
+        JButton detailsButtonSuite = new JButton("Detalles");
+        detailsButtonSuite.setForeground(Color.WHITE);
+        detailsButtonSuite.setBackground(new Color(7, 26, 43));
+        detailsButtonSuite.setBounds(209, 114, 89, 49);
+        suiteInfoPanel.add(detailsButtonSuite);
+
+        JButton pageButton1 = new JButton("1");
+        pageButton1.setBackground(Color.WHITE);
+        pageButton1.setBounds(514, 561, 44, 44);mainPanel.add(pageButton1);
+        
+        JButton pageButton2 = new JButton("2");
+        pageButton2.setBackground(Color.WHITE);
+        pageButton2.setBounds(568, 561, 44, 44);
+        mainPanel.add(pageButton2);
+        
+        JButton pageButton3 = new JButton("3");
+        pageButton3.setBackground(Color.WHITE);
+        pageButton3.setBounds(622, 561, 44, 44);
+        mainPanel.add(pageButton3);
+        
+        JButton pageButtonMore = new JButton("...");
+        pageButtonMore.setBackground(Color.WHITE);
+        pageButtonMore.setBounds(676, 561, 44, 44);
+        mainPanel.add(pageButtonMore);
+        
+        JButton newRoomTypeButton = new JButton("Nuevo tipo");
+        newRoomTypeButton.setFont(new Font("Tahoma", Font.BOLD, 25));
+        newRoomTypeButton.setForeground(Color.WHITE);
+        newRoomTypeButton.setBackground(new Color(7, 26, 43));
+        newRoomTypeButton.setBounds(395, 621, 459, 49);
+        mainPanel.add(newRoomTypeButton);
+    }
 }
