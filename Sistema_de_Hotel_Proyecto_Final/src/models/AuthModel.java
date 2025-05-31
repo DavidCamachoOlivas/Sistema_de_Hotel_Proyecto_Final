@@ -16,12 +16,12 @@ public class AuthModel {
 
 
     public boolean conectado(String u, String p) {
-    	String host ="jdbc:mysql://bitkivwdlwgq7uzzeiqj-mysql.services.clever-cloud.com:3306/bitkivwdlwgq7uzzeiqj?useSSL=true&serverTimezone=UTC";
-    	String user = "uxjfozsve2kbttru";
-    	String pass = "EQ0NmMdpuPp3V7ukbIqE";
+    	String host ="jdbc:mysql://uywiohjkpxink6lw:22LfDvbA07QUq1XOKk4d@b0ufffjehz0mbockqctk-mysql.services.clever-cloud.com:3306/b0ufffjehz0mbockqctk";
+    	String user = "uywiohjkpxink6lw";
+    	String pass = "22LfDvbA07QUq1XOKk4d";
         Connection conn = null;
         Statement stmt = null;
-        String sql = "SELECT email, password FROM user";
+        String sql = "SELECT email, password FROM users";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
