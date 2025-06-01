@@ -45,4 +45,21 @@ public class RoomTypesModel {
 		        return affected > 0;
 		 }
 	}
+	
+	public boolean updateRoomType(RoomType roomType) throws SQLException {
+	    String sql = "UPDATE room_type SET id_tariff = ?, rooms_included = ?, num_floor = ?, room_type = ? WHERE id_room_type = ?";
+	    
+	    try (Connection conn = DriverManager.getConnection(host, user, pass);
+	    
+	    		PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, roomType.getId_tariff());
+	        stmt.setInt(2, roomType.getRooms_included());
+	        stmt.setInt(3, roomType.getNum_floor());
+	        stmt.setString(4, roomType.getRoom_type());
+	        stmt.setInt(5, roomType.getId_room_type());
+	    
+	        int affected = stmt.executeUpdate();
+	        return affected > 0;
+	    }
+	}
 }
