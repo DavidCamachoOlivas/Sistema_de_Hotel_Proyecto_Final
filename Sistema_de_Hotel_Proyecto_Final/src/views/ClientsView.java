@@ -3,14 +3,23 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
+import buttonCells.TableActionCellEditor;
+import buttonCells.TableActionCellRender;
+import buttonCells.TableActionEvent;
 import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
@@ -40,37 +49,28 @@ public class ClientsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
+		String[] columnNames = {
+				"ID",
+				"Cliente",
+				"Email",
+				"Telefono",
+				"Acciones"
+		};
 		
-		JLabel lblTitle = new JLabel("Clientes");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
+		Object [][] data = {
+				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
+				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
+				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
+				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
+				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
+				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
+				
+		};
 		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
-		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
-		
-		btnHome.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				HomeController home = new HomeController();
-				frame.dispose();
-				home.home();
-			}
-			
-		});
 		
 		
 		JButton btnCreate = new JButton("Crear");
-		btnCreate.setBounds(100,250,300,70);
+		btnCreate.setBounds(868,603,300,70);
 		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnCreate.setForeground(Color.decode("#FFFFFF"));
 		btnCreate.setBackground(Color.decode("#071A2B"));
@@ -88,58 +88,113 @@ public class ClientsView {
 			
 		});
 		
-		JButton btnEdit = new JButton("Editar");
-		btnEdit.setBounds(500,250,300,70);
-		btnEdit.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnEdit.setForeground(Color.decode("#FFFFFF"));
-		btnEdit.setBackground(Color.decode("#071A2B"));
-		panel.add(btnEdit);
 		
-		btnEdit.addActionListener(new ActionListener() {
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
+		
+		
+		JLabel lblTitle = new JLabel("Clientes");
+		lblTitle.setBounds(200, 42, 250, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTitle.setOpaque(true);
+		lblTitle.setBackground(null);
+		
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
+		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnHome.setForeground(Color.decode("#FFFFFF"));
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
+		
+		JPanel clientsTablePanel = new JPanel();
+		clientsTablePanel.setBounds(130, 260, 1000, 310);
+		clientsTablePanel.setBackground(Color.decode("#071A2B"));
+		panel.add(clientsTablePanel);
+		clientsTablePanel.setLayout(null);
+				DefaultTableModel model = new DefaultTableModel(data, columnNames);
+				JTable clientsTable = new JTable(model);
+				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				clientsTable.setRowHeight(30);
+				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+				clientsTable.getColumnModel().getColumn(4).setPreferredWidth(150);
+				clientsTable.setDefaultEditor(Object.class,null);
+				TableActionEvent event = new TableActionEvent() {
+		            @Override
+		            public void onEdit(int row) {
+		            	ClientsController client = new ClientsController();
+						frame.dispose();
+						client.editClient();
+		                System.out.println("Edit row : " + row);
+		            }
+
+		            @Override
+		            public void onDelete(int row) {
+		            	ClientsController client = new ClientsController();
+						client.deleteClient();
+						//lo de abajo se implementará al dar click en el boton "aceptar"
+		                /*if (clientsTable.isEditing()) {
+		                	clientsTable.getCellEditor().stopCellEditing();
+		                }
+		                model.removeRow(row);*/
+		            }
+
+		            @Override
+		            public void onView(int row) {
+		            	ClientsController client = new ClientsController();
+						frame.dispose();
+						client.consultClient();
+		                System.out.println("View row : " + row);
+		            }
+		        };
+		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
+		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
+				JScrollPane scrollPane = new JScrollPane(clientsTable);
+				scrollPane.setBounds(0, 50, 1000, 260);
+				clientsTablePanel.add(scrollPane);
+				
+				JLabel lblTableTitle = new JLabel("Clientes");
+				lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				lblTableTitle.setForeground(Color.decode("#FFFFFF"));
+				lblTableTitle.setBounds(450, 10, 200, 40);
+				clientsTablePanel.add(lblTableTitle);
+				
+				JTextField search = new JTextField();
+				search.setBounds(130, 200, 800, 50);
+				search.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				panel.add(search);
+				search.setColumns(10);
+				
+				JButton btnSearch = new JButton("Ver");
+				btnSearch.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+				btnSearch.setBackground(Color.decode("#071A2B"));
+				btnSearch.setForeground(Color.decode("#FFFFFF"));
+				btnSearch.setBounds(935, 200, 195, 50);
+				panel.add(btnSearch);
+		
+		
+		
+		
+		
+		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
+				HomeController home = new HomeController();
 				frame.dispose();
-				client.editClient();
-			}
-			
-		});
-		
-		JButton btnConsult = new JButton("Detalles");
-		btnConsult.setBounds(900,250,300,70);
-		btnConsult.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnConsult.setForeground(Color.decode("#FFFFFF"));
-		btnConsult.setBackground(Color.decode("#071A2B"));
-		panel.add(btnConsult);
-		
-		btnConsult.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
-				frame.dispose();
-				client.consultClient();
-			}
-			
-		});
-		
-		JButton btnDelete = new JButton("Eliminar");
-		btnDelete.setBounds(100,350,300,70);
-		btnDelete.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnDelete.setForeground(Color.decode("#FFFFFF"));
-		btnDelete.setBackground(Color.decode("#071A2B"));
-		panel.add(btnDelete);
-		
-		btnDelete.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
-				client.deleteClient();
+				home.home();
 			}
 			
 		});
