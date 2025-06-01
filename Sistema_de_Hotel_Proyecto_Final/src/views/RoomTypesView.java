@@ -38,122 +38,6 @@ public class RoomTypesView {
 	}
 	
 	public void roomTypes() {
-		/*frame = new JFrame();
-		frame.setTitle("Hotel Ancla de Paz");
-		frame.setResizable(false);
-		frame.setBounds(0,0,1280,720);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		
-		JLabel lblTitle = new JLabel("Tipos de habitaciones");
-		lblTitle.setBounds(100,50,750,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
-		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
-		
-		btnHome.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				HomeController home = new HomeController();
-				frame.dispose();
-				home.home();
-			}
-			
-		});
-		
-		
-		JButton btnCreate = new JButton("Crear");
-		btnCreate.setBounds(100,250,300,70);
-		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnCreate.setForeground(Color.decode("#FFFFFF"));
-		btnCreate.setBackground(Color.decode("#071A2B"));
-		panel.add(btnCreate);
-		
-		btnCreate.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				rooms.createRoomType();
-			}
-			
-		});
-		
-		JButton btnEdit = new JButton("Editar");
-		btnEdit.setBounds(500,250,300,70);
-		btnEdit.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnEdit.setForeground(Color.decode("#FFFFFF"));
-		btnEdit.setBackground(Color.decode("#071A2B"));
-		panel.add(btnEdit);
-		
-		btnEdit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				rooms.editRoomType();
-			}
-			
-		});
-		
-		JButton btnConsult = new JButton("Detalles");
-		btnConsult.setBounds(900,250,300,70);
-		btnConsult.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnConsult.setForeground(Color.decode("#FFFFFF"));
-		btnConsult.setBackground(Color.decode("#071A2B"));
-		panel.add(btnConsult);
-		
-		btnConsult.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				rooms.consultRoomType();
-			}
-			
-		});
-		
-		JButton btnDelete = new JButton("Eliminar");
-		btnDelete.setBounds(100,350,300,70);
-		btnDelete.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnDelete.setForeground(Color.decode("#FFFFFF"));
-		btnDelete.setBackground(Color.decode("#071A2B"));
-		panel.add(btnDelete);
-		
-		btnDelete.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				rooms.deleteRoomType();
-			}
-			
-		});*/
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(new Rectangle(0, 0, 720, 1280));
@@ -178,13 +62,13 @@ public class RoomTypesView {
 		
 		JLabel lblNewLabel_4 = new JLabel("Tipo de habitaciones");
 		lblNewLabel_4.setForeground(Color.WHITE);
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel_4.setBounds(238, 21, 490, 66);
+		lblNewLabel_4.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblNewLabel_4.setBounds(200, 42, 500, 82);
 		panel.add(lblNewLabel_4);
 		
 		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(130, 30, 78, 56);
-		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(78, 56, Image.SCALE_SMOOTH);
+		btnNewButton.setBounds(130, 60, 56, 56);
+		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
 		btnNewButton.setIcon(new ImageIcon(imgBtnHome));
 		btnNewButton.setBackground(null);
 		btnNewButton.setBorder(null);
