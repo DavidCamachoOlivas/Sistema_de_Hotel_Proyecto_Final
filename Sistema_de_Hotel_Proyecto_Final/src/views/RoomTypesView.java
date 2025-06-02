@@ -1154,7 +1154,10 @@ public class RoomTypesView {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				RoomTypesController rooms = new RoomTypesController();
-				rooms.successDownload();
+				RoomTypesModel rtm = new RoomTypesModel();
+				String url = "src/docs/tablaHabitaciones.pdf";
+				rtm.exportarTablaPDF(clientsTable, url);
+				
 			}
 			
 		});
