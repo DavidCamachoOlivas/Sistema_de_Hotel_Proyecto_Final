@@ -1155,8 +1155,20 @@ public class RoomTypesView {
 				// TODO Auto-generated method stub
 				RoomTypesController rooms = new RoomTypesController();
 				RoomTypesModel rtm = new RoomTypesModel();
-				String url = "src/docs/tablaHabitaciones.pdf";
-				rtm.exportarTablaPDF(clientsTable, url);
+				String url;
+				JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Selecciona una carpeta");
+		        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		        int resultado = fileChooser.showOpenDialog(null);
+		        if (resultado == JFileChooser.APPROVE_OPTION) {
+		            File carpeta = fileChooser.getSelectedFile();
+		            url = carpeta.getAbsolutePath() + "/tipoHabitacion.pdf";
+		            rtm.exportarTablaPDF(clientsTable, url);
+		        }
+		        else{
+		        	System.out.println("ruta no valida");
+		        }
 				
 			}
 			
