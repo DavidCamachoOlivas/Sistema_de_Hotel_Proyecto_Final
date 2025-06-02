@@ -1,7 +1,8 @@
-package views;
+package viewsWB;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -14,26 +15,41 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import controllers.AuthController;
 import controllers.ClientsController;
-import controllers.HomeController;
 import controllers.RentalsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
 import controllers.TariffsController;
-import models.AuthModel;
-import models.HomeModel;
+import views.AuthView;
 
-public class HomeView extends JFrame{
+public class HomeWB extends JFrame {
 
-	private JFrame frame;
-	private HomeModel functions;
-	public HomeView() {
-		functions = new HomeModel();
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					HomeWB frame = new HomeWB();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-	
-	public void home() {
+
+	/**
+	 * Create the frame.
+	 */
+	public HomeWB() {
 		setTitle("Hotel Ancla de Paz");
 		setResizable(false);
 		setBounds(0,0,1280,720);
@@ -253,4 +269,5 @@ public class HomeView extends JFrame{
 			
 		});
 	}
+
 }
