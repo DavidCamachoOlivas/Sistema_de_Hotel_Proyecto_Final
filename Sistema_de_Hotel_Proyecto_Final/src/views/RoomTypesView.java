@@ -2,14 +2,19 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -17,6 +22,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,7 +44,6 @@ import models.Tariff;
 
 public class RoomTypesView {
 
-
 	private JFrame frame;
 	private RoomTypesModel functions;
 	
@@ -53,6 +58,122 @@ public class RoomTypesView {
 	}
 	
 	public void roomTypes() throws SQLException {
+		/*frame = new JFrame();
+		frame.setTitle("Hotel Ancla de Paz");
+		frame.setResizable(false);
+		frame.setBounds(0,0,1280,720);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
+		JPanel panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
+		panel.setLayout(null);
+		
+		
+		JLabel lblTitle = new JLabel("Tipos de habitaciones");
+		lblTitle.setBounds(100,50,750,70);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
+		lblTitle.setForeground(Color.decode("#071A2B"));
+		lblTitle.setOpaque(true);
+		lblTitle.setBackground(Color.green);
+		panel.add(lblTitle);
+		
+		JButton btnHome = new JButton("Regresar");
+		btnHome.setBounds(900,50,300,70);
+		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnHome.setForeground(Color.decode("#FFFFFF"));
+		btnHome.setBackground(Color.decode("#071A2B"));
+		panel.add(btnHome);
+		
+		btnHome.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				HomeController home = new HomeController();
+				frame.dispose();
+				home.home();
+			}
+			
+		});
+		
+		
+		JButton btnCreate = new JButton("Crear");
+		btnCreate.setBounds(100,250,300,70);
+		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnCreate.setForeground(Color.decode("#FFFFFF"));
+		btnCreate.setBackground(Color.decode("#071A2B"));
+		panel.add(btnCreate);
+		
+		btnCreate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rooms = new RoomTypesController();
+				frame.dispose();
+				rooms.createRoomType();
+			}
+			
+		});
+		
+		JButton btnEdit = new JButton("Editar");
+		btnEdit.setBounds(500,250,300,70);
+		btnEdit.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnEdit.setForeground(Color.decode("#FFFFFF"));
+		btnEdit.setBackground(Color.decode("#071A2B"));
+		panel.add(btnEdit);
+		
+		btnEdit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rooms = new RoomTypesController();
+				frame.dispose();
+				rooms.editRoomType();
+			}
+			
+		});
+		
+		JButton btnConsult = new JButton("Detalles");
+		btnConsult.setBounds(900,250,300,70);
+		btnConsult.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnConsult.setForeground(Color.decode("#FFFFFF"));
+		btnConsult.setBackground(Color.decode("#071A2B"));
+		panel.add(btnConsult);
+		
+		btnConsult.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rooms = new RoomTypesController();
+				frame.dispose();
+				rooms.consultRoomType();
+			}
+			
+		});
+		
+		JButton btnDelete = new JButton("Eliminar");
+		btnDelete.setBounds(100,350,300,70);
+		btnDelete.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnDelete.setForeground(Color.decode("#FFFFFF"));
+		btnDelete.setBackground(Color.decode("#071A2B"));
+		panel.add(btnDelete);
+		
+		btnDelete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rooms = new RoomTypesController();
+				rooms.deleteRoomType();
+			}
+			
+		});*/
 		
 		//Aqui se hace la vista predeterminada, no cambie nada del Frame principal
 		frame = new JFrame();
@@ -126,18 +247,25 @@ public class RoomTypesView {
 				panel_1.setLayout(new GridLayout(2, 0, 0, 0));
 				
 				JPanel panel_2 = new JPanel();
-				Image icon = new ImageIcon("src/images/cama.png").getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
-				ImageIcon backgroundIcon = new ImageIcon(icon);
-				JLabel backgroundLabel = new JLabel(backgroundIcon);
-				backgroundLabel.setBounds(0, 0, 900, 500);
 				panel_2.setOpaque(false);
 				panel_2.setBounds(0, 0, 900, 500);
-				backgroundLabel.add(panel_2);
-				panel_1.add(backgroundLabel);
+				
+				if(roomType.getImage() != null) {
+					Image icon = new ImageIcon(roomType.getImage()).getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
+					ImageIcon backgroundIcon = new ImageIcon(icon);
+					
+					JLabel backgroundLabel = new JLabel(backgroundIcon);
+					backgroundLabel.setBounds(0, 0, 900, 500);
+					panel_2.setOpaque(false);
+					panel_2.setBounds(0, 0, 900, 500);
+					backgroundLabel.add(panel_2);
+					panel_1.add(backgroundLabel);					
+				}
 
 				JPanel panel_5 = new JPanel();
 				panel_1.add(panel_5);
 				panel_5.setLayout(null);
+				
 
 				JLabel lblNewLabel = new JLabel(titulo);
 				lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 26));
@@ -153,7 +281,7 @@ public class RoomTypesView {
 					}
 				}
 				JLabel lblNewLabel_3 = new JLabel();
-				lblNewLabel_3.setText(""+ precioNoche);
+				lblNewLabel_3.setText(""+precioNoche);
 				lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 				lblNewLabel_3.setBounds(10, 77, 182, 30);
 				panel_5.add(lblNewLabel_3);
@@ -268,6 +396,12 @@ public class RoomTypesView {
 		contentPane.revalidate();
 	}
 	
+	//Lo mas recomendable es que copies y pegues todo el Metodo roomTypes()
+	
+	
+	RoomType rt = new RoomType();
+	byte[] imageBytes;
+	
 	public void createRoomType() throws SQLException {
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -315,6 +449,8 @@ public class RoomTypesView {
 			
 		});
 		
+		
+		
 		JLabel lblNewLabel_4 = new JLabel("Añadir tipo de habitación");
 		lblNewLabel_4.setForeground(Color.WHITE);
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
@@ -329,14 +465,63 @@ public class RoomTypesView {
 		
 		//Aqui hice cambios donde se ingresan los datos y cambie el JTextField de tipo de tarifa por un JComboBox
 		
-		 JTextField tipoHabitacionField = new JTextField();
-		    tipoHabitacionField.setBounds(122, 196, 470, 49);
+		JLabel previewLabel = new JLabel();
+		previewLabel.setBounds(100, 270, 300, 300); // ajustado para no chocar con el botón
+		contentPane.add(previewLabel);
+
+		JButton btnNewButton1 = new JButton();
+		btnNewButton1.setBounds(100, 250, 470, 400);
+		btnNewButton1.setBackground(new Color(216, 216, 216));
+		btnNewButton1.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
+		panel.add(btnNewButton1); // Este botón va en el panel
+		contentPane.add(btnNewButton1); // Este botón también está en el contentPane si deseas que se muestre completo
+
+		ImageIcon imagenPredeterminada = new ImageIcon("src/images/subir.png");
+		Image scaledPredeterminada = imagenPredeterminada.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+		btnNewButton1.setIcon(new ImageIcon(scaledPredeterminada));
+		
+		btnNewButton1.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Selecciona una imagen");
+		        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+		        int resultado = fileChooser.showOpenDialog(null);
+		        if (resultado == JFileChooser.APPROVE_OPTION) {
+		            File imagenSeleccionada = fileChooser.getSelectedFile();
+
+		            try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
+	                    imageBytes = fis.readAllBytes();
+		                rt.setImage(imageBytes); // Asignas al modelo
+
+		                // Mostrar vista previa
+		              
+		                	ImageIcon icon = new ImageIcon(imageBytes);
+		                	Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+		                	btnNewButton1.setIcon(new ImageIcon(scaled));
+
+		                System.out.println("Imagen cargada y mostrada correctamente");
+		            } catch (IOException e1) {
+		                e1.printStackTrace();
+		            }
+		        }
+		    }
+		});
+		contentPane.add(btnNewButton1);
+		
+			JTextField tipoHabitacionField = new JTextField();
+		    tipoHabitacionField.setBounds(100, 196, 470, 49);
 		    contentPane.add(tipoHabitacionField);
+		    
+		    JTextField tipoHabitacionIncluidas = new JTextField();
+		    tipoHabitacionIncluidas.setBounds(646, 350, 470, 49);
+		    contentPane.add(tipoHabitacionIncluidas);
 		    
 		    // Combo para piso
 		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 		    JComboBox<Integer> pisoCombo = new JComboBox<>(opcionesPiso);
-		    pisoCombo.setBounds(122, 466, 470, 49);
+		    pisoCombo.setBounds(646, 466, 150, 49);
 		    contentPane.add(pisoCombo);
 		    
 		    // Combo para tarifas
@@ -345,7 +530,7 @@ public class RoomTypesView {
 		    contentPane.add(tarifaCombo);
 		    
 		    JComboBox<Integer> tariffCapacity = new JComboBox<>();
-		    tariffCapacity.setBounds(646, 496, 470, 49);
+		    tariffCapacity.setBounds(970, 466, 150, 49);
 		    contentPane.add(tariffCapacity);
 		    
 		    // Cargar tarifas disponibles
@@ -383,9 +568,11 @@ public class RoomTypesView {
 		            String tipoHabitacion = tipoHabitacionField.getText();
 		            int piso = (int) pisoCombo.getSelectedItem();
 		            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
+		            byte[] imageBytesSel = imageBytes;
 		            
 		            // Validar tarifa seleccionada
 		            if (tarifaSeleccionada == null) {
+		                JOptionPane.showMessageDialog(frame, "Debe seleccionar una tarifa","Error", JOptionPane.ERROR_MESSAGE);
 		                return;
 		            }
 		            
@@ -394,6 +581,7 @@ public class RoomTypesView {
 		            nuevoTipo.setRoom_type(tipoHabitacion);
 		            nuevoTipo.setNum_floor(piso);
 		            nuevoTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
+		            nuevoTipo.setImage(imageBytes);
 		            
 		            int idGenerado = new RoomTypesModel().createRoomType(nuevoTipo);
 		            
@@ -402,13 +590,14 @@ public class RoomTypesView {
 		            new RoomTypesController().roomTypes();
 		            
 		        } catch (SQLException ex) {
+		            JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(),  "Error", JOptionPane.ERROR_MESSAGE);
 		        }
 		    });
 		    contentPane.add(btnAñadir);
 		    
 		JLabel lblNewLabel = new JLabel("Tipo de habitación");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(122, 158, 309, 27);
+		lblNewLabel.setBounds(100, 158, 309, 27);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblTipoDeTarifa = new JLabel("Tipo de tarifa");
@@ -418,17 +607,17 @@ public class RoomTypesView {
 		
 		JLabel lblHabitacionesSeleccionadas = new JLabel("Habitaciones incluidas");
 		lblHabitacionesSeleccionadas.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblHabitacionesSeleccionadas.setBounds(122, 289, 309, 27);
+		lblHabitacionesSeleccionadas.setBounds(646, 289, 309, 27);
 		contentPane.add(lblHabitacionesSeleccionadas);
 		
 		JLabel lblPiso = new JLabel("Piso");
 		lblPiso.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblPiso.setBounds(122, 428, 309, 27);
+		lblPiso.setBounds(646, 428, 309, 27);
 		contentPane.add(lblPiso);
 		
 		JLabel lblCapacidad = new JLabel("Capacidad");
 		lblCapacidad.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblCapacidad.setBounds(646, 428, 309, 27);
+		lblCapacidad.setBounds(970, 428, 309, 27);
 		contentPane.add(lblCapacidad);
 		
 		JButton btnCancelar = new JButton("Cancelar");
@@ -695,6 +884,7 @@ public class RoomTypesView {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
+		
 		JLabel lblNewLabel_4 = new JLabel("Detalles de habitación");
 		lblNewLabel_4.setForeground(Color.WHITE);
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
@@ -845,7 +1035,6 @@ public class RoomTypesView {
 				}
 				frame.dispose();
 				rooms.successDelete();
-				
 			}
 			
 		});
@@ -927,5 +1116,8 @@ public class RoomTypesView {
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
 		panel.add(title);
+	}
+	public void vistaPrevia() {
+		
 	}
 }
