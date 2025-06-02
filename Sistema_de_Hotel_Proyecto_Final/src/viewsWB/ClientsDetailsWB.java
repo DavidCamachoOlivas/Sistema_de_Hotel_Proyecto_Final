@@ -50,6 +50,13 @@ public class ClientsDetailsWB extends JFrame {
 	 * Create the frame.
 	 */
 	public ClientsDetailsWB() {
+		String name,email,phoneNumber;
+		int id;
+		name="Axdiael Trinidad Cardenas";
+		email="ax@diael.tc";
+		id=01;
+		phoneNumber = "6131234567";
+		
 		setTitle("Hotel Ancla de Paz");
 		setResizable(false);
 		setBounds(0,0,1280,720);
@@ -170,6 +177,40 @@ public class ClientsDetailsWB extends JFrame {
 			}
 			
 		});
+		
+		
+		JLabel lblNewLabel = new JLabel(name);
+		lblNewLabel.setBounds(400, 160, 606, 44);
+		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		panel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("ID:");
+		lblNewLabel_1.setBounds(400, 214, 62, 27);
+		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1);
+		JLabel lblNewLabel_1_3 = new JLabel(id+"");
+		lblNewLabel_1_3.setBounds(472, 214, 62, 27);
+		lblNewLabel_1_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_3);
+		
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Email:");
+		lblNewLabel_1_1.setBounds(400, 251, 150, 27);
+		lblNewLabel_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_1);
+		JLabel lblNewLabel_1_4 = new JLabel(email);
+		lblNewLabel_1_4.setBounds(500, 251, 450, 27);
+		lblNewLabel_1_4.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_4);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("Numero de telefono:");
+		lblNewLabel_1_2.setBounds(400, 288, 400, 27);
+		lblNewLabel_1_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_2);
+		JLabel lblNewLabel_1_5 = new JLabel(phoneNumber+"");
+		lblNewLabel_1_5.setBounds(670, 288, 400, 27);
+		lblNewLabel_1_5.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_5);
 				
 	}
 

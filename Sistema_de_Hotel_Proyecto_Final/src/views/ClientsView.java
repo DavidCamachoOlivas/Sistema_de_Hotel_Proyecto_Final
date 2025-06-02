@@ -536,7 +536,7 @@ public class ClientsView {
 	}
 	
 	public void consultClient() {
-		frame = new JFrame();
+		JFrame frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
 		frame.setBounds(0,0,1280,720);
@@ -548,49 +548,151 @@ public class ClientsView {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
+	
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Detalles");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
+		JLabel lblTitle = new JLabel("Detalles del cliente");
+		lblTitle.setBounds(200, 42, 550, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
 		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
+		lblTitle.setBackground(null);
 		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
 		
 		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
+				ClientsController home = new ClientsController();
 				frame.dispose();
-				client.clients();
+				home.clients();
 			}
 			
 		});
 		
-		JButton lblDownload = new JButton("Descargar .pdf");
-		lblDownload.setBounds(900,500,300,70);
-		lblDownload.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		lblDownload.setForeground(Color.decode("#FFFFFF"));
-		lblDownload.setBackground(Color.decode("#071A2B"));
-		panel.add(lblDownload);
+		JLabel lblImg = new JLabel();
+		lblImg.setBounds(130, 140, 200, 200);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		lblImg.setHorizontalAlignment(JLabel.CENTER);
+		lblImg.setVerticalAlignment(JLabel.CENTER);
+		lblImg.setIcon(lblImgScaledIcon);
+		panel.add(lblImg);
 		
-		lblDownload.addActionListener(new ActionListener() {
+		String[] columnNames = {
+				"Check-In",
+				"Check-Out",
+				"Habitación",
+				"Tipo"
+		};
+		
+		Object [][] data = {
+				{"2025-01-01", "2025-01-02","101","Estandar"},
+				{"2025-01-01", "2025-01-02","101","Estandar"},
+				{"2025-01-01", "2025-01-02","101","Estandar"},
+				{"2025-01-01", "2025-01-02","101","Estandar"},
+				
+		};
+		
+		JPanel clientsTablePanel = new JPanel();
+		clientsTablePanel.setBounds(130, 350, 1000, 230);
+		clientsTablePanel.setBackground(Color.decode("#071A2B"));
+		panel.add(clientsTablePanel);
+		clientsTablePanel.setLayout(null);
+				DefaultTableModel model = new DefaultTableModel(data, columnNames);
+				JTable clientsTable = new JTable(model);
+				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				clientsTable.setRowHeight(30);
+				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+				clientsTable.setDefaultEditor(Object.class,null);
+				
+		        
+				JScrollPane scrollPane = new JScrollPane(clientsTable);
+				scrollPane.setBounds(0, 50, 1000, 230);
+				clientsTablePanel.add(scrollPane);
+				
+				JLabel lblTableTitle = new JLabel("Historial de rentas");
+				lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				lblTableTitle.setForeground(Color.decode("#FFFFFF"));
+				lblTableTitle.setBounds(430, 10, 400, 40);
+				clientsTablePanel.add(lblTableTitle);
+		
+		JButton btnCancel = new JButton("Descargar .pdf");
+		btnCancel.setBounds(130,600,1000,70);
+		btnCancel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnCancel.setForeground(Color.decode("#FFFFFF"));
+		btnCancel.setBackground(Color.decode("#0E651B"));
+		panel.add(btnCancel);
+		
+		String name,email,phoneNumber;
+		int id;
+		name="Axdiael Trinidad Cardenas";
+		email="ax@diael.tc";
+		id=01;
+		phoneNumber = "6131234567";
+		JLabel lblNewLabel = new JLabel(name);
+		lblNewLabel.setBounds(400, 160, 606, 44);
+		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		panel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("ID:");
+		lblNewLabel_1.setBounds(400, 214, 62, 27);
+		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1);
+		JLabel lblNewLabel_1_3 = new JLabel(id+"");
+		lblNewLabel_1_3.setBounds(472, 214, 62, 27);
+		lblNewLabel_1_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_3);
+		
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Email:");
+		lblNewLabel_1_1.setBounds(400, 251, 150, 27);
+		lblNewLabel_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_1);
+		JLabel lblNewLabel_1_4 = new JLabel(email);
+		lblNewLabel_1_4.setBounds(500, 251, 450, 27);
+		lblNewLabel_1_4.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_4);
+		
+		JLabel lblNewLabel_1_2 = new JLabel("Numero de telefono:");
+		lblNewLabel_1_2.setBounds(400, 288, 400, 27);
+		lblNewLabel_1_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_2);
+		JLabel lblNewLabel_1_5 = new JLabel(phoneNumber+"");
+		lblNewLabel_1_5.setBounds(670, 288, 400, 27);
+		lblNewLabel_1_5.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
+		panel.add(lblNewLabel_1_5);
+		
+		
+		
+		btnCancel.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
-				client.successDownload();
+				ClientsController download = new ClientsController();
+				download.successDownload();
 			}
 			
 		});
