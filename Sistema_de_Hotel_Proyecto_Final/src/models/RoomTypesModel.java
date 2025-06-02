@@ -88,4 +88,25 @@ public class RoomTypesModel {
         }
         return tariffs;
 	 }
+	 public List<RoomType> getAvailableRoomType() throws SQLException {
+	        List<RoomType> roomTypes = new ArrayList<>();
+	        String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type FROM room_type";
+	        
+	        try (Connection conn = DriverManager.getConnection(host, user, pass);
+	             Statement stmt = conn.createStatement();
+	             ResultSet rs = stmt.executeQuery(sql)) {
+	            
+	            while (rs.next()) {
+	            	RoomType roomType = new RoomType(
+	        			rs.getInt("id_room_type"),
+	        			rs.getInt("id_tariff"),
+	                    rs.getInt("rooms_included"),
+	                    rs.getInt("num_floor"),
+	                    rs.getString("room_type")
+	                );
+	            	roomTypes.add(roomType);
+	            }
+	        }
+	        return roomTypes;
+	    }
 }
