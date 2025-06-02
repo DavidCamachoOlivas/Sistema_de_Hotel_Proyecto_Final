@@ -83,7 +83,7 @@ public class TariffsView {
 				// TODO Auto-generated method stub
 				TariffsController tariff = new TariffsController();
 				frame.dispose();
-				tariff.createClient();
+				tariff.createTariff();
 			}
 			
 		});
@@ -102,7 +102,7 @@ public class TariffsView {
 				// TODO Auto-generated method stub
 				TariffsController tariff = new TariffsController();
 				frame.dispose();
-				tariff.editClient();
+				tariff.editTariff();
 			}
 			
 		});
@@ -121,7 +121,7 @@ public class TariffsView {
 				// TODO Auto-generated method stub
 				TariffsController tariff = new TariffsController();
 				frame.dispose();
-				tariff.consultClient();
+				tariff.consultTariff();
 			}
 			
 		});
@@ -139,7 +139,7 @@ public class TariffsView {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				TariffsController tariff = new TariffsController();
-				tariff.deleteClient();
+				tariff.deleteConfirm();
 			}
 			
 		});

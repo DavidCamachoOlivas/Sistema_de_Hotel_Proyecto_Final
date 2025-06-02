@@ -61,11 +61,13 @@ public class RoomTypesModel {
 	    try (Connection conn = DriverManager.getConnection(host, user, pass);
 	    
 	    		PreparedStatement stmt = conn.prepareStatement(sql)) {
+	    	
 	        stmt.setInt(1, roomType.getId_tariff());
 	        stmt.setInt(2, roomType.getRooms_included());
 	        stmt.setInt(3, roomType.getNum_floor());
 	        stmt.setString(4, roomType.getRoom_type());
 	        stmt.setBytes(5, roomType.getImage());
+	        stmt.setInt(6, roomType.getId_room_type());
 	    
 	        int affected = stmt.executeUpdate();
 	        return affected > 0;
