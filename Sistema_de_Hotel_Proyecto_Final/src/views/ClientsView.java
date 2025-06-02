@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -361,6 +362,16 @@ public class ClientsView {
 	}
 	
 	public void editClient() {
+		String name,email;
+		Date birthdate;
+		int phone;// puede ser string: no me acuerdo como estaba en la base de datos
+		
+		name="david";
+		email="david@e.mail";
+		phone=1234567890;
+		birthdate=Date.valueOf("2025-01-01");
+		
+		
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -373,31 +384,152 @@ public class ClientsView {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
+	
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
 		
 		
 		JLabel lblTitle = new JLabel("Editar cliente");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
+		lblTitle.setBounds(200, 42, 350, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
 		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
+		lblTitle.setBackground(null);
 		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
 		
 		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
+				ClientsController home = new ClientsController();
 				frame.dispose();
-				client.clients();
+				home.clients();
+			}
+			
+		});
+		
+		JLabel lblImg = new JLabel();
+		lblImg.setBounds(130,150,400,300);
+		lblImg.setText(null);
+		lblImg.setBorder(BorderFactory.createLineBorder(Color.black));
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		lblImg.setHorizontalAlignment(JLabel.CENTER);
+		lblImg.setVerticalAlignment(JLabel.CENTER);
+		lblImg.setIcon(lblImgScaledIcon);
+		panel.add(lblImg);
+		
+		JButton btnAddImage = new JButton("Cambiar imagen");
+		btnAddImage.setBounds(130,450,400,70);
+		btnAddImage.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnAddImage.setForeground(Color.decode("#FFFFFF"));
+		btnAddImage.setBackground(Color.decode("#071A2B"));
+		panel.add(btnAddImage);
+		
+		btnAddImage.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		JLabel lblNewLabel = new JLabel("Nombre");
+		lblNewLabel.setBounds(700, 160, 100, 15);
+		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel);
+		
+		JTextField textField = new JTextField(name);
+		textField.setColumns(10);
+		textField.setBounds(700, 180, 460, 50);
+		textField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(textField);
+		
+		
+		JLabel lblNewLabel_1 = new JLabel("Telefono");
+		lblNewLabel_1.setBounds(700, 240, 100, 15);
+		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_1);
+		
+		JTextField textField_1 = new JTextField(phone+"");
+		textField_1.setColumns(10);
+		textField_1.setBounds(700, 260, 460, 50);
+		textField_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(textField_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Email");
+		lblNewLabel_2.setBounds(700, 320, 100, 15);
+		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_2);
+		
+		JTextField textField_2 = new JTextField(email);
+		textField_2.setColumns(10);
+		textField_2.setBounds(700, 340, 460, 50);
+		textField_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(textField_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Fecha de nacimiento");
+		lblNewLabel_3.setBounds(700, 400, 200, 15);
+		lblNewLabel_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_3);
+		
+		JTextField textField_3 = new JTextField(birthdate.toString());
+		textField_3.setColumns(10);
+		textField_3.setBounds(700, 420, 249, 50);
+		textField_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(textField_3);
+		
+		JButton btnCreate = new JButton("Guardar");
+		btnCreate.setBounds(870,600,300,70);
+		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnCreate.setForeground(Color.decode("#FFFFFF"));
+		btnCreate.setBackground(Color.decode("#071A2B"));
+		panel.add(btnCreate);
+		
+		btnCreate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		JButton btnCancel = new JButton("Cancelar");
+		btnCancel.setBounds(560,600,300,70);
+		btnCancel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		btnCancel.setForeground(Color.decode("#FFFFFF"));
+		btnCancel.setBackground(new Color(153, 89, 45));
+		panel.add(btnCancel);
+		
+		btnCancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ClientsController home = new ClientsController();
+				frame.dispose();
+				home.clients();
 			}
 			
 		});
