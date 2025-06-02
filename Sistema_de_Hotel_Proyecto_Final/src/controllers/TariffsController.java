@@ -12,25 +12,23 @@ public class TariffsController {
 		view = new TariffsView();
 	}
 	
-	
-	
 	public void tariffs(){
 		view.tariff();
 	}
 	
-	public void createClient() {
+	public void createTariff() {
 		view.createTariff();
 	}
 	
-	public void editClient() {
+	public void editTariff() {
 		view.editTariff();
 	}
 	
-	public void consultClient() {
+	public void consultTariff() {
 		view.consultTariff();
 	}
 	
-	public void deleteClient() {
+	public void deleteConfirm() {
 		view.deleteConfirm();
 	}
 	
