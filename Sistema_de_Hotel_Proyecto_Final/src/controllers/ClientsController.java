@@ -11,8 +11,6 @@ public class ClientsController {
 		view = new ClientsView();
 	}
 	
-	
-	
 	public void clients(){
 		view.clients();
 	}

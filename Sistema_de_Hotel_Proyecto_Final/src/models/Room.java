@@ -22,7 +22,9 @@ public class Room {
 		this.amenities = amenities;
 		
 	}
-
+	public Room() {
+		
+	}
 	public int getId_room() {
 		return id_room;
 	}
