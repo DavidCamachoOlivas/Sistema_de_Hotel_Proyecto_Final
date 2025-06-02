@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomTypesModel {
 	
@@ -62,4 +65,27 @@ public class RoomTypesModel {
 	        return affected > 0;
 	    }
 	}
+	
+	public List<Tariff> getAvailableTariffs() throws SQLException {
+        List<Tariff> tariffs = new ArrayList<>();
+        String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable FROM tariff";
+        
+        try (Connection conn = DriverManager.getConnection(host, user, pass);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                Tariff tariff = new Tariff(
+                    rs.getInt("id_tariff"),
+                    rs.getInt("id_room"),
+                    rs.getFloat("price_per_night"),
+                    rs.getInt("capacity"),
+                    rs.getString("tariff_type"),
+                    rs.getBoolean("refundable")
+                );
+                tariffs.add(tariff);
+            }
+        }
+        return tariffs;
+	 }
 }
