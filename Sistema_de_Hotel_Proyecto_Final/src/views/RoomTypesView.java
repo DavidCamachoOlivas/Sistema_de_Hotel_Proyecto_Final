@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -371,14 +372,19 @@ public class RoomTypesView {
 				// TODO Auto-generated method stub
 				RoomTypesController rooms = new RoomTypesController();
 				frame.dispose();
-				rooms.createRoomType();
+				try {
+					rooms.createRoomType();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		contentPane.repaint();
 		contentPane.revalidate();
 	}
 	
-	public void createRoomType() {
+	public void createRoomType() throws SQLException {
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(new Rectangle(0, 0, 720, 1280));
@@ -437,29 +443,85 @@ public class RoomTypesView {
 		lblNewLabel_5.setIcon(new ImageIcon(img));
 		panel.add(lblNewLabel_5);
 		
-		JTextField textField = new JTextField();
-		textField.setBounds(122, 196, 470, 49);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		//Aqui hice cambios donde se ingresan los datos y cambie el JTextField de tipo de tarifa por un JComboBox
 		
-		JTextField textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(646, 196, 470, 49);
-		contentPane.add(textField_1);
-		
-		JTextField textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(122, 327, 994, 49);
-		contentPane.add(textField_2);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(122, 466, 470, 49);
-		contentPane.add(comboBox);
-		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(646, 466, 470, 49);
-		contentPane.add(comboBox_1);
-		
+		 JTextField tipoHabitacionField = new JTextField();
+		    tipoHabitacionField.setBounds(122, 196, 470, 49);
+		    contentPane.add(tipoHabitacionField);
+		    
+		    // Combo para piso
+		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		    JComboBox<Integer> pisoCombo = new JComboBox<>(opcionesPiso);
+		    pisoCombo.setBounds(122, 466, 470, 49);
+		    contentPane.add(pisoCombo);
+		    
+		    // Combo para tarifas
+		    JComboBox<Tariff> tarifaCombo = new JComboBox<>();
+		    tarifaCombo.setBounds(646, 196, 470, 49);
+		    contentPane.add(tarifaCombo);
+		    
+		    JComboBox<Integer> tariffCapacity = new JComboBox<>();
+		    tariffCapacity.setBounds(646, 496, 470, 49);
+		    contentPane.add(tariffCapacity);
+		    
+		    // Cargar tarifas disponibles
+		    try {
+		        List<Tariff> tarifas = new RoomTypesModel().getAvailableTariffs();
+		        DefaultComboBoxModel<Tariff> model = new DefaultComboBoxModel<>();
+		        for (Tariff tarifa : tarifas) {
+		            model.addElement(tarifa);
+		        }
+		        tarifaCombo.setModel(model);
+		    } catch (SQLException e) {
+		    }
+		    
+		    // Combo para cargar la capacidad de cada tarifa
+		    try {
+		        List<Tariff> tarifas = new RoomTypesModel().getAvailableTariffs();
+		        DefaultComboBoxModel<Integer> tarifas1 = new DefaultComboBoxModel<>();
+		        for (Tariff tarifa : tarifas) {
+		        	tarifas1.addElement(tarifa.getCapacity());
+		        }
+		        tariffCapacity.setModel(tarifas1);
+		    } catch (SQLException e) {
+		    }
+		    
+		    // Botón Añadir
+		    JButton btnAñadir = new JButton("Añadir");
+		    btnAñadir.setFont(new Font("Tahoma", Font.BOLD, 20));
+		    btnAñadir.setForeground(Color.WHITE);
+		    btnAñadir.setBackground(new Color(7, 26, 43));
+		    btnAñadir.setBounds(976, 571, 140, 72);
+		    btnAñadir.addActionListener(e -> {
+		        try {
+		            
+		            // Obtener datos
+		            String tipoHabitacion = tipoHabitacionField.getText();
+		            int piso = (int) pisoCombo.getSelectedItem();
+		            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
+		            
+		            // Validar tarifa seleccionada
+		            if (tarifaSeleccionada == null) {
+		                return;
+		            }
+		            
+		            // Crear y guardar el tipo de habitación
+		            RoomType nuevoTipo = new RoomType();
+		            nuevoTipo.setRoom_type(tipoHabitacion);
+		            nuevoTipo.setNum_floor(piso);
+		            nuevoTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
+		            
+		            int idGenerado = new RoomTypesModel().createRoomType(nuevoTipo);
+		            
+		            // Cerrar ventana y volver al listado
+		            frame.dispose();
+		            new RoomTypesController().roomTypes();
+		            
+		        } catch (SQLException ex) {
+		        }
+		    });
+		    contentPane.add(btnAñadir);
+		    
 		JLabel lblNewLabel = new JLabel("Tipo de habitación");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNewLabel.setBounds(122, 158, 309, 27);
@@ -470,7 +532,7 @@ public class RoomTypesView {
 		lblTipoDeTarifa.setBounds(646, 158, 309, 27);
 		contentPane.add(lblTipoDeTarifa);
 		
-		JLabel lblHabitacionesSeleccionadas = new JLabel("Habitaciones seleccionadas");
+		JLabel lblHabitacionesSeleccionadas = new JLabel("Habitaciones incluidas");
 		lblHabitacionesSeleccionadas.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblHabitacionesSeleccionadas.setBounds(122, 289, 309, 27);
 		contentPane.add(lblHabitacionesSeleccionadas);
@@ -492,12 +554,8 @@ public class RoomTypesView {
 		btnCancelar.setBounds(808, 571, 140, 72);
 		contentPane.add(btnCancelar);
 		
-		JButton btnNewButton_1 = new JButton("Añadir");
-		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setBackground(new Color(7, 26, 43));
-		btnNewButton_1.setBounds(976, 571, 140, 72);
-		contentPane.add(btnNewButton_1);
+		
+		
 		/*frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
 		frame.setBounds(0,0,1280,720);

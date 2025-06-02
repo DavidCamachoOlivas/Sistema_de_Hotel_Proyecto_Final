@@ -19,7 +19,7 @@ public class RoomTypesController {
 		view.roomTypes();
 	}
 	
-	public void createRoomType() {
+	public void createRoomType() throws SQLException {
 		view.createRoomType();
 	}
 	
