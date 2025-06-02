@@ -12,10 +12,7 @@ import java.util.List;
 import views.HomeView;
 
 public class RoomTypesModel {
-    private int id;
-    private String type;
-    private float price;
-    
+
 	String host ="jdbc:mysql://uywiohjkpxink6lw:22LfDvbA07QUq1XOKk4d@b0ufffjehz0mbockqctk-mysql.services.clever-cloud.com:3306/b0ufffjehz0mbockqctk";
 	String user = "uywiohjkpxink6lw";
 	String pass = "22LfDvbA07QUq1XOKk4d";

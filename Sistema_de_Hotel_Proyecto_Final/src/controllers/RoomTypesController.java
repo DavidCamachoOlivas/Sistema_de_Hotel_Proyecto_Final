@@ -27,8 +27,8 @@ public class RoomTypesController {
 		view.editRoomType(rt);
 	}
 	
-	public void consultRoomType() {
-		view.consultRoomType();
+	public void consultRoomType(RoomType rt) {
+		view.consultRoomType(rt);
 	}
 	
 	public void deleteRoomType(RoomType rm) {

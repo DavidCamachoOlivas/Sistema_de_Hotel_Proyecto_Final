@@ -33,13 +33,18 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import buttonCells.TableActionCellEditor;
+import buttonCells.TableActionCellRender;
+import buttonCells.TableActionEvent;
 import controllers.ClientsController;
 import controllers.HomeController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.ClientsModel;
+import models.Room;
 import models.RoomType;
 import models.RoomTypesModel;
+import models.RoomsModel;
 import models.Tariff;
 
 public class RoomTypesView {
@@ -341,7 +346,7 @@ public class RoomTypesView {
 						// TODO Auto-generated method stub
 						RoomTypesController rooms = new RoomTypesController();
 						frame.dispose();
-						rooms.consultRoomType();
+						rooms.consultRoomType(roomType);
 					}
 					
 				});
@@ -628,21 +633,6 @@ public class RoomTypesView {
 		btnCancelar.setForeground(Color.WHITE);
 		btnCancelar.setBackground(new Color(153, 89, 45));
 		btnCancelar.setBounds(808, 571, 140, 72);
-		btnCancelar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rtc = new RoomTypesController();
-				frame.dispose();
-				try {
-					rtc.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
 		contentPane.add(btnCancelar);
 		
 		
@@ -949,7 +939,8 @@ public class RoomTypesView {
 
 	}
 	
-	public void consultRoomType() {
+	public void consultRoomType(RoomType rt) {
+		
 		/*frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -978,6 +969,40 @@ public class RoomTypesView {
 		btnHome.setForeground(Color.decode("#FFFFFF"));
 		btnHome.setBackground(Color.decode("#071A2B"));
 		panel.add(btnHome);*/
+	
+		List<Room> rooms = new ArrayList<>();
+		List<RoomType> roomTypes = new ArrayList<>();
+		List<Tariff> tariffs = new ArrayList<>();
+		
+		System.out.println("RT ID: " + rt.getId_room_type());
+		for (Room room : rooms) {
+		    System.out.println("Room: " + room.getNum_room() + ", ID tipo: " + room.getId_room_type());
+		}
+
+		// 1. Cargar los datos primero
+		RoomsModel functions = new RoomsModel();
+		try {
+		    rooms = functions.getAvailableRoom();
+		    roomTypes = functions.getAvailableRoomType();
+		    tariffs = functions.getAvailableTariffs();
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
+
+		// 2. Luego filtrar por el tipo de habitación seleccionado
+		List<Room> filteredRooms = new ArrayList<>();
+		List<Tariff> filteredTariffs = new ArrayList<>();
+
+		for (int i = 0; i < rooms.size(); i++) {
+		    Room room = rooms.get(i);
+		    Tariff tariff = tariffs.get(i); // asumiendo que sí está alineado con rooms
+
+		    if (room.getId_room_type() == rt.getId_room_type()) {
+		        filteredRooms.add(room);
+		        filteredTariffs.add(tariff);
+		    }
+		}
+
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -1029,7 +1054,7 @@ public class RoomTypesView {
 			
 		});
 		
-		JLabel lblTipoDeTarifa = new JLabel("Tipo de tarifa");
+		JLabel lblTipoDeTarifa = new JLabel();
 		lblTipoDeTarifa.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblTipoDeTarifa.setBounds(358, 159, 309, 27);
 		contentPane.add(lblTipoDeTarifa);
@@ -1040,54 +1065,81 @@ public class RoomTypesView {
 		lblNewLabel.setBounds(358, 185, 660, 61);
 		contentPane.add(lblNewLabel);
 		
-	
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBackground(new Color(7, 26, 43));
 		panel_1.setBounds(126, 289, 990, 272);
 		contentPane.add(panel_1);
-		String[] columnNames = {
-				"#-Habitación",
-				"Piso",
-				"Capacidad",
-				"Tarifa"
-		};
 		
-		Object [][] data = {
-				{"110", 2, "5 personas","Variable"},
-				{"111", 2, "5 personas","Variable"},
-				{"112", 2, "5 personas","Variable"},
-				{"113", 2, "5 personas","Variable"},
-				{"114", 2, "5 personas","Variable"},
-				{"115", 2, "5 personas","Variable"},				
-		};
-		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-		JTable roomsTypeDetailsTable = new JTable(model);
-		JScrollPane scrollPane = new JScrollPane(roomsTypeDetailsTable);
-		scrollPane.setBounds(0, 54, 990, 218);
-		panel_1.add(scrollPane);
-		roomsTypeDetailsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-		roomsTypeDetailsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
-		roomsTypeDetailsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-		roomsTypeDetailsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-		roomsTypeDetailsTable.setRowHeight(30);
-		
-		JLabel lblNewLabel_2 = new JLabel("New label");
+		JLabel lblNewLabel_2 = new JLabel("impreson");
 		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 		lblNewLabel_2.setForeground(Color.decode("#FFFFFF"));
 		lblNewLabel_2.setBounds(400, 10, 200, 40);
 		panel_1.add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_5 = new JLabel("");
+		String[] columnas = {"Num_room", "Tipo", "Estado", "Acciones"};
+		
+		Object[][] datos = new Object[filteredRooms.size()][4];
+		for (int i = 0; i < filteredRooms.size(); i++) {
+		    datos[i][0] = filteredRooms.get(i).getNum_room();
+		    datos[i][1] = rt.getRoom_type(); // ya es el tipo que se seleccionó
+		    datos[i][2] = filteredTariffs.get(i).isRefundable() ? "Reembolsable" : "No reembolsable";
+		}
+		
+		DefaultTableModel model = new DefaultTableModel(datos, columnas);
+		JTable clientsTable = new JTable(model);
+		JScrollPane scrollPane = new JScrollPane(clientsTable);
+		scrollPane.setBounds(0, 40, 1000, 260);
+				
+				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				clientsTable.setRowHeight(30);
+				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+				clientsTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+				clientsTable.setDefaultEditor(Object.class,null);
+				TableActionEvent event = new TableActionEvent() {
+		            @Override
+		            public void onEdit(int row) {
+		            	RoomsController client = new RoomsController();
+						frame.dispose();
+						client.editRoom();
+		                System.out.println("Edit row : " + row);
+		            }
+
+		            @Override
+		            public void onDelete(int row) {
+		            	RoomsController client = new RoomsController();
+						client.deleteRoom();
+						//lo de abajo se implementará al dar click en el boton "aceptar"
+		                /*if (clientsTable.isEditing()) {
+		                	clientsTable.getCellEditor().stopCellEditing();
+		                }
+		                model.removeRow(row);*/
+		            }
+
+		            @Override
+		            public void onView(int row) {
+		            	RoomsController client = new RoomsController();
+						frame.dispose();
+						client.consultRoom();
+		                System.out.println("View row : " + row);
+		            }
+		        };
+		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
+		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
+				
+		        panel_1.add(scrollPane);
+		
+		
+		
+		JLabel lblNewLabel_5 = new JLabel();
+		lblNewLabel_5.setText(""+rt.getId_tariff());
 		lblNewLabel_5.setBounds(130, 158, 180, 90);
 		Image img = new ImageIcon("src/images/normal.png").getImage().getScaledInstance(180, 90, Image.SCALE_SMOOTH);
 		lblNewLabel_5.setIcon(new ImageIcon(img));
 		contentPane.add(lblNewLabel_5);
-		roomsTypeDetailsTable.setDefaultEditor(Object.class,null);
-		
-		
-		
+		clientsTable.setDefaultEditor(Object.class,null);
 		
 		JButton btnDownload = new JButton("Descargar .pdf");
 		btnDownload.setBounds(125, 580, 990,70);
