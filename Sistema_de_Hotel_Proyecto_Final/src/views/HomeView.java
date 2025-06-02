@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -103,7 +104,12 @@ public class HomeView extends JFrame{
 				// TODO Auto-generated method stub
 				RoomTypesController rooms = new RoomTypesController();
 				frame.dispose();
-				rooms.roomTypes();
+				try {
+					rooms.roomTypes();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		});

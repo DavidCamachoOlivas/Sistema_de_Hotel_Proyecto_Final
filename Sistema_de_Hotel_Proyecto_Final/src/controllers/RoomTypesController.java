@@ -1,5 +1,8 @@
 package controllers;
 
+import java.sql.SQLException;
+
+import models.RoomType;
 import views.ClientsView;
 import views.RoomTypesView;
 
@@ -12,9 +15,7 @@ public class RoomTypesController {
 		view = new RoomTypesView();
 	}
 	
-	
-	
-	public void roomTypes(){
+	public void roomTypes() throws SQLException{
 		view.roomTypes();
 	}
 	
@@ -22,16 +23,16 @@ public class RoomTypesController {
 		view.createRoomType();
 	}
 	
-	public void editRoomType() {
-		view.editRoomType();
+	public void editRoomType(RoomType rt) throws SQLException {
+		view.editRoomType(rt);
 	}
 	
 	public void consultRoomType() {
 		view.consultRoomType();
 	}
 	
-	public void deleteRoomType() {
-		view.deleteConfirm();
+	public void deleteRoomType(RoomType rm) {
+		view.deleteConfirm(rm);
 	}
 	
 	public void successDelete() {
