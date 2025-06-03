@@ -217,6 +217,9 @@ public class RentalsView {
 				TableActionEvent2 event = new TableActionEvent2() {
 		            @Override
 		            public void onEdit(int row) {
+		            	RentalsController rent = new RentalsController();
+		            	frame.dispose();
+		            	rent.editRental();
 		                System.out.println("Edit row : " + row);
 		            }
 
@@ -225,7 +228,7 @@ public class RentalsView {
 		                if (clientsTable.isEditing()) {
 		                	clientsTable.getCellEditor().stopCellEditing();
 		                }
-		                model.removeRow(row);
+		                //model.removeRow(row);
 		            }
 
 		        };
@@ -393,95 +396,136 @@ public class RentalsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Editar renta");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
+		
+		JLabel lblTitle = new JLabel("Editar renta");
+		lblTitle.setBounds(200, 42, 350, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTitle.setOpaque(true);
+		lblTitle.setBackground(null);
+		
+		JLabel lblNewLabel = new JLabel("Nombre del cliente");
+		lblNewLabel.setBounds(117, 175, 178, 34);
+		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(117, 219, 344, 44);
+		panel.add(comboBox);
+		
+		JButton btnNewButton = new JButton("Nuevo cliente");
+		btnNewButton.setBounds(481, 219, 146, 44);
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(new Color(7, 26, 43));
+		btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 16));
+		panel.add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ClientsController client = new ClientsController();
+				frame.dispose();
+				client.createClient();
+			}
+			
+		});
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(117, 314, 510, 44);
+		panel.add(comboBox_1);
+		
+		JLabel lblNewLabel_1 = new JLabel("Tipo de habitación");
+		lblNewLabel_1.setBounds(117, 270, 178, 34);
+		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Check in");
+		lblNewLabel_2.setBounds(691, 175, 178, 34);
+		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_2);
+		
+		JTextField textField = new JTextField("31/12/24");
+		textField.setBounds(691, 219, 424, 44);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Check out");
+		lblNewLabel_2_1.setBounds(691, 270, 178, 34);
+		lblNewLabel_2_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_2_1);
+		
+		JTextField textField_1 = new JTextField("12/01/25");
+		textField_1.setColumns(10);
+		textField_1.setBounds(691, 314, 424, 44);
+		panel.add(textField_1);
+		
+		JLabel lblNewLabel_2_1_1 = new JLabel("Precio por noche");
+		lblNewLabel_2_1_1.setBounds(691, 368, 178, 34);
+		lblNewLabel_2_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_2_1_1);
+		
+		JTextField textField_2 = new JTextField("$2,000");
+		textField_2.setColumns(10);
+		textField_2.setBounds(691, 412, 424, 44);
+		panel.add(textField_2);
+		
+		JLabel lblNewLabel_2_1_1_1 = new JLabel("Total");
+		lblNewLabel_2_1_1_1.setBounds(691, 466, 178, 34);
+		lblNewLabel_2_1_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+		panel.add(lblNewLabel_2_1_1_1);
+		
+		JTextField textField_3 = new JTextField("$24,000");
+		textField_3.setColumns(10);
+		textField_3.setBounds(691, 510, 424, 44);
+		panel.add(textField_3);
+		
+		JButton btnNewButton_1 = new JButton("Cancelar");
+		btnNewButton_1.setBounds(691, 601, 188, 51);
+		btnNewButton_1.setBackground(new Color(153, 89, 45));
+		btnNewButton_1.setForeground(Color.WHITE);
+		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		panel.add(btnNewButton_1);
+		
+		JButton btnNewButton_1_1 = new JButton("Aceptar");
+		btnNewButton_1_1.setBounds(927, 601, 188, 51);
+		btnNewButton_1_1.setForeground(Color.WHITE);
+		btnNewButton_1_1.setBackground(new Color(7, 26, 43));
+		btnNewButton_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		panel.add(btnNewButton_1_1);
 		
 		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RentalsController rental = new RentalsController();
+				RentalsController rent = new RentalsController();
 				frame.dispose();
-				rental.rentals();
+				rent.rentals();
 			}
 			
 		});
 	}
 	
-	public void consultRental() {
-		frame = new JFrame();
-		frame.setTitle("Hotel Ancla de Paz");
-		frame.setResizable(false);
-		frame.setBounds(0,0,1280,720);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		
-		JLabel lblTitle = new JLabel("Detalles");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
-		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
-		
-		btnHome.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RentalsController rental = new RentalsController();
-				frame.dispose();
-				rental.rentals();
-			}
-			
-		});
-		
-		JButton lblDownload = new JButton("Descargar .pdf");
-		lblDownload.setBounds(900,500,300,70);
-		lblDownload.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		lblDownload.setForeground(Color.decode("#FFFFFF"));
-		lblDownload.setBackground(Color.decode("#071A2B"));
-		panel.add(lblDownload);
-		
-		lblDownload.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RentalsController rental = new RentalsController();
-				rental.successDownload();
-			}
-			
-		});
-	}
+	
 	
 	public void deleteConfirm() {
 		frame = new JFrame();

@@ -22,10 +22,6 @@ public class RentalsController {
 		view.editRental();
 	}
 	
-	public void consultRental() {
-		view.consultRental();
-	}
-	
 	public void deleteConfirm() {
 		view.deleteConfirm();
 	}
