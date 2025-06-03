@@ -35,3 +35,23 @@ Creación, edición, consulta y eliminación de tarifas.
 Frontend: Java (Eclipse)
 
 Base de Datos: [Upstash]
+
+# TERCER ENTREGABLE: CRUD de Tipos de Habitaciones
+
+## Descripción General
+
+Este módulo permite la administración de los tipos de habitaciones que ofrece el hotel, integrando funcionalidades de creación, actualización y eliminación de registros. Además, se incorpora la gestión de imágenes relacionadas a cada tipo.
+
+## Funcionalidades principales implementadas
+
+✅ **Agregar Tipo de Habitación:**
+Permite registrar nuevos tipos de habitación incluyendo sus datos descriptivos.
+
+✏️ **Editar Tipo de Habitación:**
+Habilita la modificación de la información existente de cada tipo de habitación, facilitando la actualización de datos.
+
+🗑️ **Eliminar Tipo de Habitación:**
+Permite borrar los registros seleccionados usando el botón de eliminar, asegurando que la acción se realice de forma segura.
+
+⬇️ **Descargar Información:**
+Posibilita la descarga de los datos del tipo de habitación, generando un archivo con la información necesaria.
