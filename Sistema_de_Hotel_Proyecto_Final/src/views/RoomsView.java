@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serial;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import buttonCells.TableActionCellEditor;
@@ -80,8 +82,8 @@ public class RoomsView {
 			e.printStackTrace();
 		}
 		
-		JButton btnCreate = new JButton("Crear");
-		btnCreate.setBounds(830,600,300,70);
+		JButton btnCreate = new JButton("Añadir");
+		btnCreate.setBounds(830,580,300,70);
 		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnCreate.setForeground(Color.decode("#FFFFFF"));
 		btnCreate.setBackground(Color.decode("#071A2B"));
@@ -108,7 +110,7 @@ public class RoomsView {
 		
 		
 		JLabel lblTitle = new JLabel("Habitaciones");
-		lblTitle.setBounds(200, 42, 550, 82);
+		lblTitle.setBounds(200, 42, 300, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -141,20 +143,20 @@ public class RoomsView {
 		    }
 		}
 		
-		JPanel clientsTablePanel = new JPanel();
-		clientsTablePanel.setBounds(130, 260, 1000, 310);
-		clientsTablePanel.setBackground(Color.decode("#071A2B"));
-		panel.add(clientsTablePanel);
-		clientsTablePanel.setLayout(null);
+		JPanel RoomTablePanel = new JPanel();
+		RoomTablePanel.setBounds(130, 240, 1000, 310);
+		RoomTablePanel.setBackground(Color.decode("#071A2B"));
+		panel.add(RoomTablePanel);
+		RoomTablePanel.setLayout(null);
 				DefaultTableModel model = new DefaultTableModel(datos, columnas);
-				JTable clientsTable = new JTable(model);
-				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-				clientsTable.setRowHeight(30);
-				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
-				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-				clientsTable.getColumnModel().getColumn(3).setPreferredWidth(150);
-				clientsTable.setDefaultEditor(Object.class,null);
+				JTable RoomTable = new JTable(model);
+				RoomTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				RoomTable.setRowHeight(30);
+				RoomTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				RoomTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+				RoomTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+				RoomTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+				RoomTable.setDefaultEditor(Object.class,null);
 				TableActionEvent event = new TableActionEvent() {
 		            @Override
 		            public void onEdit(int row) {
@@ -166,8 +168,8 @@ public class RoomsView {
 
 		            @Override
 		            public void onDelete(int row) {
-		            	RoomsController client = new RoomsController();
-						client.deleteRoom();
+		            	RoomsController rc = new RoomsController();
+						rc.deleteRoom();
 						//lo de abajo se implementará al dar click en el boton "aceptar"
 		                /*if (clientsTable.isEditing()) {
 		                	clientsTable.getCellEditor().stopCellEditing();
@@ -177,27 +179,67 @@ public class RoomsView {
 
 		            @Override
 		            public void onView(int row) {
-		            	RoomsController client = new RoomsController();
+		            	RoomsController rc = new RoomsController();
 						frame.dispose();
-						client.consultRoom();
+						rc.consultRoom();
 		                System.out.println("View row : " + row);
 		            }
 		        };
-		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
-		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
-				JScrollPane scrollPane = new JScrollPane(clientsTable);
-				scrollPane.setBounds(0, 50, 1000, 260);
-				clientsTablePanel.add(scrollPane);
+		        RoomTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
+		        RoomTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
 				
-				JLabel lblTableTitle = new JLabel("Clientes");
+		        JScrollPane scrollPane = new JScrollPane(RoomTable);
+				scrollPane.setBounds(0, 50, 1000, 260);
+				RoomTablePanel.add(scrollPane);
+				
+				JLabel lblTableTitle = new JLabel("Habitaciones");
 				lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 				lblTableTitle.setForeground(Color.decode("#FFFFFF"));
-				lblTableTitle.setBounds(450, 10, 200, 40);
-				clientsTablePanel.add(lblTableTitle);
+				lblTableTitle.setBounds(400, 5, 200, 40);
+				RoomTablePanel.add(lblTableTitle);
 				
 				JTextField search = new JTextField();
-				search.setBounds(130, 200, 800, 50);
+				search.setBounds(130, 180, 800, 50);
+				search.setText("🔍 Buscar");
 				search.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				search.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						if(search.getText().equals("🔍 Buscar")) {
+							search.setText("");							
+						}
+						else {
+							return;
+						}
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 				panel.add(search);
 				search.setColumns(10);
 				
@@ -205,7 +247,7 @@ public class RoomsView {
 				btnSearch.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
 				btnSearch.setBackground(Color.decode("#071A2B"));
 				btnSearch.setForeground(Color.decode("#FFFFFF"));
-				btnSearch.setBounds(935, 200, 195, 50);
+				btnSearch.setBounds(935, 180, 195, 50);
 				panel.add(btnSearch);
 				
 		btnHome.addActionListener(new ActionListener() {
@@ -243,8 +285,8 @@ public class RoomsView {
 		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Añadir habitación");
-		lblTitle.setBounds(200, 42, 550, 82);
+		JLabel lblTitle = new JLabel("Añadir Habitacion");
+		lblTitle.setBounds(200, 42, 350, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -280,13 +322,13 @@ public class RoomsView {
 		lblImg.setText(null);
 		lblImg.setBorder(BorderFactory.createLineBorder(Color.black));
 		
-		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
-		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		ImageIcon imagenPredeterminada = new ImageIcon("src/images/subir.png");
+		Image scaledPredeterminada = imagenPredeterminada.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+		
 		
 		lblImg.setHorizontalAlignment(JLabel.CENTER);
 		lblImg.setVerticalAlignment(JLabel.CENTER);
-		lblImg.setIcon(lblImgScaledIcon);
+		lblImg.setIcon(new ImageIcon(scaledPredeterminada));
 		panel.add(lblImg);
 		
 		JButton btnAddImage = new JButton("Agregar imagen");
@@ -311,14 +353,11 @@ public class RoomsView {
 			
 			        try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
 			        	imageBytes = fis.readAllBytes();
-			           
-			            // Mostrar vista previa
-			          
+			        	
 			            	ImageIcon icon = new ImageIcon(imageBytes);
 			            	Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-			            	btnAddImage.setIcon(new ImageIcon(scaled));
-			
-			            System.out.println("Imagen cargada y mostrada correctamente");
+			            	lblImg.setIcon(new ImageIcon(scaled));
+			            	
 			        } catch (IOException e1) {
 			            e1.printStackTrace();
 			        }
@@ -708,10 +747,10 @@ public class RoomsView {
 		bedQtTextField.setBounds(130, 500, 150, 50);
 		panel.add(bedQtTextField);
 
-		TextArea amenitiestextField_3 = new TextArea("Suite amplia y espaciosa con vista al mar ");
-		amenitiestextField_3.setColumns(10);
-		amenitiestextField_3.setBounds(700, 390, 470, 160);
-		panel.add(amenitiestextField_3);
+		TextArea amenitiestextField = new TextArea("Suite amplia y espaciosa con vista al mar ");
+		amenitiestextField.setColumns(10);
+		amenitiestextField.setBounds(700, 390, 470, 160);
+		panel.add(amenitiestextField);
 		
 		JButton btnCreate = new JButton("Guardar");
 		btnCreate.setBounds(970,600,200,70);
@@ -771,7 +810,7 @@ public class RoomsView {
 		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Detalles del cliente");
+		JLabel lblTitle = new JLabel("Detalles de habitación");
 		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
@@ -842,30 +881,30 @@ public class RoomsView {
 				
 		};
 		
-		JPanel clientsTablePanel = new JPanel();
-		clientsTablePanel.setBounds(130, 350, 1000, 230);
-		clientsTablePanel.setBackground(Color.decode("#071A2B"));
-		panel.add(clientsTablePanel);
-		clientsTablePanel.setLayout(null);
+		JPanel RoomTablePanel = new JPanel();
+		RoomTablePanel.setBounds(130, 350, 1000, 230);
+		RoomTablePanel.setBackground(Color.decode("#071A2B"));
+		panel.add(RoomTablePanel);
+		RoomTablePanel.setLayout(null);
 				DefaultTableModel model = new DefaultTableModel(data, columnNames);
-				JTable clientsTable = new JTable(model);
-				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-				clientsTable.setRowHeight(30);
-				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
-				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-				clientsTable.setDefaultEditor(Object.class,null);
+				JTable RoomTable = new JTable(model);
+				RoomTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				RoomTable.setRowHeight(30);
+				RoomTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				RoomTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+				RoomTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+				RoomTable.setDefaultEditor(Object.class,null);
 				
 		        
-				JScrollPane scrollPane = new JScrollPane(clientsTable);
+				JScrollPane scrollPane = new JScrollPane(RoomTable);
 				scrollPane.setBounds(0, 50, 1000, 230);
-				clientsTablePanel.add(scrollPane);
+				RoomTablePanel.add(scrollPane);
 				
 				JLabel lblTableTitle = new JLabel("Historial de rentas");
 				lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 				lblTableTitle.setForeground(Color.decode("#FFFFFF"));
 				lblTableTitle.setBounds(430, 10, 400, 40);
-				clientsTablePanel.add(lblTableTitle);
+				RoomTablePanel.add(lblTableTitle);
 		
 		JButton btnCancel = new JButton("Descargar .pdf");
 		btnCancel.setBounds(130,600,1000,70);
@@ -1040,5 +1079,178 @@ public class RoomsView {
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
 		panel.add(title);
+	}
+	
+	public void roomDetails() {
+	    frame = new JFrame();
+	    frame.setTitle("Hotel Ancla de Paz");
+	    frame.setResizable(false);
+	    frame.setBounds(0,0,1280,720);
+	    frame.setLocationRelativeTo(null);
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    frame.setVisible(true);
+	    
+	    JPanel panel = new JPanel();
+	    frame.getContentPane().add(panel, BorderLayout.CENTER);
+	    panel.setBackground(Color.decode("#FFFCF7"));
+	    panel.setLayout(null);
+
+	    JPanel header = new JPanel();
+	    header.setBounds(0, 0, 1266, 130);
+	    header.setBackground(Color.decode("#071A2B"));
+	    panel.add(header);
+	    header.setLayout(null);
+	    
+	    JLabel lblTitle = new JLabel("Detalles");
+	    lblTitle.setBounds(200, 42, 250, 82);
+	    header.add(lblTitle);
+	    lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+	    lblTitle.setForeground(Color.decode("#FFFFFF"));
+	    lblTitle.setOpaque(true);
+	    lblTitle.setBackground(null);
+	    
+	    JButton btnBack = new JButton("");
+	    btnBack.setBounds(130, 60, 56, 56);
+	    header.add(btnBack);
+	    btnBack.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    btnBack.setForeground(Color.decode("#FFFFFF"));
+	    btnBack.setBorderPainted(false);
+	    btnBack.setBackground(null);
+
+	    ImageIcon btnBackOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnBack.png"));
+	    Image btnBackScaledImage = btnBackOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+	    ImageIcon btnBackScaledIcon = new ImageIcon(btnBackScaledImage);
+	    btnBack.setIcon(btnBackScaledIcon);
+
+	    JPanel roomInfoPanel = new JPanel();
+	    roomInfoPanel.setBounds(130, 160, 400, 400);
+	    roomInfoPanel.setBackground(Color.decode("#FFFFFF"));
+	    roomInfoPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#E0E0E0"), 1));
+	    panel.add(roomInfoPanel);
+	    roomInfoPanel.setLayout(null);
+
+	    JPanel roomImagePanel = new JPanel();
+	    roomImagePanel.setBounds(20, 20, 360, 200);
+	    roomImagePanel.setBackground(Color.decode("#F0F0F0"));
+	    roomImagePanel.setBorder(BorderFactory.createLineBorder(Color.decode("#E0E0E0"), 1));
+	    roomInfoPanel.add(roomImagePanel);
+	    
+	    JLabel roomImageLabel = new JLabel("Imagen de habitación", SwingConstants.CENTER);
+	    roomImageLabel.setBounds(0, 0, 360, 200);
+	    roomImageLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    roomImageLabel.setForeground(Color.decode("#888888"));
+	    roomImagePanel.add(roomImageLabel);
+	    
+	    JLabel lblRoomTitle = new JLabel("Habitación de lujo");
+	    lblRoomTitle.setBounds(20, 240, 300, 30);
+	    lblRoomTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+	    lblRoomTitle.setForeground(Color.decode("#071A2B"));
+	    roomInfoPanel.add(lblRoomTitle);
+
+	    JLabel lblPrice = new JLabel("$2,000.00 MXN/noche");
+	    lblPrice.setBounds(20, 275, 200, 25);
+	    lblPrice.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+	    lblPrice.setForeground(Color.decode("#071A2B"));
+	    roomInfoPanel.add(lblPrice);
+
+	    JLabel lblTariff = new JLabel("Tarifa variable");
+	    lblTariff.setBounds(20, 300, 150, 20);
+	    lblTariff.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    lblTariff.setForeground(Color.decode("#666666"));
+	    roomInfoPanel.add(lblTariff);
+
+	    JLabel lblStars = new JLabel("5 estrellas");
+	    lblStars.setBounds(20, 320, 100, 20);
+	    lblStars.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    lblStars.setForeground(Color.decode("#666666"));
+	    roomInfoPanel.add(lblStars);
+
+	    JLabel lblAmenidadesTitle = new JLabel("Amenidades");
+	    lblAmenidadesTitle.setBounds(20, 345, 120, 25);
+	    lblAmenidadesTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
+	    lblAmenidadesTitle.setForeground(Color.decode("#071A2B"));
+	    roomInfoPanel.add(lblAmenidadesTitle);
+	    
+	    JLabel lblWifi = new JLabel("Wifi");
+	    lblWifi.setBounds(20, 370, 60, 20);
+	    lblWifi.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    lblWifi.setForeground(Color.decode("#666666"));
+	    roomInfoPanel.add(lblWifi);
+	    
+	    JLabel lblHotWater = new JLabel("Agua caliente");
+	    lblHotWater.setBounds(90, 370, 100, 20);
+	    lblHotWater.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    lblHotWater.setForeground(Color.decode("#666666"));
+	    roomInfoPanel.add(lblHotWater);
+	    
+	    JLabel lblJacuzzi = new JLabel("Jacuzzi");
+	    lblJacuzzi.setBounds(200, 370, 60, 20);
+	    lblJacuzzi.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    lblJacuzzi.setForeground(Color.decode("#666666"));
+	    roomInfoPanel.add(lblJacuzzi);
+	    
+	    String[] columnNames = {
+	        "Cliente",
+	        "Check in",
+	        "Check out"
+	    };
+	    
+	    Object[][] data = {
+	        {"1", "12/02/25", "15/02/25"},
+	        {"1", "12/02/25", "15/02/25"},
+	        {"1", "12/02/25", "15/02/25"},
+	        {"1", "12/02/25", "15/02/25"},
+	        {"1", "12/02/25", "15/02/25"},
+	        {"1", "12/02/25", "15/02/25"}
+	    };
+	    
+	    JPanel historialTablePanel = new JPanel();
+	    historialTablePanel.setBounds(560, 160, 570, 400);
+	    historialTablePanel.setBackground(Color.decode("#071A2B"));
+	    panel.add(historialTablePanel);
+	    historialTablePanel.setLayout(null);
+	    
+	    JLabel lblTableTitle = new JLabel("Historial de renta");
+	    lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+	    lblTableTitle.setForeground(Color.decode("#FFFFFF"));
+	    lblTableTitle.setBounds(200, 10, 250, 40);
+	    historialTablePanel.add(lblTableTitle);
+	    
+	    DefaultTableModel model = new DefaultTableModel(data, columnNames);
+	    JTable historialTable = new JTable(model);
+	    historialTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+	    historialTable.setRowHeight(35);
+	    historialTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
+	    historialTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+	    historialTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+	    historialTable.setDefaultEditor(Object.class, null);
+	    
+	    JScrollPane scrollPane = new JScrollPane(historialTable);
+	    scrollPane.setBounds(20, 60, 530, 320);
+	    historialTablePanel.add(scrollPane);
+	    
+	    JButton btnDownloadPDF = new JButton("Descargar detalles (PDF)");
+	    btnDownloadPDF.setBounds(560, 580, 350, 50);
+	    btnDownloadPDF.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
+	    btnDownloadPDF.setForeground(Color.decode("#FFFFFF"));
+	    btnDownloadPDF.setBackground(Color.decode("#28A745")); 
+	    panel.add(btnDownloadPDF);
+
+	    btnBack.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	RoomsController home = new RoomsController();
+				frame.dispose();
+				home.rooms();
+	        }
+	    });
+	    
+	    btnDownloadPDF.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // llamar al metodo del pop up
+	            System.out.println("Descargando PDF...");
+	        }
+	    });
 	}
 }
