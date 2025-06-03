@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Connection.ConnectionDB;
 import views.HomeView;
 
 public class AuthModel {
@@ -16,16 +17,14 @@ public class AuthModel {
 
 
     public boolean conectado(String u, String p) {
-    	String host ="jdbc:mysql://uywiohjkpxink6lw:22LfDvbA07QUq1XOKk4d@b0ufffjehz0mbockqctk-mysql.services.clever-cloud.com:3306/b0ufffjehz0mbockqctk";
-    	String user = "uywiohjkpxink6lw";
-    	String pass = "22LfDvbA07QUq1XOKk4d";
-        Connection conn = null;
+
+    	Connection conn = null;
         Statement stmt = null;
         String sql = "SELECT email, password FROM users";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(host, user, pass);
+            conn = ConnectionDB.getDataSource().getConnection();
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 

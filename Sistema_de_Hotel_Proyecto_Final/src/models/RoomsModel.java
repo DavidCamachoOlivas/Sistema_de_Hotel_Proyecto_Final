@@ -9,16 +9,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomsModel {
+import Connection.ConnectionDB;
 
-	String host ="jdbc:mysql://uywiohjkpxink6lw:22LfDvbA07QUq1XOKk4d@b0ufffjehz0mbockqctk-mysql.services.clever-cloud.com:3306/b0ufffjehz0mbockqctk";
-	String user = "uywiohjkpxink6lw";
-	String pass = "22LfDvbA07QUq1XOKk4d";
-    
+public class RoomsModel {
 	 public int createRoom(Room room) throws SQLException {
         String sql = "INSERT INTO `room` (`id_room`, `id_room_image`, `id_room_type`, `num_room`, `beds_qty`, `max_guest_qty`, `room_name`, `amenities`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
-        try (Connection conn = DriverManager.getConnection(host, user, pass);
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             
             stmt.setInt(1, room.getId_room());
@@ -43,7 +40,7 @@ public class RoomsModel {
 	        List<RoomType> roomTypes = new ArrayList<>();
 	        String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image, description FROM room_type";
 	        
-	        try (Connection conn = DriverManager.getConnection(host, user, pass);
+	        try (Connection conn = ConnectionDB.getDataSource().getConnection();
 	             Statement stmt = conn.createStatement();
 	             ResultSet rs = stmt.executeQuery(sql)) {
 	            
@@ -67,7 +64,7 @@ public class RoomsModel {
 		List<Room> rooms = new ArrayList<>();
 		String sql = "SELECT id_room, id_room_image, id_room_type, num_room, beds_qty, max_guest_qty, room_name, amenities FROM room";
 		
-		try (Connection conn = DriverManager.getConnection(host, user, pass);
+		try (Connection conn = ConnectionDB.getDataSource().getConnection();
 		     Statement stmt = conn.createStatement();
 		     ResultSet rs = stmt.executeQuery(sql)) {
 		    
@@ -91,7 +88,7 @@ public class RoomsModel {
 		List<RoomImage> roomsImages = new ArrayList<>();
 		String sql = "SELECT id_room_image, id_room, room_image FROM room_image";
 		
-		try (Connection conn = DriverManager.getConnection(host, user, pass);
+		try (Connection conn = ConnectionDB.getDataSource().getConnection();
 		     Statement stmt = conn.createStatement();
 		     ResultSet rs = stmt.executeQuery(sql)) {
 		    
@@ -111,7 +108,7 @@ public class RoomsModel {
         List<Tariff> tariffs = new ArrayList<>();
         String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable FROM tariff";
         
-        try (Connection conn = DriverManager.getConnection(host, user, pass);
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             

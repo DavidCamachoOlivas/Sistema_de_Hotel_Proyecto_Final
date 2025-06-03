@@ -50,6 +50,7 @@ import models.Tariff;
 public class RoomTypesView {
 
 	private JFrame frame;
+	JTable roomTypesTable;
 	private RoomTypesModel functions;
 	private int currentPage = 1;
 	private final int itemsPerPage = 3;
@@ -710,7 +711,7 @@ public class RoomTypesView {
 		        filteredTariffs.add(tariff);
 		    }
 		}
-
+		
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -796,17 +797,17 @@ public class RoomTypesView {
 		}
 		
 		DefaultTableModel model = new DefaultTableModel(datos, columnas);
-		JTable clientsTable = new JTable(model);
-		JScrollPane scrollPane = new JScrollPane(clientsTable);
+		roomTypesTable = new JTable(model);
+		JScrollPane scrollPane = new JScrollPane(roomTypesTable);
 		scrollPane.setBounds(0, 40, 1000, 260);
 				
-				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-				clientsTable.setRowHeight(30);
-				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
-				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-				clientsTable.getColumnModel().getColumn(3).setPreferredWidth(150);
-				clientsTable.setDefaultEditor(Object.class,null);
+				roomTypesTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+				roomTypesTable.setRowHeight(30);
+				roomTypesTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+				roomTypesTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+				roomTypesTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+				roomTypesTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+				roomTypesTable.setDefaultEditor(Object.class,null);
 				
 		        panel_1.add(scrollPane);
 		
@@ -818,25 +819,40 @@ public class RoomTypesView {
 		Image img = new ImageIcon(rt.getImage()).getImage().getScaledInstance(180, 90, Image.SCALE_SMOOTH);
 		lblNewLabel_5.setIcon(new ImageIcon(img));
 		contentPane.add(lblNewLabel_5);
-		clientsTable.setDefaultEditor(Object.class,null);
+		roomTypesTable.setDefaultEditor(Object.class,null);
 		
-		JButton btnDownload = new JButton("Descargar .pdf");
-		btnDownload.setBounds(125, 580, 990,70);
-		btnDownload.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnDownload.setForeground(Color.decode("#FFFFFF"));
-		btnDownload.setBackground(Color.decode("#071A2B"));
-		contentPane.add(btnDownload);
-		
-		btnDownload.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				rooms.successDownload();
-			}
+		 JButton btnDownload = new JButton("Descargar .pdf");
+			btnDownload.setBounds(125, 580, 990,70);
+			btnDownload.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+			btnDownload.setForeground(Color.decode("#FFFFFF"));
+			btnDownload.setBackground(Color.decode("#071A2B"));
+			contentPane.add(btnDownload);
 			
-		});
+			btnDownload.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					RoomTypesController rooms = new RoomTypesController();
+					RoomTypesModel rtm = new RoomTypesModel();
+					String url;
+					JFileChooser fileChooser = new JFileChooser();
+			        fileChooser.setDialogTitle("Selecciona una carpeta");
+			        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			        int resultado = fileChooser.showOpenDialog(null);
+			        if (resultado == JFileChooser.APPROVE_OPTION) {
+			            File carpeta = fileChooser.getSelectedFile();
+			            url = carpeta.getAbsolutePath() + "/tipoHabitacion.pdf";
+			            rtm.exportarTablaPDF(roomTypesTable, url);
+			        }
+			        else{
+			        	System.out.println("ruta no valida");
+			        }
+					
+				}
+				
+			});
 	}
 	
 	public void deleteConfirm(RoomType rm) {
@@ -1078,17 +1094,23 @@ public class RoomTypesView {
 	                ex.printStackTrace();
 	            }
 	        });
-
 	        JButton btnDetalles = new JButton("Detalles");
-	        btnDetalles.setForeground(Color.WHITE);
-	        btnDetalles.setBackground(new Color(7, 26, 43));
-	        btnDetalles.setBounds(209, 118, 89, 49);
-	        panel_5.add(btnDetalles);
-	        btnDetalles.addActionListener(e -> {
-	            RoomTypesController rooms = new RoomTypesController();
-	            frame.dispose();
-	            rooms.consultRoomType(roomType);
-	        });
+			btnDetalles.setForeground(Color.WHITE);
+			btnDetalles.setBackground(new Color(7, 26, 43));
+			btnDetalles.setBounds(209, 118, 89, 49);
+			panel_5.add(btnDetalles);
+			
+			btnDetalles.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					RoomTypesController rooms = new RoomTypesController();
+					frame.dispose();
+					rooms.consultRoomType(roomType);
+				}
+				
+			});
 
 	        x += 320;
 	    }
