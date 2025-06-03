@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -202,11 +203,7 @@ public class RoomTypesView {
 		lblNewLabel_4.setBounds(238, 21, 550, 66);
 		panel.add(lblNewLabel_4);
 		
-		JLabel lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setBounds(146, 21, 128, 75);
-		Image img = new ImageIcon("src/flecha.png").getImage().getScaledInstance(76, 58, Image.SCALE_SMOOTH);
-		lblNewLabel_5.setIcon(new ImageIcon(img));
-		panel.add(lblNewLabel_5);
+		
 		
 		//Aqui hice cambios donde se ingresan los datos y cambie el JTextField de tipo de tarifa por un JComboBox
 		
@@ -216,7 +213,7 @@ public class RoomTypesView {
 
 		
 		JButton btnNewButton1 = new JButton();
-		btnNewButton1.setBounds(100, 250, 470, 400);
+		btnNewButton1.setBounds(200, 350, 400, 300);
 		btnNewButton1.setBackground(new Color(216, 216, 216));
 		btnNewButton1.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
 		panel.add(btnNewButton1); // Este botón va en el panel
@@ -257,26 +254,33 @@ public class RoomTypesView {
 		contentPane.add(btnNewButton1);
 		
 			JTextField tipoHabitacionField = new JTextField();
-		    tipoHabitacionField.setBounds(100, 196, 470, 49);
+		    tipoHabitacionField.setBounds(200, 196, 400, 49);
 		    contentPane.add(tipoHabitacionField);
 		    
 		    JTextField tipoHabitacionIncluidas = new JTextField();
-		    tipoHabitacionIncluidas.setBounds(646, 350, 470, 49);
+		    tipoHabitacionIncluidas.setBounds(200, 290, 400, 49);
 		    contentPane.add(tipoHabitacionIncluidas);
+		    
+		    JTextArea textArea = new JTextArea(5, 30); 
+		    textArea.setLineWrap(true); 
+		    textArea.setWrapStyleWord(true); 
+		    JScrollPane scrollPane = new JScrollPane(textArea);
+		    scrollPane.setBounds(696,350,420,200);
+		    contentPane.add(scrollPane);
 		    
 		    // Combo para piso
 		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 		    JComboBox<Integer> pisoCombo = new JComboBox<>(opcionesPiso);
-		    pisoCombo.setBounds(646, 466, 150, 49);
+		    pisoCombo.setBounds(696, 290, 150, 49);
 		    contentPane.add(pisoCombo);
 		    
 		    // Combo para tarifas
 		    JComboBox<Tariff> tarifaCombo = new JComboBox<>();
-		    tarifaCombo.setBounds(646, 196, 470, 49);
+		    tarifaCombo.setBounds(696, 196, 420, 49);
 		    contentPane.add(tarifaCombo);
 		    
 		    JComboBox<Integer> tariffCapacity = new JComboBox<>();
-		    tariffCapacity.setBounds(970, 466, 150, 49);
+		    tariffCapacity.setBounds(970, 290, 150, 49);
 		    contentPane.add(tariffCapacity);
 		    
 		    // Cargar tarifas disponibles
@@ -345,27 +349,27 @@ public class RoomTypesView {
 		    
 		JLabel lblNewLabel = new JLabel("Tipo de habitación");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(100, 158, 309, 27);
+		lblNewLabel.setBounds(200, 158, 250, 27);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblTipoDeTarifa = new JLabel("Tipo de tarifa");
 		lblTipoDeTarifa.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTipoDeTarifa.setBounds(646, 158, 309, 27);
+		lblTipoDeTarifa.setBounds(696, 158, 309, 27);
 		contentPane.add(lblTipoDeTarifa);
 		
 		JLabel lblHabitacionesSeleccionadas = new JLabel("Habitaciones incluidas");
 		lblHabitacionesSeleccionadas.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblHabitacionesSeleccionadas.setBounds(646, 289, 309, 27);
+		lblHabitacionesSeleccionadas.setBounds(200, 260, 309, 27);
 		contentPane.add(lblHabitacionesSeleccionadas);
 		
 		JLabel lblPiso = new JLabel("Piso");
 		lblPiso.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblPiso.setBounds(646, 428, 309, 27);
+		lblPiso.setBounds(696, 260, 309, 27);
 		contentPane.add(lblPiso);
 		
 		JLabel lblCapacidad = new JLabel("Capacidad");
 		lblCapacidad.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblCapacidad.setBounds(970, 428, 309, 27);
+		lblCapacidad.setBounds(970, 260, 309, 27);
 		contentPane.add(lblCapacidad);
 		
 		JButton btnCancelar = new JButton("Cancelar");
@@ -374,48 +378,6 @@ public class RoomTypesView {
 		btnCancelar.setBackground(new Color(153, 89, 45));
 		btnCancelar.setBounds(808, 571, 140, 72);
 		contentPane.add(btnCancelar);
-		
-		
-		
-		/*frame.setTitle("Hotel Ancla de Paz");
-		frame.setResizable(false);
-		frame.setBounds(0,0,1280,720);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		
-		JLabel lblTitle = new JLabel("Añadir tipo de habitación");
-		lblTitle.setBounds(100,50,800,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
-		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
-		
-		btnHome.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				rooms.roomTypes();
-			}
-			
-		});*/
 	}
 	
 	public void editRoomType(RoomType rt) throws SQLException {
