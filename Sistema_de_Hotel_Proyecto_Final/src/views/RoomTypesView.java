@@ -454,18 +454,16 @@ public class RoomTypesView {
 		lblNewLabel_5.setIcon(new ImageIcon(img));
 		panel.add(lblNewLabel_5);
 		
-		//Aqui hice cambios donde se ingresan los datos y cambie el JTextField de tipo de tarifa por un JComboBox
-		
 		JLabel previewLabel = new JLabel();
-		previewLabel.setBounds(100, 270, 300, 300); // ajustado para no chocar con el botón
+		previewLabel.setBounds(100, 270, 300, 300);
 		contentPane.add(previewLabel);
 
 		JButton btnNewButton1 = new JButton();
 		btnNewButton1.setBounds(100, 250, 470, 400);
 		btnNewButton1.setBackground(new Color(216, 216, 216));
 		btnNewButton1.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
-		panel.add(btnNewButton1); // Este botón va en el panel
-		contentPane.add(btnNewButton1); // Este botón también está en el contentPane si deseas que se muestre completo
+		panel.add(btnNewButton1);
+		contentPane.add(btnNewButton1);
 		if(rt.getImage() != null) {
 			ImageIcon imagenPredeterminada = new ImageIcon(rt.getImage());
 			Image scaledPredeterminada = imagenPredeterminada.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
@@ -485,10 +483,8 @@ public class RoomTypesView {
 
 		            try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
 		            	imageBytes = fis.readAllBytes();
-		                rt.setImage(imageBytes); // Asignas al modelo
-
-		                // Mostrar vista previa
-		              
+		                rt.setImage(imageBytes); 
+		                
 		                	ImageIcon icon = new ImageIcon(imageBytes);
 		                	Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
 		                	btnNewButton1.setIcon(new ImageIcon(scaled));
@@ -503,33 +499,35 @@ public class RoomTypesView {
 		contentPane.add(btnNewButton1);
 		
 			JTextField tipoHabitacionField = new JTextField();
+			tipoHabitacionField.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 			tipoHabitacionField.setText(rt.getRoom_type());
 		    tipoHabitacionField.setBounds(100, 196, 470, 49);
 		    contentPane.add(tipoHabitacionField);
 		    
 		    JTextField tipoHabitacionIncluidas = new JTextField();
+		    tipoHabitacionIncluidas.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    tipoHabitacionIncluidas.setText(""+rt.getRooms_included());
 		    tipoHabitacionIncluidas.setBounds(646, 350, 470, 49);
 		    contentPane.add(tipoHabitacionIncluidas);
-		    
-		    // Combo para piso
-		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6};
 		    JComboBox<Integer> pisoCombo = new JComboBox<>(opcionesPiso);
+		    pisoCombo.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    pisoCombo.setSelectedItem(rt.getNum_floor());
 		    pisoCombo.setBounds(646, 466, 150, 49);
 		    contentPane.add(pisoCombo);
-		    
-		    // Combo para tarifas
+
 		    JComboBox<Tariff> tarifaCombo = new JComboBox<>();
+		    tarifaCombo.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    tarifaCombo.setBounds(646, 196, 470, 49);
 		    contentPane.add(tarifaCombo);
 		    
 		    JComboBox<Integer> tariffCapacity = new JComboBox<>();
+		    tariffCapacity.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    tariffCapacity.setBounds(970, 466, 150, 49);
 		    tariffCapacity.setEnabled(false);
 		    contentPane.add(tariffCapacity);
 		    
-		    // Cargar tarifas disponibles
 		    try {
 		        List<Tariff> tarifas = new RoomTypesModel().getAvailableTariffs();
 		        DefaultComboBoxModel<Tariff> modelTarifas = new DefaultComboBoxModel<>();
