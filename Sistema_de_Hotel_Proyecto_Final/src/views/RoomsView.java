@@ -81,7 +81,7 @@ public class RoomsView {
 		}
 		
 		JButton btnCreate = new JButton("Crear");
-		btnCreate.setBounds(868,603,300,70);
+		btnCreate.setBounds(830,600,300,70);
 		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnCreate.setForeground(Color.decode("#FFFFFF"));
 		btnCreate.setBackground(Color.decode("#071A2B"));
