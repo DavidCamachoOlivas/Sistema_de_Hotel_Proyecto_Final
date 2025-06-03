@@ -33,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -318,43 +319,83 @@ public class RoomTypesView {
 		    btnAñadir.setForeground(Color.WHITE);
 		    btnAñadir.setBackground(new Color(7, 26, 43));
 		    btnAñadir.setBounds(976, 571, 140, 72);
+
 		    btnAñadir.addActionListener(e -> {
-	        try {
-	            
-	            // Obtener datos
-	            String tipoHabitacion = tipoHabitacionField.getText();
-	            int piso = (int) pisoCombo.getSelectedItem();
-	            int habitaciones_integradas = Integer.parseInt(tipoHabitacionIncluidas.getText());
-	            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
-	            byte[] imageBytesSel = imageBytes;
-	            String descripcion = textArea.getText();
-	            
-	            // Validar tarifa seleccionada
-	            if (tarifaSeleccionada == null) {
-	                JOptionPane.showMessageDialog(frame, "Debe seleccionar una tarifa","Error", JOptionPane.ERROR_MESSAGE);
-	                return;
-	            }
-	            
-	            // Crear y guardar el tipo de habitación
-	            RoomType nuevoTipo = new RoomType();
-	            nuevoTipo.setRoom_type(tipoHabitacion);
-	            nuevoTipo.setRooms_included(habitaciones_integradas);
-	            nuevoTipo.setNum_floor(piso);
-	            nuevoTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
-	            nuevoTipo.setImage(imageBytes);
-	            nuevoTipo.setDescription(descripcion);
-	            
-	            int idGenerado = new RoomTypesModel().createRoomType(nuevoTipo);
-	            
-	            // Cerrar ventana y volver al listado
-	            frame.dispose();
-	            new RoomTypesController().roomTypes();
-	            
-	        } catch (SQLException ex) {
-	            JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(),  "Error", JOptionPane.ERROR_MESSAGE);
-	        }
-	    });
-	    contentPane.add(btnAñadir);
+		        boolean valido = true;
+		        Border bordeRojo = BorderFactory.createLineBorder(Color.RED, 2);
+		        Border bordeNormal = BorderFactory.createLineBorder(Color.GRAY);
+
+		        tipoHabitacionField.setBorder(bordeNormal);
+		        tipoHabitacionIncluidas.setBorder(bordeNormal);
+		        tarifaCombo.setBorder(bordeNormal);
+		        textArea.setBorder(bordeNormal);
+		        btnNewButton1.setBorder(null);
+
+		        String tipoHabitacion = tipoHabitacionField.getText().trim();
+		        String habitacionesTexto = tipoHabitacionIncluidas.getText().trim();
+		        Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
+		        String descripcion = textArea.getText().trim();
+		        int piso = (int) pisoCombo.getSelectedItem();
+
+		        if (tipoHabitacion.isEmpty() || !tipoHabitacion.matches("[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\\s]+")) {
+		            tipoHabitacionField.setBorder(bordeRojo);
+		            valido = false;
+		        }
+
+		        int habitaciones_integradas = -1;
+		        try {
+		            habitaciones_integradas = Integer.parseInt(habitacionesTexto);
+		            if (habitaciones_integradas <= 0) {
+		                tipoHabitacionIncluidas.setBorder(bordeRojo);
+		                valido = false;
+		            }
+		        } catch (NumberFormatException ex) {
+		            tipoHabitacionIncluidas.setBorder(bordeRojo);
+		            valido = false;
+		        }
+
+		        if (tarifaSeleccionada == null) {
+		            tarifaCombo.setBorder(bordeRojo);
+		            valido = false;
+		        }
+
+		        if (descripcion.isEmpty() || descripcion.equalsIgnoreCase("Descripcion")) {
+		            textArea.setBorder(bordeRojo);
+		            valido = false;
+		        }
+
+		        ImageIcon predeterminada = new ImageIcon("src/images/subir.png");
+		        Image img1 = predeterminada.getImage();
+		        Image img2 = btnNewButton1.getIcon() != null ? ((ImageIcon) btnNewButton1.getIcon()).getImage() : null;
+		        if (img2 == null || img1.getSource().equals(img2.getSource())) {
+		            btnNewButton1.setBorder(bordeRojo);
+		            valido = false;
+		        }
+
+		        if (!valido) {
+		            JOptionPane.showMessageDialog(frame, "Por favor corrige los campos marcados en rojo.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+
+		        try {
+		            RoomType nuevoTipo = new RoomType();
+		            nuevoTipo.setRoom_type(tipoHabitacion);
+		            nuevoTipo.setRooms_included(habitaciones_integradas);
+		            nuevoTipo.setNum_floor(piso);
+		            nuevoTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
+		            nuevoTipo.setImage(imageBytes); 
+		            nuevoTipo.setDescription(descripcion);
+
+		            int idGenerado = new RoomTypesModel().createRoomType(nuevoTipo);
+
+		            frame.dispose();
+		            new RoomTypesController().roomTypes();
+		        } catch (SQLException ex) {
+		            JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		        }
+		    });
+		    contentPane.add(btnAñadir);
+
 		    
 		JLabel lblNewLabel = new JLabel("Tipo de habitación");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -386,6 +427,21 @@ public class RoomTypesView {
 		btnCancelar.setForeground(Color.WHITE);
 		btnCancelar.setBackground(new Color(153, 89, 45));
 		btnCancelar.setBounds(808, 571, 140, 72);
+		btnCancelar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rtc = new RoomTypesController();
+				frame.dispose();
+				try {
+					rtc.roomTypes();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		contentPane.add(btnCancelar);
 	}
 	
