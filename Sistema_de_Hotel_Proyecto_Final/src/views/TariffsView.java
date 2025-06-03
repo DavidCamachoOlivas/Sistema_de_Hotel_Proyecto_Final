@@ -3,16 +3,26 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
+import buttonCells.TableActionCellEditor2;
+import buttonCells.TableActionCellRender2;
+import buttonCells.TableActionEvent2;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.RentalsController;
 import controllers.RoomsController;
 import controllers.TariffsController;
 import models.ClientsModel;
@@ -40,21 +50,23 @@ public class TariffsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Tarifas");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
 		
 		btnHome.addActionListener(new ActionListener() {
 
@@ -68,81 +80,82 @@ public class TariffsView {
 			
 		});
 		
+		JLabel lblTitle = new JLabel("Tarifas");
+		lblTitle.setBounds(200, 42, 250, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTitle.setOpaque(true);
+		lblTitle.setBackground(null);
 		
-		JButton btnCreate = new JButton("Crear");
-		btnCreate.setBounds(100,250,300,70);
-		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnCreate.setForeground(Color.decode("#FFFFFF"));
-		btnCreate.setBackground(Color.decode("#071A2B"));
-		panel.add(btnCreate);
+		JTextField textField = new JTextField();
+		textField.setBounds(130, 208, 777, 58);
+		panel.add(textField);
+		textField.setColumns(10);
 		
-		btnCreate.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
-				frame.dispose();
-				tariff.createTariff();
-			}
-			
-		});
+		JButton btnNewButton = new JButton("Ver");
+		btnNewButton.setBounds(917, 207, 213, 58);
+		btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		btnNewButton.setForeground(Color.decode("#FFFFFF"));
+		btnNewButton.setBackground(new Color(7, 26, 43));
+		panel.add(btnNewButton);
 		
-		JButton btnEdit = new JButton("Editar");
-		btnEdit.setBounds(500,250,300,70);
-		btnEdit.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnEdit.setForeground(Color.decode("#FFFFFF"));
-		btnEdit.setBackground(Color.decode("#071A2B"));
-		panel.add(btnEdit);
+		String[] columnNames = {
+				"Tarifas",
+				"Precios",
+				"Descripción",
+				"Acciones"
+		};
 		
-		btnEdit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
-				frame.dispose();
-				tariff.editTariff();
-			}
-			
-		});
+		Object [][] data = {
+				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
+				
+		};
 		
-		JButton btnConsult = new JButton("Detalles");
-		btnConsult.setBounds(900,250,300,70);
-		btnConsult.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnConsult.setForeground(Color.decode("#FFFFFF"));
-		btnConsult.setBackground(Color.decode("#071A2B"));
-		panel.add(btnConsult);
-		
-		btnConsult.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
-				frame.dispose();
-				tariff.consultTariff();
-			}
-			
-		});
-		
-		JButton btnDelete = new JButton("Eliminar");
-		btnDelete.setBounds(100,350,300,70);
-		btnDelete.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnDelete.setForeground(Color.decode("#FFFFFF"));
-		btnDelete.setBackground(Color.decode("#071A2B"));
-		panel.add(btnDelete);
-		
-		btnDelete.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
-				tariff.deleteConfirm();
-			}
-			
-		});
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(130, 286, 1000, 300);
+		panel.add(panel_1);
+			DefaultTableModel model = new DefaultTableModel(data, columnNames);
+			JTable clientsTable = new JTable(model);
+			clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+			clientsTable.setRowHeight(30);
+			clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+			clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+			clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+			clientsTable.setDefaultEditor(Object.class,null);
+			TableActionEvent2 event = new TableActionEvent2() {
+	            @Override
+	            public void onEdit(int row) {
+	            	RentalsController rent = new RentalsController();
+	            	frame.dispose();
+	            	rent.editRental();
+	                System.out.println("Edit row : " + row);
+	            }
+	
+	            @Override
+	            public void onDelete(int row) {
+	                if (clientsTable.isEditing()) {
+	                	clientsTable.getCellEditor().stopCellEditing();
+	                }
+	                //model.removeRow(row);
+	            }
+	
+	        };
+	        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());
+	        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event));
+			JScrollPane scrollPane = new JScrollPane(clientsTable);
+			panel_1.setLayout(null);
+			scrollPane.setBounds(0, 0, 1000, 300);
+			panel_1.add(scrollPane);
+		JButton btnNewButton1 = new JButton("Añadir");
+		btnNewButton1.setBounds(917, 600, 213, 58);
+		btnNewButton1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 32));
+		btnNewButton1.setForeground(Color.decode("#FFFFFF"));
+		btnNewButton1.setBackground(new Color(7, 26, 43));
+		panel.add(btnNewButton1);
 	}
 	
 	public void createTariff() {
