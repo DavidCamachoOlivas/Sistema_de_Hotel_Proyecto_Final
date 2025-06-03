@@ -719,6 +719,20 @@ public class RoomsView {
 		lblImg.setIcon(lblImgScaledIcon);
 		panel.add(lblImg);
 		
+		/*String[] columnNames = {
+				"Habitación",
+				"Check-In",
+				"Check-Out"
+		};
+		
+		Object [][] data = {
+				{"1","2025-01-01", "2025-01-02"},
+				{"1","2025-01-01", "2025-01-02"},
+				{"1","2025-01-01", "2025-01-02"},
+				{"1","2025-01-01", "2025-01-02"},
+				
+		};*/
+		
 		String[] columnNames = {
 				"Check-In",
 				"Check-Out",
