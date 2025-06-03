@@ -9,6 +9,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -255,31 +257,72 @@ public class RoomTypesView {
 		
 			JTextField tipoHabitacionField = new JTextField();
 		    tipoHabitacionField.setBounds(200, 196, 400, 49);
+		    tipoHabitacionField.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    contentPane.add(tipoHabitacionField);
 		    
 		    JTextField tipoHabitacionIncluidas = new JTextField();
 		    tipoHabitacionIncluidas.setBounds(200, 290, 400, 49);
+		    tipoHabitacionIncluidas.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    contentPane.add(tipoHabitacionIncluidas);
 		    
 		    JTextArea textArea = new JTextArea(5, 30); 
 		    textArea.setLineWrap(true); 
 		    textArea.setWrapStyleWord(true); 
+		    textArea.setText("Descripcion");
+		    textArea.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
+		    textArea.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					if(textArea.getText().equals("Descripcion")) {
+						textArea.setText("");
+					}
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		    JScrollPane scrollPane = new JScrollPane(textArea);
 		    scrollPane.setBounds(696,350,420,200);
 		    contentPane.add(scrollPane);
 		    
 		    // Combo para piso
-		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6};
 		    JComboBox<Integer> pisoCombo = new JComboBox<>(opcionesPiso);
+		    pisoCombo.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    pisoCombo.setBounds(696, 290, 150, 49);
 		    contentPane.add(pisoCombo);
 		    
 		    // Combo para tarifas
 		    JComboBox<Tariff> tarifaCombo = new JComboBox<>();
+		    tarifaCombo.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    tarifaCombo.setBounds(696, 196, 420, 49);
 		    contentPane.add(tarifaCombo);
 		    
 		    JComboBox<Integer> tariffCapacity = new JComboBox<>();
+		    tariffCapacity.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 		    tariffCapacity.setBounds(970, 290, 150, 49);
 		    contentPane.add(tariffCapacity);
 		    
@@ -320,6 +363,7 @@ public class RoomTypesView {
 	            int habitaciones_integradas = Integer.parseInt(tipoHabitacionIncluidas.getText());
 	            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
 	            byte[] imageBytesSel = imageBytes;
+	            String descripcion = textArea.getText();
 	            
 	            // Validar tarifa seleccionada
 	            if (tarifaSeleccionada == null) {
@@ -334,6 +378,7 @@ public class RoomTypesView {
 	            nuevoTipo.setNum_floor(piso);
 	            nuevoTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
 	            nuevoTipo.setImage(imageBytes);
+	            nuevoTipo.setDescription(descripcion);
 	            
 	            int idGenerado = new RoomTypesModel().createRoomType(nuevoTipo);
 	            
