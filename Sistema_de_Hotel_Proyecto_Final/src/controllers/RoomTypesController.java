@@ -2,6 +2,8 @@ package controllers;
 
 import java.sql.SQLException;
 
+import javax.swing.JFrame;
+
 import models.RoomType;
 import views.ClientsView;
 import views.RoomTypesView;
@@ -31,8 +33,8 @@ public class RoomTypesController {
 		view.consultRoomType(rt);
 	}
 	
-	public void deleteRoomType(RoomType rm) {
-		view.deleteConfirm(rm);
+	public void deleteRoomType(RoomType rm, JFrame frame) {
+		view.deleteConfirm(rm, frame);
 	}
 	
 	public void successDelete() {
