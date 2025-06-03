@@ -45,4 +45,8 @@ public class RoomsController {
 	public void errorDelete() {
 		view.errorDelete();
 	}
+	
+	public void roomDetails() {
+		view.roomDetails();
+	}
 }

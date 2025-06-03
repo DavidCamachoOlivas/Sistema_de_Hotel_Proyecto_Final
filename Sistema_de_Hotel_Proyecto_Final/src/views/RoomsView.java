@@ -181,7 +181,7 @@ public class RoomsView {
 		            public void onView(int row) {
 		            	RoomsController rc = new RoomsController();
 						frame.dispose();
-						rc.consultRoom();
+						rc.roomDetails();
 		                System.out.println("View row : " + row);
 		            }
 		        };
@@ -1117,7 +1117,7 @@ public class RoomsView {
 	    btnBack.setBorderPainted(false);
 	    btnBack.setBackground(null);
 
-	    ImageIcon btnBackOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnBack.png"));
+	    ImageIcon btnBackOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
 	    Image btnBackScaledImage = btnBackOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
 	    ImageIcon btnBackScaledIcon = new ImageIcon(btnBackScaledImage);
 	    btnBack.setIcon(btnBackScaledIcon);
