@@ -286,7 +286,7 @@ public class RoomsView {
 		
 		
 		JLabel lblTitle = new JLabel("Añadir Habitacion");
-		lblTitle.setBounds(200, 42, 350, 82);
+		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));

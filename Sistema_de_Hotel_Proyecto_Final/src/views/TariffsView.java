@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -129,9 +130,9 @@ public class TariffsView {
 			TableActionEvent2 event = new TableActionEvent2() {
 	            @Override
 	            public void onEdit(int row) {
-	            	RentalsController rent = new RentalsController();
+	            	TariffsController rte = new TariffsController();
 	            	frame.dispose();
-	            	rent.editRental();
+	            	rte.editTariff();
 	                System.out.println("Edit row : " + row);
 	            }
 	
@@ -156,6 +157,17 @@ public class TariffsView {
 		btnNewButton1.setForeground(Color.decode("#FFFFFF"));
 		btnNewButton1.setBackground(new Color(7, 26, 43));
 		panel.add(btnNewButton1);
+		btnNewButton1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController rte = new TariffsController();
+				frame.dispose();
+				rte.createTariff();
+			}
+			
+		});
 	}
 	
 	public void createTariff() {
@@ -172,30 +184,105 @@ public class TariffsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Añadir tarifa");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
 		
 		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
+				TariffsController tariffs = new TariffsController();
 				frame.dispose();
-				tariff.tariffs();
+				tariffs.tariffs();
+			}
+			
+		});
+		
+		JLabel lblTitle = new JLabel("Añadir tarifas");
+		lblTitle.setBounds(200, 42, 550, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTitle.setOpaque(true);
+		lblTitle.setBackground(null);
+		
+		JLabel lblNewLabel = new JLabel("Tipo de tarifa");
+		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		lblNewLabel.setBounds(130, 172, 202, 42);
+		panel.add(lblNewLabel);
+		
+		JTextField textField = new JTextField();
+		textField.setBounds(130, 224, 1000, 56);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Precio por noche");
+		lblNewLabel_1.setBounds(130, 313, 250, 42);
+		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(lblNewLabel_1);
+		
+		JTextField textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(130, 365, 1000, 56);
+		panel.add(textField_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("¿Es reembolsable?");
+		lblNewLabel_1_1.setBounds(130, 449, 250, 42);
+		lblNewLabel_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(lblNewLabel_1_1);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(130, 501, 1000, 56);
+		panel.add(comboBox);
+		
+		JButton btnNewButton = new JButton("Aceptar");
+		btnNewButton.setBounds(947, 587, 183, 56);
+		panel.add(btnNewButton);
+		btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		btnNewButton.setForeground(Color.decode("#FFFFFF"));
+		btnNewButton.setBackground(new Color(7, 26, 43));
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController home = new TariffsController();
+				frame.dispose();
+				home.tariffs();
+			}
+			
+		});
+		
+		JButton btnNewButton_1 = new JButton("Cancelar");
+		btnNewButton_1.setBounds(732, 587, 183, 56);
+		panel.add(btnNewButton_1);
+		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		btnNewButton_1.setForeground(Color.decode("#FFFFFF"));
+		btnNewButton_1.setBackground(Color.decode("#99592D"));
+		btnNewButton_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController home = new TariffsController();
+				frame.dispose();
+				home.tariffs();
 			}
 			
 		});
@@ -215,30 +302,105 @@ public class TariffsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
+		JPanel header = new JPanel();
+		header.setBounds(0, 0, 1266, 130);
+		header.setBackground(Color.decode("#071A2B"));
+		panel.add(header);
+		header.setLayout(null);
 		
-		JLabel lblTitle = new JLabel("Editar tarifa");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);
+		btnHome.setBorderPainted(false);
+		btnHome.setBackground(null);
+		ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
 		
 		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
+				TariffsController tariffs = new TariffsController();
 				frame.dispose();
-				tariff.tariffs();
+				tariffs.tariffs();
+			}
+			
+		});
+		
+		JLabel lblTitle = new JLabel("Añadir tarifas");
+		lblTitle.setBounds(200, 42, 550, 82);
+		header.add(lblTitle);
+		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
+		lblTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTitle.setOpaque(true);
+		lblTitle.setBackground(null);
+		
+		JLabel lblNewLabel = new JLabel("Tipo de tarifa");
+		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		lblNewLabel.setBounds(130, 172, 202, 42);
+		panel.add(lblNewLabel);
+		
+		JTextField textField = new JTextField("Estandar");
+		textField.setBounds(130, 224, 1000, 56);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel_1 = new JLabel("Precio por noche");
+		lblNewLabel_1.setBounds(130, 313, 250, 42);
+		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(lblNewLabel_1);
+		
+		JTextField textField_1 = new JTextField("$2,000");
+		textField_1.setColumns(10);
+		textField_1.setBounds(130, 365, 1000, 56);
+		panel.add(textField_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("¿Es reembolsable?");
+		lblNewLabel_1_1.setBounds(130, 449, 250, 42);
+		lblNewLabel_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(lblNewLabel_1_1);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(130, 501, 1000, 56);
+		panel.add(comboBox);
+		
+		JButton btnNewButton = new JButton("Aceptar");
+		btnNewButton.setBounds(947, 587, 183, 56);
+		panel.add(btnNewButton);
+		btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		btnNewButton.setForeground(Color.decode("#FFFFFF"));
+		btnNewButton.setBackground(new Color(7, 26, 43));
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController home = new TariffsController();
+				frame.dispose();
+				home.tariffs();
+			}
+			
+		});
+		
+		JButton btnNewButton_1 = new JButton("Cancelar");
+		btnNewButton_1.setBounds(732, 587, 183, 56);
+		panel.add(btnNewButton_1);
+		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		btnNewButton_1.setForeground(Color.decode("#FFFFFF"));
+		btnNewButton_1.setBackground(Color.decode("#99592D"));
+		btnNewButton_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				TariffsController home = new TariffsController();
+				frame.dispose();
+				home.tariffs();
 			}
 			
 		});
