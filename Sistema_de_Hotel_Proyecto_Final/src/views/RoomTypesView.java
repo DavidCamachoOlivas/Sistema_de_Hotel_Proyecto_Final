@@ -756,10 +756,10 @@ public class RoomTypesView {
 		panel.setLayout(null);
 		
 		
-		JLabel lblNewLabel_4 = new JLabel("Detalles de habitación");
+		JLabel lblNewLabel_4 = new JLabel("Detalles de tipo de habitación");
 		lblNewLabel_4.setForeground(Color.WHITE);
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel_4.setBounds(238, 21, 490, 66);
+		lblNewLabel_4.setBounds(238, 21, 600, 66);
 		panel.add(lblNewLabel_4);
 		
 		JButton btnNewButton = new JButton("");
