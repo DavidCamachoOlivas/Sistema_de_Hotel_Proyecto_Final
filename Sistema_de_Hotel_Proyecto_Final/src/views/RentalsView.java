@@ -20,8 +20,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import buttonCells.TableActionCellEditor;
+import buttonCells.TableActionCellEditor2;
 import buttonCells.TableActionCellRender;
+import buttonCells.TableActionCellRender2;
 import buttonCells.TableActionEvent;
+import buttonCells.TableActionEvent2;
 import controllers.ClientsController;
 import controllers.HomeController;
 import controllers.RentalsController;
@@ -211,7 +214,7 @@ public class RentalsView {
 				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
 				clientsTable.getColumnModel().getColumn(4).setPreferredWidth(150);
 				clientsTable.setDefaultEditor(Object.class,null);
-				TableActionEvent event = new TableActionEvent() {
+				TableActionEvent2 event = new TableActionEvent2() {
 		            @Override
 		            public void onEdit(int row) {
 		                System.out.println("Edit row : " + row);
@@ -225,13 +228,9 @@ public class RentalsView {
 		                model.removeRow(row);
 		            }
 
-		            @Override
-		            public void onView(int row) {
-		                System.out.println("View row : " + row);
-		            }
 		        };
-		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
-		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
+		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());
+		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event));
 				JScrollPane scrollPane = new JScrollPane(clientsTable);
 				scrollPane.setBounds(0, 0, 1100, 270);
 				panel_2.add(scrollPane);
