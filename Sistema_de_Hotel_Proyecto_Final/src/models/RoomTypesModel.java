@@ -1,6 +1,5 @@
 package models;
 
-import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,36 +9,23 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.TableModel;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import controllers.RoomTypesController;
+import Connection.ConnectionDB;
 import views.HomeView;
 
 public class RoomTypesModel {
-
-	String host ="jdbc:mysql://uywiohjkpxink6lw:22LfDvbA07QUq1XOKk4d@b0ufffjehz0mbockqctk-mysql.services.clever-cloud.com:3306/b0ufffjehz0mbockqctk";
-	String user = "uywiohjkpxink6lw";
-	String pass = "22LfDvbA07QUq1XOKk4d";
     
 	 public int createRoomType(RoomType roomType) throws SQLException {
-	        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, image) VALUES (?, ?, ?, ?, ?)";
+	        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, image, description) VALUES (?, ?, ?, ?, ?)";
 	        
-	        try (Connection conn = DriverManager.getConnection(host, user, pass);
-	             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+	        try(Connection conn = ConnectionDB.getDataSource().getConnection();
+	        		PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 	            
 	            stmt.setInt(1, roomType.getId_tariff());
 	            stmt.setInt(2, roomType.getRooms_included());
 	            stmt.setInt(3, roomType.getNum_floor());
 	            stmt.setString(4, roomType.getRoom_type());
 	            stmt.setBytes(5, roomType.getImage());
+	            stmt.setString(6, roomType.getDescription());
 	            
 	            stmt.executeUpdate();
 	            
@@ -56,7 +42,7 @@ public class RoomTypesModel {
 		   
 		 String sql = "DELETE FROM room_type WHERE id_room_type = ?";
 		 
-		 try (Connection conn = DriverManager.getConnection(host, user, pass);
+		 try (Connection conn = ConnectionDB.getDataSource().getConnection();
 		         PreparedStatement stmt = conn.prepareStatement(sql)) {
 		        stmt.setInt(1, rm.getId_room_type());
 		        int affected = stmt.executeUpdate();
@@ -65,9 +51,9 @@ public class RoomTypesModel {
 	}
 
 	public boolean updateRoomType(RoomType roomType) throws SQLException {
-	    String sql = "UPDATE room_type SET id_tariff = ?, rooms_included = ?, num_floor = ?, room_type = ?, image = ? WHERE id_room_type = ?";
+	    String sql = "UPDATE room_type SET id_tariff = ?, rooms_included = ?, num_floor = ?, room_type = ?, image = ?, description = ? WHERE id_room_type = ?";
 	    
-	    try (Connection conn = DriverManager.getConnection(host, user, pass);
+	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
 	    
 	    		PreparedStatement stmt = conn.prepareStatement(sql)) {
 	    	
@@ -76,7 +62,8 @@ public class RoomTypesModel {
 	        stmt.setInt(3, roomType.getNum_floor());
 	        stmt.setString(4, roomType.getRoom_type());
 	        stmt.setBytes(5, roomType.getImage());
-	        stmt.setInt(6, roomType.getId_room_type());
+	        stmt.setString(6, roomType.getDescription());
+	        stmt.setInt(7, roomType.getId_room_type());
 	    
 	        int affected = stmt.executeUpdate();
 	        return affected > 0;
@@ -88,7 +75,7 @@ public class RoomTypesModel {
         List<Tariff> tariffs = new ArrayList<>();
         String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable FROM tariff";
         
-        try (Connection conn = DriverManager.getConnection(host, user, pass);
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -108,9 +95,9 @@ public class RoomTypesModel {
     }
     public List<RoomType> getAvailableRoomType() throws SQLException {
         List<RoomType> roomTypes = new ArrayList<>();
-        String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image FROM room_type";
+        String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image, description FROM room_type";
         
-        try (Connection conn = DriverManager.getConnection(host, user, pass);
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -121,7 +108,8 @@ public class RoomTypesModel {
                     rs.getInt("rooms_included"),
                     rs.getInt("num_floor"),
                     rs.getString("room_type"),
-                    rs.getBytes("image")
+                    rs.getBytes("image"),
+                    rs.getString("description")
                 );
             	roomTypes.add(roomType);
             }
@@ -131,7 +119,7 @@ public class RoomTypesModel {
     
     public boolean tariffExists(int tariffId) throws SQLException {
         String sql = "SELECT 1 FROM tariff WHERE id_tariff = ?";
-        try (Connection conn = DriverManager.getConnection(host, user, pass);
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, tariffId);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -141,47 +129,12 @@ public class RoomTypesModel {
     }
     public boolean RoomTypeExists(int roomTypeId) throws SQLException {
         String sql = "SELECT 1 FROM room_type WHERE id_room_type = ?";
-        try (Connection conn = DriverManager.getConnection(host, user, pass);
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, roomTypeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
-        }
-    }
-    public static void exportarTablaPDF(JTable table, String rutaArchivo) {
-        Document document = new Document();
-
-        try {
-            PdfWriter.getInstance(document, new FileOutputStream(rutaArchivo));
-            document.open();
-
-            PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
-
-            TableModel model = table.getModel();
-            for (int i = 0; i < model.getColumnCount(); i++) {
-                pdfTable.addCell(new PdfPCell(new Phrase(model.getColumnName(i))));
-            }
-
-            for (int rows = 0; rows < model.getRowCount(); rows++) {
-                for (int cols = 0; cols < model.getColumnCount(); cols++) {
-                	 Object valor = model.getValueAt(rows, cols);
-                	 if (valor != null) {
-                		    pdfTable.addCell(valor.toString());
-                	 }
-                	 else {
-                		 pdfTable.addCell("");
-                	 }
-                }
-            }
-
-            document.add(pdfTable);
-            RoomTypesController rtc = new RoomTypesController();
-            rtc.successDownload();
-            document.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

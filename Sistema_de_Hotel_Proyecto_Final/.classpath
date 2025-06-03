@@ -13,5 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="src/files/mysql-connector-j-9.3.0.jar"/>
 	<classpathentry kind="lib" path="libreria/itextpdf-5.5.13.4.jar"/>
+	<classpathentry kind="lib" path="libreria/HikariCP-5.0.1.jar"/>
+	<classpathentry kind="lib" path="libreria/slf4j-api-2.0.17.jar"/>
+	<classpathentry kind="lib" path="libreria/slf4j-simple-2.0.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

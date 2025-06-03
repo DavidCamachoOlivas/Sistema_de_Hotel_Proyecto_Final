@@ -39,28 +39,29 @@ public class RoomsModel {
         }
         throw new SQLException("No se pudo obtener el ID generado");
     }
-	public List<RoomType> getAvailableRoomType() throws SQLException {
-		List<RoomType> roomTypes = new ArrayList<>();
-		String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image FROM room_type";
-		
-		try (Connection conn = DriverManager.getConnection(host, user, pass);
-		     Statement stmt = conn.createStatement();
-		     ResultSet rs = stmt.executeQuery(sql)) {
-		    
-		    while (rs.next()) {
-		    	RoomType roomType = new RoomType(
-				rs.getInt("id_room_type"),
-				rs.getInt("id_tariff"),
-		        rs.getInt("rooms_included"),
-		        rs.getInt("num_floor"),
-		        rs.getString("room_type"),
-		        rs.getBytes("image")
-		        );
-		    	roomTypes.add(roomType);
-		    }
-		}
-		return roomTypes;
-    }
+	 public List<RoomType> getAvailableRoomType() throws SQLException {
+	        List<RoomType> roomTypes = new ArrayList<>();
+	        String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image, description FROM room_type";
+	        
+	        try (Connection conn = DriverManager.getConnection(host, user, pass);
+	             Statement stmt = conn.createStatement();
+	             ResultSet rs = stmt.executeQuery(sql)) {
+	            
+	            while (rs.next()) {
+	            	RoomType roomType = new RoomType(
+	        			rs.getInt("id_room_type"),
+	        			rs.getInt("id_tariff"),
+	                    rs.getInt("rooms_included"),
+	                    rs.getInt("num_floor"),
+	                    rs.getString("room_type"),
+	                    rs.getBytes("image"),
+	                    rs.getString("description")
+	                );
+	            	roomTypes.add(roomType);
+	            }
+	        }
+	        return roomTypes;
+	    }
 	
 	public List<Room> getAvailableRoom() throws SQLException {
 		List<Room> rooms = new ArrayList<>();
@@ -85,6 +86,25 @@ public class RoomsModel {
 		    }
 		}
 		return rooms;
+    }
+	public List<RoomImage> getAvailableRoomImage() throws SQLException {
+		List<RoomImage> roomsImages = new ArrayList<>();
+		String sql = "SELECT id_room_image, id_room, room_image FROM room_image";
+		
+		try (Connection conn = DriverManager.getConnection(host, user, pass);
+		     Statement stmt = conn.createStatement();
+		     ResultSet rs = stmt.executeQuery(sql)) {
+		    
+		    while (rs.next()) {
+		    	RoomImage roomImage = new RoomImage(
+		    	rs.getInt("id_room_image"),
+				rs.getInt("id_room"),
+		        rs.getBytes("room_image")
+		        );
+		    	roomsImages.add(roomImage);
+		    }
+		}
+		return roomsImages;
     }
 	
 	public List<Tariff> getAvailableTariffs() throws SQLException {

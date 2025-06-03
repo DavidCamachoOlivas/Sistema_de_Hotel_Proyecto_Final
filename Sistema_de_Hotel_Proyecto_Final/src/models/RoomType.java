@@ -7,14 +7,16 @@ public class RoomType {
 	int num_floor;
 	String room_type;
 	private byte[] image;
+	String description;
 	
-	public RoomType(int id_room_type, int id_tariff, int rooms_included, int num_floor, String room_type, byte[] image) {
+	public RoomType(int id_room_type, int id_tariff, int rooms_included, int num_floor, String room_type, byte[] image, String description) {
 		this.id_room_type = id_room_type;
 		this.id_tariff = id_tariff;
 		this.num_floor = num_floor;
 		this.rooms_included =  rooms_included;
 		this.room_type = room_type;
 		this.image = image;
+		this.description = description;
 	}
 	public RoomType() {
 	}
@@ -65,6 +67,12 @@ public class RoomType {
 	public void setImage(byte[] image) { 
 		this.image = image; }
 	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	@Override
 	public String toString() {
 		return room_type;

@@ -492,8 +492,9 @@ public class RoomTypesView {
 		btnNewButton1.setBounds(100, 250, 470, 400);
 		btnNewButton1.setBackground(new Color(216, 216, 216));
 		btnNewButton1.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
-		panel.add(btnNewButton1); // Este botón va en el panel
-		contentPane.add(btnNewButton1); // Este botón también está en el contentPane si deseas que se muestre completo
+		panel.add(btnNewButton1);
+		contentPane.add(btnNewButton1);
+		
 		if(rt.getImage() != null) {
 			ImageIcon imagenPredeterminada = new ImageIcon(rt.getImage());
 			Image scaledPredeterminada = imagenPredeterminada.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
@@ -679,35 +680,6 @@ public class RoomTypesView {
 	}
 	
 	public void consultRoomType(RoomType rt) {
-		
-		/*frame = new JFrame();
-		frame.setTitle("Hotel Ancla de Paz");
-		frame.setResizable(false);
-		frame.setBounds(0,0,1280,720);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		
-		JLabel lblTitle = new JLabel("Detalles");
-		lblTitle.setBounds(100,50,450,70);
-		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 64));
-		lblTitle.setForeground(Color.decode("#071A2B"));
-		lblTitle.setOpaque(true);
-		lblTitle.setBackground(Color.green);
-		panel.add(lblTitle);
-		
-		JButton btnHome = new JButton("Regresar");
-		btnHome.setBounds(900,50,300,70);
-		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnHome.setForeground(Color.decode("#FFFFFF"));
-		btnHome.setBackground(Color.decode("#071A2B"));
-		panel.add(btnHome);*/
 	
 		List<Room> rooms = new ArrayList<>();
 		List<RoomType> roomTypes = new ArrayList<>();
@@ -717,8 +689,6 @@ public class RoomTypesView {
 		for (Room room : rooms) {
 		    System.out.println("Room: " + room.getNum_room() + ", ID tipo: " + room.getId_room_type());
 		}
-
-		// 1. Cargar los datos primero
 		RoomsModel functions = new RoomsModel();
 		try {
 		    rooms = functions.getAvailableRoom();
@@ -727,14 +697,13 @@ public class RoomTypesView {
 		} catch (SQLException e) {
 		    e.printStackTrace();
 		}
-
-		// 2. Luego filtrar por el tipo de habitación seleccionado
+		
 		List<Room> filteredRooms = new ArrayList<>();
 		List<Tariff> filteredTariffs = new ArrayList<>();
 
 		for (int i = 0; i < rooms.size(); i++) {
 		    Room room = rooms.get(i);
-		    Tariff tariff = tariffs.get(i); // asumiendo que sí está alineado con rooms
+		    Tariff tariff = tariffs.get(i);
 
 		    if (room.getId_room_type() == rt.getId_room_type()) {
 		        filteredRooms.add(room);
@@ -810,19 +779,20 @@ public class RoomTypesView {
 		panel_1.setBounds(126, 289, 990, 272);
 		contentPane.add(panel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("impreson");
+		JLabel lblNewLabel_2 = new JLabel("impresion");
 		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 		lblNewLabel_2.setForeground(Color.decode("#FFFFFF"));
 		lblNewLabel_2.setBounds(400, 10, 200, 40);
 		panel_1.add(lblNewLabel_2);
 		
-		String[] columnas = {"Num_room", "Tipo", "Estado", "Acciones"};
+		String[] columnas = {"Habitacion", "Piso", "Capacidad", "Tarifa"};
 		
 		Object[][] datos = new Object[filteredRooms.size()][4];
 		for (int i = 0; i < filteredRooms.size(); i++) {
 		    datos[i][0] = filteredRooms.get(i).getNum_room();
-		    datos[i][1] = rt.getRoom_type(); // ya es el tipo que se seleccionó
-		    datos[i][2] = filteredTariffs.get(i).isRefundable() ? "Reembolsable" : "No reembolsable";
+		    datos[i][1] = rt.getNum_floor();
+		    datos[i][2] = filteredTariffs.get(i).getCapacity() + " Personas";
+		    datos[i][3] = filteredTariffs.get(i).isRefundable() ? "Reembolsable" : "No reembolsable";
 		}
 		
 		DefaultTableModel model = new DefaultTableModel(datos, columnas);
@@ -837,36 +807,6 @@ public class RoomTypesView {
 				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
 				clientsTable.getColumnModel().getColumn(3).setPreferredWidth(150);
 				clientsTable.setDefaultEditor(Object.class,null);
-				TableActionEvent event = new TableActionEvent() {
-		            @Override
-		            public void onEdit(int row) {
-		            	RoomsController client = new RoomsController();
-						frame.dispose();
-						client.editRoom();
-		                System.out.println("Edit row : " + row);
-		            }
-
-		            @Override
-		            public void onDelete(int row) {
-		            	RoomsController client = new RoomsController();
-						client.deleteRoom();
-						//lo de abajo se implementará al dar click en el boton "aceptar"
-		                /*if (clientsTable.isEditing()) {
-		                	clientsTable.getCellEditor().stopCellEditing();
-		                }
-		                model.removeRow(row);*/
-		            }
-
-		            @Override
-		            public void onView(int row) {
-		            	RoomsController client = new RoomsController();
-						frame.dispose();
-						client.consultRoom();
-		                System.out.println("View row : " + row);
-		            }
-		        };
-		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
-		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
 				
 		        panel_1.add(scrollPane);
 		
@@ -875,7 +815,7 @@ public class RoomTypesView {
 		JLabel lblNewLabel_5 = new JLabel();
 		lblNewLabel_5.setText(""+rt.getId_tariff());
 		lblNewLabel_5.setBounds(130, 158, 180, 90);
-		Image img = new ImageIcon("src/images/normal.png").getImage().getScaledInstance(180, 90, Image.SCALE_SMOOTH);
+		Image img = new ImageIcon(rt.getImage()).getImage().getScaledInstance(180, 90, Image.SCALE_SMOOTH);
 		lblNewLabel_5.setIcon(new ImageIcon(img));
 		contentPane.add(lblNewLabel_5);
 		clientsTable.setDefaultEditor(Object.class,null);
@@ -1042,7 +982,7 @@ public class RoomTypesView {
 	    panel.add(lblNewLabel_4);
 
 	    JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(130, 30, 78, 56);
+		btnNewButton.setBounds(100, 30, 78, 56);
 		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(78, 56, Image.SCALE_SMOOTH);
 		btnNewButton.setIcon(new ImageIcon(imgBtnHome));
 		btnNewButton.setBackground(null);
