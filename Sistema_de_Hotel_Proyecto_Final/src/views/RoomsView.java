@@ -108,7 +108,7 @@ public class RoomsView {
 		
 		
 		JLabel lblTitle = new JLabel("Habitaciones");
-		lblTitle.setBounds(200, 42, 250, 82);
+		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -243,8 +243,8 @@ public class RoomsView {
 		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Añadir cliente");
-		lblTitle.setBounds(200, 42, 350, 82);
+		JLabel lblTitle = new JLabel("Añadir habitación");
+		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -484,13 +484,11 @@ public class RoomsView {
 	
 	public void editRoom() {
 		String name,email;
-		Date birthdate;
 		int phone;// puede ser string: no me acuerdo como estaba en la base de datos
 		
 		name="david";
 		email="david@e.mail";
 		phone=1234567890;
-		birthdate=Date.valueOf("2025-01-01");
 		
 		
 		frame = new JFrame();
@@ -513,8 +511,8 @@ public class RoomsView {
 		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Editar cliente");
-		lblTitle.setBounds(200, 42, 350, 82);
+		JLabel lblTitle = new JLabel("Editar habitación");
+		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -546,19 +544,21 @@ public class RoomsView {
 		});
 		
 		JLabel lblImg = new JLabel();
-		lblImg.setBounds(130,150,400,300);
+		lblImg.setBounds(130,150,400,250);
 		lblImg.setText(null);
 		lblImg.setBorder(BorderFactory.createLineBorder(Color.black));
-		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
+		
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/suite.png"));
 		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		
 		lblImg.setHorizontalAlignment(JLabel.CENTER);
 		lblImg.setVerticalAlignment(JLabel.CENTER);
 		lblImg.setIcon(lblImgScaledIcon);
 		panel.add(lblImg);
 		
-		JButton btnAddImage = new JButton("Cambiar imagen");
-		btnAddImage.setBounds(130,450,400,70);
+		JButton btnAddImage = new JButton("Agregar imagen");
+		btnAddImage.setBounds(700,300,400,60);
 		btnAddImage.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnAddImage.setForeground(Color.decode("#FFFFFF"));
 		btnAddImage.setBackground(Color.decode("#071A2B"));
@@ -569,58 +569,152 @@ public class RoomsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+			    JFileChooser fileChooser = new JFileChooser();
+			    fileChooser.setDialogTitle("Selecciona una imagen");
+			    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			
+			    int resultado = fileChooser.showOpenDialog(null);
+			    if (resultado == JFileChooser.APPROVE_OPTION) {
+			        File imagenSeleccionada = fileChooser.getSelectedFile();
+			
+			        try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
+			        	imageBytes = fis.readAllBytes();
+			           
+			            // Mostrar vista previa
+			          
+			            	ImageIcon icon = new ImageIcon(imageBytes);
+			            	Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+			            	btnAddImage.setIcon(new ImageIcon(scaled));
+			
+			            System.out.println("Imagen cargada y mostrada correctamente");
+			        } catch (IOException e1) {
+			            e1.printStackTrace();
+			        }
+			    }
+			}			
+		});
+		
+		JComboBox<RoomType> tipoHabitacionCombo = new JComboBox<>();
+		tipoHabitacionCombo.setBounds(130, 400, 400, 49);
+	    panel.add(tipoHabitacionCombo);
+		
+		try {
+	        List<RoomType> tarifas = new RoomsModel().getAvailableRoomType();
+	        DefaultComboBoxModel<RoomType> model = new DefaultComboBoxModel<>();
+	        for (RoomType tarifa : tarifas) {
+	            model.addElement(tarifa);
+	        }
+	        tipoHabitacionCombo.setModel(model);
+	    } catch (SQLException e) {
+	    }
+
+		
+		JTextField nombreTextField = new JTextField();
+		nombreTextField.setText(name);
+		nombreTextField.setBounds(700, 150, 460, 50);
+		nombreTextField.setForeground(Color.gray);
+		nombreTextField.setColumns(10);
+		nombreTextField.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
 				
 			}
 			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(nombreTextField.getText().equals("Nombre")) {
+					nombreTextField.setText("");
+				}
+				else {
+					return;
+				}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+				
 		});
+		panel.add(nombreTextField);
+
+		JTextField numeroTextField = new JTextField();
+		numeroTextField.setText("Numero de habitacion");
+		numeroTextField.setBounds(700, 230, 460, 50);
+		numeroTextField.setColumns(10);
+		numeroTextField.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(numeroTextField.getText().equals("Numero de habitacion")) {
+					numeroTextField.setText("");
+				}
+				else {
+					return;
+				}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+				
+		});
+		panel.add(numeroTextField);
 		
-		JLabel lblNewLabel = new JLabel("Nombre");
-		lblNewLabel.setBounds(700, 160, 100, 15);
-		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(lblNewLabel);
+		JTextField capacidadTextField = new JTextField();
+		capacidadTextField.setColumns(10);
+		capacidadTextField.setText("6");
+		capacidadTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
+		capacidadTextField.setBounds(380, 500, 150, 50);
+		panel.add(capacidadTextField);
 		
-		JTextField textField = new JTextField(name);
-		textField.setColumns(10);
-		textField.setBounds(700, 180, 460, 50);
-		textField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(textField);
-		
-		
-		JLabel lblNewLabel_1 = new JLabel("Telefono");
-		lblNewLabel_1.setBounds(700, 240, 100, 15);
-		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(lblNewLabel_1);
-		
-		JTextField textField_1 = new JTextField(phone+"");
-		textField_1.setColumns(10);
-		textField_1.setBounds(700, 260, 460, 50);
-		textField_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(textField_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("Email");
-		lblNewLabel_2.setBounds(700, 320, 100, 15);
-		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(lblNewLabel_2);
-		
-		JTextField textField_2 = new JTextField(email);
-		textField_2.setColumns(10);
-		textField_2.setBounds(700, 340, 460, 50);
-		textField_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(textField_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("Fecha de nacimiento");
-		lblNewLabel_3.setBounds(700, 400, 200, 15);
-		lblNewLabel_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(lblNewLabel_3);
-		
-		JTextField textField_3 = new JTextField(birthdate.toString());
-		textField_3.setColumns(10);
-		textField_3.setBounds(700, 420, 249, 50);
-		textField_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		panel.add(textField_3);
+		JTextField bedQtTextField = new JTextField();
+		bedQtTextField.setColumns(10);
+		bedQtTextField.setText("4");
+		bedQtTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
+		bedQtTextField.setBounds(130, 500, 150, 50);
+		panel.add(bedQtTextField);
+
+		TextArea amenitiestextField_3 = new TextArea("Suite amplia y espaciosa con vista al mar ");
+		amenitiestextField_3.setColumns(10);
+		amenitiestextField_3.setBounds(700, 390, 470, 160);
+		panel.add(amenitiestextField_3);
 		
 		JButton btnCreate = new JButton("Guardar");
-		btnCreate.setBounds(870,600,300,70);
+		btnCreate.setBounds(970,600,200,70);
 		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnCreate.setForeground(Color.decode("#FFFFFF"));
 		btnCreate.setBackground(Color.decode("#071A2B"));
@@ -637,7 +731,7 @@ public class RoomsView {
 		});
 		
 		JButton btnCancel = new JButton("Cancelar");
-		btnCancel.setBounds(560,600,300,70);
+		btnCancel.setBounds(760,600,200,70);
 		btnCancel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnCancel.setForeground(Color.decode("#FFFFFF"));
 		btnCancel.setBackground(new Color(153, 89, 45));
