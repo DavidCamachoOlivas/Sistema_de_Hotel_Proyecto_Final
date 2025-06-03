@@ -80,25 +80,6 @@ public class RoomsView {
 			e.printStackTrace();
 		}
 		
-		String[] columnNames = {
-				"# Habitaciones",
-				"Tipo",
-				"Estado",
-				"Acciones"
-		};
-		
-		Object [][] data = {
-				{"1", "Axdiael","Ax@gmail.com",""},
-				{"1", "Axdiael","Ax@gmail.com",""},
-				{"1", "Axdiael","Ax@gmail.com",""},
-				{"1", "Axdiael","Ax@gmail.com",""},
-				{"1", "Axdiael","Ax@gmail.com",""},
-				{"1", "Axdiael","Ax@gmail.com",""},
-				
-		};
-		
-		
-		
 		JButton btnCreate = new JButton("Crear");
 		btnCreate.setBounds(868,603,300,70);
 		btnCreate.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
