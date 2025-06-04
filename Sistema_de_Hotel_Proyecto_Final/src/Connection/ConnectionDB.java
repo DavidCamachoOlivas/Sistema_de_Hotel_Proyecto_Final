@@ -10,7 +10,7 @@ public class ConnectionDB {
 
     static {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://b0ufffjehz0mbockqctk-mysql.services.clever-cloud.com:3306/b0ufffjehz0mbockqctk");
+        config.setJdbcUrl("jdbc:mysql://bdxajlhwerpvn6dhzfwp-mysql.services.clever-cloud.com:20323/bdxajlhwerpvn6dhzfwp");
         config.setUsername("uywiohjkpxink6lw");
         config.setPassword("22LfDvbA07QUq1XOKk4d");
 
