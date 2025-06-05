@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 public class PopUpsView {
 
 	JFrame frame = new JFrame();
-	
+	JFrame loadingFrame;
 	public void successDownload() {
 		frame = new JFrame();
 		frame.setSize(700, 500);
@@ -135,7 +135,7 @@ public class PopUpsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
-		JLabel title = new JLabel("Datos ingresados incorrectos");
+		JLabel title = new JLabel("Bienvenido, espere un momento");
 		title.setBounds(50,100,600,70);
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
@@ -158,4 +158,31 @@ public class PopUpsView {
 			
 		});
 	}
+	
+	public void loading() {
+		loadingFrame = new JFrame("Cargando");
+		loadingFrame.setSize(700, 500);
+		loadingFrame.setLocationRelativeTo(null);
+		loadingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		loadingFrame.setVisible(true);
+		
+		JPanel panel = new JPanel();
+		loadingFrame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
+		panel.setLayout(null);
+		
+		JLabel title = new JLabel("Espere un momento...");
+		title.setBounds(50,100,600,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		title.setVisible(true);
+		panel.add(title);
+		
+		
+	}
+	
+	public void closeLoading() {
+        if (loadingFrame != null) {
+            loadingFrame.dispose();
+        }
+    }
 }
