@@ -14,7 +14,7 @@ import Connection.ConnectionDB;
 public class RoomsModel {
 	 public int createRoom(Room room) throws SQLException {
         String sql = "INSERT INTO `room` (`id_room`, `id_room_image`, `id_room_type`, `num_room`, `beds_qty`, `max_guest_qty`, `room_name`, `amenities`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
+       
         try (Connection conn = ConnectionDB.getDataSource().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             

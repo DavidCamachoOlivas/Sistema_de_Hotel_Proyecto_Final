@@ -8,7 +8,7 @@ public class Tariff {
 	String tariff_type;
 	boolean refundable;
 	
-	public Tariff(int id_tariff, int id_room, float price_per_night, int capacity,String tariff_type, boolean refundable) {
+	public Tariff(int id_tariff, int id_room, float price_per_night, int capacity, String tariff_type, boolean refundable) {
 		this.id_tariff =  id_tariff;
 		this.id_room = id_room;
 		this.price_per_night = price_per_night;

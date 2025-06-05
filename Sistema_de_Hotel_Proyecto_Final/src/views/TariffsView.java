@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,6 +29,7 @@ import controllers.RentalsController;
 import controllers.RoomsController;
 import controllers.TariffsController;
 import models.ClientsModel;
+import models.Tariff;
 import models.TariffsModel;
 
 public class TariffsView {
@@ -104,15 +107,17 @@ public class TariffsView {
 		String[] columnNames = {
 				"Tarifas",
 				"Precios",
+				"Capacidad",
 				"Descripción",
 				"Acciones"
 		};
 		
 		Object [][] data = {
-				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
-				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
-				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
-				{"Reembolsable", "$1,300","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
+				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
+				
 				
 		};
 		
@@ -222,34 +227,60 @@ public class TariffsView {
 		lblTitle.setOpaque(true);
 		lblTitle.setBackground(null);
 		
-		JLabel lblNewLabel = new JLabel("Tipo de tarifa");
-		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		lblNewLabel.setBounds(130, 172, 202, 42);
-		panel.add(lblNewLabel);
+		JLabel tariffType_lblNewLabel = new JLabel("Tipo de tarifa:");
+		tariffType_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		tariffType_lblNewLabel.setBounds(130, 160, 202, 42);
+		panel.add(tariffType_lblNewLabel);
 		
-		JTextField textField = new JTextField();
-		textField.setBounds(130, 224, 1000, 56);
-		panel.add(textField);
-		textField.setColumns(10);
+		String[] type_tariff = {"Flexible", "No reembolsable", "Reembolsable"};
+		JComboBox tariffType_comboBox = new JComboBox(type_tariff);
+		tariffType_comboBox.setBounds(130, 210, 400, 56);
+		panel.add(tariffType_comboBox);
 		
-		JLabel lblNewLabel_1 = new JLabel("Precio por noche");
-		lblNewLabel_1.setBounds(130, 313, 250, 42);
-		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		panel.add(lblNewLabel_1);
+		JLabel priceNight_lblNewLabel = new JLabel("Precio por noche:");
+		priceNight_lblNewLabel.setBounds(730, 160, 250, 42);
+		priceNight_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(priceNight_lblNewLabel);
 		
-		JTextField textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(130, 365, 1000, 56);
-		panel.add(textField_1);
+		JTextField priceNight_textField = new JTextField();
+		priceNight_textField.setColumns(10);
+		priceNight_textField.setBounds(730, 210, 400, 56);
+		panel.add(priceNight_textField);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("¿Es reembolsable?");
-		lblNewLabel_1_1.setBounds(130, 449, 250, 42);
-		lblNewLabel_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		panel.add(lblNewLabel_1_1);
+		JLabel capacity_lblNewLabel = new JLabel("Capacidad:");
+		capacity_lblNewLabel.setBounds(130, 270, 400, 42);
+		capacity_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(capacity_lblNewLabel);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(130, 501, 1000, 56);
+		Integer[] num_guest = {1, 2, 3, 4, 5, 6};
+		JComboBox<Integer> capacity_comboBox = new JComboBox(num_guest);
+		capacity_comboBox.setBounds(130, 320, 400, 56);
+		panel.add(capacity_comboBox);
+		
+		JLabel isRefundable_lblNewLabel = new JLabel("¿Es reembolsable?");
+		isRefundable_lblNewLabel.setBounds(730, 270, 250, 42);
+		isRefundable_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(isRefundable_lblNewLabel);
+		
+		String[] opciones = {"Si", "No"};
+		JComboBox<String> comboBox = new JComboBox<>(opciones);
+		comboBox.setBounds(730, 320, 400, 56);
 		panel.add(comboBox);
+		
+		//Cambion de texto a resultado booleano para "¿es reembolsable?"
+		String selected = (String) comboBox.getSelectedItem();
+		boolean isRefundable = selected.equals("Sí");
+		
+		JLabel description_lblNewLabel = new JLabel("Descripción:");
+		description_lblNewLabel.setBounds(130, 380, 250, 42);
+		description_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(description_lblNewLabel);
+		
+		TextArea description_textArea = new TextArea();
+		description_textArea.setBounds(130, 430, 1000, 130);
+		description_textArea.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(description_textArea);
+
 		
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.setBounds(947, 587, 183, 56);
@@ -258,13 +289,30 @@ public class TariffsView {
 		btnNewButton.setForeground(Color.decode("#FFFFFF"));
 		btnNewButton.setBackground(new Color(7, 26, 43));
 		btnNewButton.addActionListener(new ActionListener() {
+			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				//Obtener datos
+				float price_night = Float.parseFloat(priceNight_textField.getText());
+				int capacity = (int) capacity_comboBox.getSelectedItem();
+				String tariffType = (String) tariffType_comboBox.getSelectedItem();
+				boolean refundable = isRefundable;
+				Tariff t = new Tariff(0, 0, price_night, capacity, tariffType, refundable);
+				
 				// TODO Auto-generated method stub
-				TariffsController home = new TariffsController();
-				frame.dispose();
-				home.tariffs();
+				TariffsModel tm = new TariffsModel();
+				try {
+					System.out.println("Entró");
+					tm.createTariff(t);
+					frame.dispose();
+					TariffsView tv = new TariffsView();
+					tv.tariff();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		});
