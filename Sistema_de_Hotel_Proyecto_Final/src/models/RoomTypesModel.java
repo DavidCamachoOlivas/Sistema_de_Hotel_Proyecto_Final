@@ -80,29 +80,6 @@ public class RoomTypesModel {
 	    }
 	}
 
-	    
-    public List<Tariff> getAvailableTariffs() throws SQLException {
-        List<Tariff> tariffs = new ArrayList<>();
-        String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable FROM tariff";
-        
-        try (Connection conn = ConnectionDB.getDataSource().getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            while (rs.next()) {
-                Tariff tariff = new Tariff(
-                    rs.getInt("id_tariff"),
-                    rs.getInt("id_room"),
-                    rs.getFloat("price_per_night"),
-                    rs.getInt("capacity"),
-                    rs.getString("tariff_type"),
-                    rs.getBoolean("refundable")
-                );
-                tariffs.add(tariff);
-            }
-        }
-        return tariffs;
-    }
     public List<RoomType> getAvailableRoomType() throws SQLException {
         List<RoomType> roomTypes = new ArrayList<>();
         String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image, description FROM room_type";

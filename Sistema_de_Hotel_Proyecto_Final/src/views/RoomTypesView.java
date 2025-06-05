@@ -50,6 +50,7 @@ import models.RoomType;
 import models.RoomTypesModel;
 import models.RoomsModel;
 import models.Tariff;
+import models.TariffsModel;
 
 public class RoomTypesView {
 
@@ -310,7 +311,7 @@ public class RoomTypesView {
 		    contentPane.add(tariffCapacity);
 		    
 		    try {
-		        List<Tariff> tarifas = new RoomTypesModel().getAvailableTariffs();
+		        List<Tariff> tarifas = new TariffsModel().getAvailableTariffs();
 		        DefaultComboBoxModel<Tariff> model = new DefaultComboBoxModel<>();
 		        for (Tariff tarifa : tarifas) {
 		            model.addElement(tarifa);
@@ -321,7 +322,7 @@ public class RoomTypesView {
 		    }
 		    
 		    try {
-		        List<Tariff> tarifas = new RoomTypesModel().getAvailableTariffs();
+		        List<Tariff> tarifas = new TariffsModel().getAvailableTariffs();
 		        DefaultComboBoxModel<Integer> tarifas1 = new DefaultComboBoxModel<>();
 		        for (Tariff tarifa : tarifas) {
 		        	tarifas1.addElement(tarifa.getCapacity());
@@ -603,7 +604,7 @@ public class RoomTypesView {
 		    contentPane.add(tariffCapacity);
 		    
 		    try {
-		        List<Tariff> tarifas = new RoomTypesModel().getAvailableTariffs();
+		        List<Tariff> tarifas = new TariffsModel().getAvailableTariffs();
 		        DefaultComboBoxModel<Tariff> modelTarifas = new DefaultComboBoxModel<>();
 
 		        Tariff tarifaPreseleccionada = null;
@@ -1098,8 +1099,8 @@ public class RoomTypesView {
 	        lblNewLabel.setBounds(10, 31, 271, 46);
 	        panel_5.add(lblNewLabel);
 
-	        RoomTypesModel rtm = new RoomTypesModel();
-	        List<Tariff> prueba = rtm.getAvailableTariffs();
+	        TariffsModel tm = new TariffsModel();
+	        List<Tariff> prueba = tm.getAvailableTariffs();
 	        for (Tariff roomType2 : prueba) {
 	            if(precio == roomType2.getId_tariff()) {
 	                precioNoche = roomType2.getPrice_per_night();
