@@ -9,18 +9,13 @@ public class ConnectionDB {
     private static HikariDataSource dataSource;
 
     static {
-        String jdbcUrl = System.getenv("DB_URL");
-        String username = System.getenv("DB_USER");
-        String password = System.getenv("DB_PASS");
-
-        if (jdbcUrl == null || username == null || password == null) {
-            throw new RuntimeException("❌ Variables de entorno no definidas: DB_URL, DB_USER, DB_PASS");
-        }
-
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(jdbcUrl);
-        config.setUsername(username);
-        config.setPassword(password);
+        String user = "avnadmin";
+        String pass = "AVNS_09hEmMqg7x5NVvl-bOH";
+        
+        config.setJdbcUrl("jdbc:mysql://avnadmin:AVNS_09hEmMqg7x5NVvl-bOH@mysql-16ce286a-database-hotel.g.aivencloud.com:24121/defaultdb?ssl-mode=REQUIRED");
+        config.setUsername(user);
+        config.setPassword(pass);
 
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(2);
