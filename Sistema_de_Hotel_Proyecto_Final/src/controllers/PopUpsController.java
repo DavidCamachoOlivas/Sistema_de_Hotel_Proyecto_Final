@@ -21,4 +21,12 @@ public class PopUpsController {
 	public void incorrectSignIn() {
 		pop.incorrectSignIn();
 	}
+	
+	public void loading() {
+		pop.loading();
+	}
+	
+	public void closeLoading() {
+		pop.closeLoading();
+	}
 }

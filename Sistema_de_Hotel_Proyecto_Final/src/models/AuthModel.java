@@ -32,7 +32,6 @@ public class AuthModel {
                 String userDB = rs.getString("email").trim();
                 String passDB = rs.getString("password").trim();
                 if (userDB.equals(u) && passDB.equals(p)) {
-                    new HomeView().home();
                     rs.close();
                     return true;
                 }

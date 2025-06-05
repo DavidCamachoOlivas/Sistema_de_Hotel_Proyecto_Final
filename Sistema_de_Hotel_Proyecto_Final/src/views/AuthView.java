@@ -29,6 +29,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import controllers.HomeController;
+import controllers.PopUpsController;
 import models.AuthModel;
 	
 	public class AuthView extends JFrame{
@@ -42,7 +43,7 @@ import models.AuthModel;
 		
 		public void login() {
 			
-			
+			PopUpsController pop = new PopUpsController();
 			frame = new JFrame();
 			frame.setTitle("Hotel Ancla de Paz");
 			//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -164,21 +165,33 @@ import models.AuthModel;
 						frame.repaint();
 						flag1=true;
 					}
+					
 					if(flag1 && flag2) {
-						
-						
-						boolean user_auth = false;
-						user_auth = functions.conectado(usuario,contraseña); 
-						 
-						if(user_auth) {
-							frame.dispose();
-							//JOptionPane.showMessageDialog(frame, "Bienvenido.");
-							
-						}else {
-							tfEmail.setBorder(BorderFactory.createLineBorder(Color.red,2));
-							tfPassw.setBorder(BorderFactory.createLineBorder(Color.red,2));
-							//JOptionPane.showMessageDialog(frame, "Error al acceder","verifique su información",JOptionPane.WARNING_MESSAGE);
-						}
+						javax.swing.SwingUtilities.invokeLater(() -> {
+			                pop.loading(); 
+			            });
+
+			            
+			            new Thread(() -> {
+			                boolean user_auth = functions.conectado(usuario, contraseña);
+
+			                
+			                javax.swing.SwingUtilities.invokeLater(() -> {
+			                    pop.closeLoading(); 
+			                    if (user_auth) {
+			                        pop.successSignIn();
+			                        
+			                        javax.swing.SwingUtilities.invokeLater(() -> {
+			                        	new HomeView().home();
+			                        });
+			                        frame.dispose();
+			                    } else {
+			                        tfEmail.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+			                        tfPassw.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+			                        pop.incorrectSignIn();
+			                    }
+			                });
+			            }).start();
 						 
 						
 						
