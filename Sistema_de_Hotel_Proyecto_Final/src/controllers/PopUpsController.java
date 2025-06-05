@@ -14,10 +14,6 @@ public class PopUpsController {
 		pop.successDelete();
 	}
 	
-	public void successSignIn() {
-		pop.successSignIn();
-	}
-	
 	public void incorrectSignIn() {
 		pop.incorrectSignIn();
 	}

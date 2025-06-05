@@ -179,7 +179,6 @@ import models.AuthModel;
 			                javax.swing.SwingUtilities.invokeLater(() -> {
 			                    pop.closeLoading(); 
 			                    if (user_auth) {
-			                        pop.successSignIn();
 			                        
 			                        javax.swing.SwingUtilities.invokeLater(() -> {
 			                        	new HomeView().home();
