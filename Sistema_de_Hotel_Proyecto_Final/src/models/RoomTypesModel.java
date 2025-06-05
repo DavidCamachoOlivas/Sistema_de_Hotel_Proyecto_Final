@@ -26,7 +26,7 @@ import views.HomeView;
 public class RoomTypesModel {
     
 	 public int createRoomType(RoomType roomType) throws SQLException {
-	        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, image, description) VALUES (?, ?, ?, ?, ?, ?)";
+	        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, description, image) VALUES (?, ?, ?, ?, ?, ?)";
 	        
 	        try(Connection conn = ConnectionDB.getDataSource().getConnection();
 	        		PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -35,8 +35,8 @@ public class RoomTypesModel {
 	            stmt.setInt(2, roomType.getRooms_included());
 	            stmt.setInt(3, roomType.getNum_floor());
 	            stmt.setString(4, roomType.getRoom_type());
-	            stmt.setBytes(5, roomType.getImage());
-	            stmt.setString(6, roomType.getDescription());
+	            stmt.setString(5, roomType.getDescription());
+	            stmt.setBytes(6, roomType.getImage());
 	            stmt.executeUpdate();
 	            
 	            try (ResultSet rs = stmt.getGeneratedKeys()) {

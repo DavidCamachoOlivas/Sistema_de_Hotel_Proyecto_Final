@@ -92,6 +92,25 @@ public class RoomTypesView {
 	    contentPane.add(panel);
 	    panel.setLayout(null);
 
+	    JButton btnNewButton = new JButton("");
+	    btnNewButton.setBounds(130, 60, 56, 56);
+		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		btnNewButton.setIcon(new ImageIcon(imgBtnHome));
+		btnNewButton.setBackground(null);
+		btnNewButton.setBorder(null);
+		panel.add(btnNewButton);
+		
+		btnNewButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				HomeController home = new HomeController();
+				frame.dispose();
+				home.home();
+			}
+		});
+	    
 	    JLabel lblNewLabel_4 = new JLabel("Tipo de habitaciones");
 	    lblNewLabel_4.setForeground(Color.WHITE);
 	    lblNewLabel_4.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));

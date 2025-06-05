@@ -10,9 +10,11 @@ public class ConnectionDB {
 
     static {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://bdxajlhwerpvn6dhzfwp-mysql.services.clever-cloud.com:20323/bdxajlhwerpvn6dhzfwp");
-        config.setUsername("uywiohjkpxink6lw");
-        config.setPassword("22LfDvbA07QUq1XOKk4d");
+        String user = "avnadmin";
+        String pass = "AVNS_09hEmMqg7x5NVvl-bOH";
+        config.setJdbcUrl("jdbc:mysql://avnadmin:AVNS_09hEmMqg7x5NVvl-bOH@mysql-16ce286a-database-hotel.g.aivencloud.com:24121/defaultdb?ssl-mode=REQUIRED");
+        config.setUsername(user);
+        config.setPassword(pass);
 
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(2);
