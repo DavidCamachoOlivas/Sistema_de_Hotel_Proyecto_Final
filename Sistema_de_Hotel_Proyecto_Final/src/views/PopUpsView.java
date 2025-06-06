@@ -3,9 +3,11 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -144,9 +146,17 @@ public class PopUpsView {
 	        panel.setLayout(null);
 
 	        JLabel title = new JLabel("Espere un momento...");
-	        title.setBounds(50, 100, 600, 70);
+	        title.setBounds(50, 60, 600, 70);
 	        title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 	        panel.add(title);
+	        
+	        JLabel img = new JLabel();
+	        img.setBounds(225,140,250,250);
+	        ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/loading.png"));
+			Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+			ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+			img.setIcon(lblImgScaledIcon);
+			panel.add(img);
 
 	        loadingDialog.getContentPane().add(panel, BorderLayout.CENTER);
 	    }
