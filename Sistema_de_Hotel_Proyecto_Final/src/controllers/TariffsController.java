@@ -1,5 +1,8 @@
 package controllers;
 
+import javax.swing.table.DefaultTableModel;
+
+import models.Tariff;
 import views.ClientsView;
 import views.TariffsView;
 
@@ -28,8 +31,8 @@ public class TariffsController {
 		view.consultTariff();
 	}
 	
-	public void deleteConfirm() {
-		view.deleteConfirm();
+	public void deleteConfirm(int row, Tariff t, DefaultTableModel model) {
+		view.deleteConfirm(row, t, model);
 	}
 	
 	public void successDelete() {

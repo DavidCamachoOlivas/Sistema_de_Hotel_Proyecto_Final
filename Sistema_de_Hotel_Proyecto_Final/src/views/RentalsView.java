@@ -32,6 +32,7 @@ import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.ClientsModel;
 import models.RentalsModel;
+import models.Tariff;
 
 public class RentalsView {
 
@@ -230,6 +231,18 @@ public class RentalsView {
 		                }
 		                //model.removeRow(row);
 		            }
+
+					@Override
+					public void onDelete(int row, Tariff t) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onDelete(int row, Tariff t, DefaultTableModel model) {
+						// TODO Auto-generated method stub
+						
+					}
 
 		        };
 		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());

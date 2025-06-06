@@ -106,7 +106,7 @@ public class RoomsModel {
 	
 	public List<Tariff> getAvailableTariffs() throws SQLException {
         List<Tariff> tariffs = new ArrayList<>();
-        String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable FROM tariff";
+        String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable, description FROM tariff";
         
         try (Connection conn = ConnectionDB.getDataSource().getConnection();
              Statement stmt = conn.createStatement();
@@ -119,7 +119,8 @@ public class RoomsModel {
                     rs.getFloat("price_per_night"),
                     rs.getInt("capacity"),
                     rs.getString("tariff_type"),
-                    rs.getBoolean("refundable")
+                    rs.getBoolean("refundable"),
+                    rs.getString("description")
                 );
                 tariffs.add(tariff);
             }

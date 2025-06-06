@@ -1107,7 +1107,7 @@ public class RoomTypesView {
 	            }
 	        }
 
-	        JLabel lblNewLabel_3 = new JLabel("" + precioNoche);
+	        JLabel lblNewLabel_3 = new JLabel("$" + precioNoche);
 	        lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 	        lblNewLabel_3.setBounds(10, 77, 182, 30);
 	        panel_5.add(lblNewLabel_3);

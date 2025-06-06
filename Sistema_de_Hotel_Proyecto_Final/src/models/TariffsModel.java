@@ -39,9 +39,20 @@ public class TariffsModel {
 	    }
 	    throw new SQLException("No se pudo obtener el ID generado");
 	}
+	public boolean deleteRoomType(Tariff t) throws SQLException {
+		   
+		 String sql = "DELETE FROM tariff WHERE id_tariff = ?";
+		 
+		 try (Connection conn = ConnectionDB.getDataSource().getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql)) {
+		        stmt.setInt(1, t.getId_tariff());
+		        int affected = stmt.executeUpdate();
+		        return affected > 0;
+		 }
+	}
 	 public List<Tariff> getAvailableTariffs() throws SQLException {
 	        List<Tariff> tariffs = new ArrayList<>();
-	        String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable FROM tariff";
+	        String sql = "SELECT id_tariff, id_room, price_per_night, capacity, tariff_type, refundable, description FROM tariff";
 	        
 	        try (Connection conn = ConnectionDB.getDataSource().getConnection();
 	             Statement stmt = conn.createStatement();
@@ -54,11 +65,24 @@ public class TariffsModel {
 	                    rs.getFloat("price_per_night"),
 	                    rs.getInt("capacity"),
 	                    rs.getString("tariff_type"),
-	                    rs.getBoolean("refundable")
+	                    rs.getBoolean("refundable"),
+	                    rs.getString("description")
 	                );
 	                tariffs.add(tariff);
 	            }
 	        }
 	        return tariffs;
-	    }
+	 }
+	 public boolean isTariffInUse(Tariff t) throws SQLException {
+		    Connection conn = ConnectionDB.getDataSource().getConnection();
+		    String sql = "SELECT COUNT(*) FROM room_type WHERE id_tariff = ?";
+		    PreparedStatement stmt = conn.prepareStatement(sql);
+		    stmt.setInt(1, t.getId_tariff());
+		    ResultSet rs = stmt.executeQuery();
+		    if (rs.next()) {
+		        return rs.getInt(1) > 0;
+		    }
+		    return false;
+		}
+
 }

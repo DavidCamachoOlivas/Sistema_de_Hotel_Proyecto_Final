@@ -207,7 +207,6 @@ public class HomeView extends JFrame{
 		        	tariffs.tariffs();
 		            javax.swing.SwingUtilities.invokeLater(() -> {
 		                pop.closeLoading();
-		                frame.dispose();
 		            });
 		        }).start();
 				

@@ -8,12 +8,15 @@ import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -104,6 +107,7 @@ public class TariffsView {
 		btnNewButton.setBackground(new Color(7, 26, 43));
 		panel.add(btnNewButton);
 		
+		
 		String[] columnNames = {
 				"Tarifas",
 				"Precios",
@@ -112,19 +116,37 @@ public class TariffsView {
 				"Acciones"
 		};
 		
-		Object [][] data = {
-				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
-				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
-				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
-				{"Reembolsable", "$1,300","2","Cancelación gratuita hasta antes de 24hrs",""},
-				
-				
-		};
+		TariffsModel tm = new TariffsModel();
+		List<Tariff> tariffs = new ArrayList<>();
+		
+		try {
+			tariffs = tm.getAvailableTariffs();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		Object[][] datos = new Object[tariffs.size()][5];
+
+		for (int i = 0; i < tariffs.size(); i++) {
+		    datos[i][0] = tariffs.get(i).getTariff_type();
+		    datos[i][1] = tariffs.get(i).getPrice_per_night();
+		    datos[i][2] = tariffs.get(i).getCapacity();
+		    if(tariffs.get(i).isRefundable()) {
+		    	datos[i][3] = "Reembolsable";    	
+		    }
+		    else {
+		    	datos[i][3] = "No reembolsable";
+		    }
+		    datos[i][4] = tariffs.get(i).getDescription();
+		}
+		
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(130, 286, 1000, 300);
 		panel.add(panel_1);
-			DefaultTableModel model = new DefaultTableModel(data, columnNames);
+			
+		DefaultTableModel model = new DefaultTableModel(datos, columnNames);
 			JTable clientsTable = new JTable(model);
 			clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
 			clientsTable.setRowHeight(30);
@@ -140,22 +162,36 @@ public class TariffsView {
 	            	rte.editTariff();
 	                System.out.println("Edit row : " + row);
 	            }
-	
 	            @Override
-	            public void onDelete(int row) {
+				public void onDelete(int row) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onDelete(int row, Tariff t) {
+					// TODO Auto-generated method stub
+					
+				}
+	            @Override
+	            public void onDelete(int row, Tariff t, DefaultTableModel model) {
 	                if (clientsTable.isEditing()) {
 	                	clientsTable.getCellEditor().stopCellEditing();
 	                }
-	                //model.removeRow(row);
+	                
+	                deleteConfirm(row,t,model);
 	            }
+
+				
 	
 	        };
 	        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());
-	        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event));
+	        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event, tariffs, model));
 			JScrollPane scrollPane = new JScrollPane(clientsTable);
 			panel_1.setLayout(null);
 			scrollPane.setBounds(0, 0, 1000, 300);
 			panel_1.add(scrollPane);
+	
 		JButton btnNewButton1 = new JButton("Añadir");
 		btnNewButton1.setBounds(917, 600, 213, 58);
 		btnNewButton1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 32));
@@ -299,7 +335,8 @@ public class TariffsView {
 				int capacity = (int) capacity_comboBox.getSelectedItem();
 				String tariffType = (String) tariffType_comboBox.getSelectedItem();
 				boolean refundable = isRefundable;
-				Tariff t = new Tariff(0, 0, price_night, capacity, tariffType, refundable);
+				String description = description_textArea.getText();
+				Tariff t = new Tariff(0, 0, price_night, capacity, tariffType, refundable, description);
 				
 				// TODO Auto-generated method stub
 				TariffsModel tm = new TariffsModel();
@@ -380,7 +417,7 @@ public class TariffsView {
 			
 		});
 		
-		JLabel lblTitle = new JLabel("Añadir tarifas");
+		JLabel lblTitle = new JLabel("Editar tarifa");
 		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
@@ -388,34 +425,60 @@ public class TariffsView {
 		lblTitle.setOpaque(true);
 		lblTitle.setBackground(null);
 		
-		JLabel lblNewLabel = new JLabel("Tipo de tarifa");
-		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		lblNewLabel.setBounds(130, 172, 202, 42);
-		panel.add(lblNewLabel);
+		JLabel tariffType_lblNewLabel = new JLabel("Tipo de tarifa:");
+		tariffType_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		tariffType_lblNewLabel.setBounds(130, 160, 202, 42);
+		panel.add(tariffType_lblNewLabel);
 		
-		JTextField textField = new JTextField("Estandar");
-		textField.setBounds(130, 224, 1000, 56);
-		panel.add(textField);
-		textField.setColumns(10);
+		String[] type_tariff = {"Flexible", "No reembolsable", "Reembolsable"};
+		JComboBox tariffType_comboBox = new JComboBox(type_tariff);
+		tariffType_comboBox.setBounds(130, 210, 400, 56);
+		panel.add(tariffType_comboBox);
 		
-		JLabel lblNewLabel_1 = new JLabel("Precio por noche");
-		lblNewLabel_1.setBounds(130, 313, 250, 42);
-		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		panel.add(lblNewLabel_1);
+		JLabel priceNight_lblNewLabel = new JLabel("Precio por noche:");
+		priceNight_lblNewLabel.setBounds(730, 160, 250, 42);
+		priceNight_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(priceNight_lblNewLabel);
 		
-		JTextField textField_1 = new JTextField("$2,000");
-		textField_1.setColumns(10);
-		textField_1.setBounds(130, 365, 1000, 56);
-		panel.add(textField_1);
+		JTextField priceNight_textField = new JTextField();
+		priceNight_textField.setColumns(10);
+		priceNight_textField.setBounds(730, 210, 400, 56);
+		panel.add(priceNight_textField);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("¿Es reembolsable?");
-		lblNewLabel_1_1.setBounds(130, 449, 250, 42);
-		lblNewLabel_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		panel.add(lblNewLabel_1_1);
+		JLabel capacity_lblNewLabel = new JLabel("Capacidad:");
+		capacity_lblNewLabel.setBounds(130, 270, 400, 42);
+		capacity_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(capacity_lblNewLabel);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(130, 501, 1000, 56);
+		Integer[] num_guest = {1, 2, 3, 4, 5, 6};
+		JComboBox<Integer> capacity_comboBox = new JComboBox(num_guest);
+		capacity_comboBox.setBounds(130, 320, 400, 56);
+		panel.add(capacity_comboBox);
+		
+		JLabel isRefundable_lblNewLabel = new JLabel("¿Es reembolsable?");
+		isRefundable_lblNewLabel.setBounds(730, 270, 250, 42);
+		isRefundable_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(isRefundable_lblNewLabel);
+		
+		String[] opciones = {"Si", "No"};
+		JComboBox<String> comboBox = new JComboBox<>(opciones);
+		comboBox.setBounds(730, 320, 400, 56);
 		panel.add(comboBox);
+		
+		//Cambion de texto a resultado booleano para "¿es reembolsable?"
+		String selected = (String) comboBox.getSelectedItem();
+		boolean isRefundable = selected.equals("Sí");
+		
+		JLabel description_lblNewLabel = new JLabel("Descripción:");
+		description_lblNewLabel.setBounds(130, 380, 250, 42);
+		description_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(description_lblNewLabel);
+		
+		TextArea description_textArea = new TextArea();
+		description_textArea.setBounds(130, 430, 1000, 130);
+		description_textArea.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
+		panel.add(description_textArea);
+
 		
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.setBounds(947, 587, 183, 56);
@@ -424,13 +487,31 @@ public class TariffsView {
 		btnNewButton.setForeground(Color.decode("#FFFFFF"));
 		btnNewButton.setBackground(new Color(7, 26, 43));
 		btnNewButton.addActionListener(new ActionListener() {
+			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
+				//Obtener datos
+				float price_night = Float.parseFloat(priceNight_textField.getText());
+				int capacity = (int) capacity_comboBox.getSelectedItem();
+				String tariffType = (String) tariffType_comboBox.getSelectedItem();
+				boolean refundable = isRefundable;
+				String description = description_textArea.getText();
+				Tariff t = new Tariff(0, 0, price_night, capacity, tariffType, refundable, description);
+				
 				// TODO Auto-generated method stub
-				TariffsController home = new TariffsController();
-				frame.dispose();
-				home.tariffs();
+				TariffsModel tm = new TariffsModel();
+				try {
+					System.out.println("Entró");
+					tm.createTariff(t);
+					frame.dispose();
+					TariffsView tv = new TariffsView();
+					tv.tariff();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		});
@@ -516,15 +597,16 @@ public class TariffsView {
 		});
 	}
 	
-	public void deleteConfirm() {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
+	public void deleteConfirm(int row, Tariff t, DefaultTableModel model) {
+		JFrame confirmFrame = new JFrame();
+
+		confirmFrame.setSize(700, 500);
+		confirmFrame.setLocationRelativeTo(null);
+		confirmFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		confirmFrame.setVisible(true);
 		
 		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		confirmFrame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
@@ -542,15 +624,27 @@ public class TariffsView {
 		panel.add(accept);
 		
 		accept.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        try {
+		            TariffsModel tm = new TariffsModel();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
-				frame.dispose();
-				tariff.successDelete();
-			}
-			
+		            if (tm.isTariffInUse(t)) {
+		                JOptionPane.showMessageDialog(null, "No puedes eliminar esta tarifa porque está en uso por algún tipo de habitación.");
+		                return; // Salimos sin hacer nada
+		            }
+
+		            boolean deleted = tm.deleteRoomType(t);
+		            if (deleted) {
+		                model.removeRow(row);
+		                confirmFrame.dispose();
+		                JOptionPane.showMessageDialog(null, "Tarifa eliminada con éxito.");
+		            } else {
+		                JOptionPane.showMessageDialog(null, "No se pudo eliminar la tarifa.");
+		            }
+		        } catch (SQLException e1) {
+		            JOptionPane.showMessageDialog(null, "Error: " + e1.getMessage());
+		        }
+		    }
 		});
 		
 		JButton deny = new JButton("Cancelar");
@@ -566,7 +660,7 @@ public class TariffsView {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				TariffsController tariff = new TariffsController();
-				frame.dispose();
+				confirmFrame.dispose();
 				tariff.errorDelete();
 			}
 			

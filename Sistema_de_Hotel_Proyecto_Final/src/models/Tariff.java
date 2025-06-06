@@ -7,14 +7,16 @@ public class Tariff {
 	int capacity;
 	String tariff_type;
 	boolean refundable;
+	String description;
 	
-	public Tariff(int id_tariff, int id_room, float price_per_night, int capacity, String tariff_type, boolean refundable) {
+	public Tariff(int id_tariff, int id_room, float price_per_night, int capacity, String tariff_type, boolean refundable, String description) {
 		this.id_tariff =  id_tariff;
 		this.id_room = id_room;
 		this.price_per_night = price_per_night;
 		this.capacity = capacity;
 		this.tariff_type = tariff_type;
 		this.refundable = refundable;
+		this.description = description;
 	}
 
 	public int getId_tariff() {
@@ -64,8 +66,17 @@ public class Tariff {
 	public void setRefundable(boolean refundable) {
 		this.refundable = refundable;
 	}
+	
 	    
-    @Override
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
     public String toString() {
         return tariff_type + " - $" + price_per_night;
     }
