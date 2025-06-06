@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -125,30 +126,38 @@ public class PopUpsView {
 	}
 	
 	
+	private JDialog loadingDialog;
+
 	public void loading() {
-		loadingFrame = new JFrame("Cargando");
-		loadingFrame.setSize(700, 500);
-		loadingFrame.setLocationRelativeTo(null);
-		loadingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		loadingFrame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		loadingFrame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("Espere un momento...");
-		title.setBounds(50,100,600,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		title.setVisible(true);
-		panel.add(title);
-		
-		
+	    if (loadingDialog == null) {
+	    	loadingDialog = new JDialog();
+	    	loadingDialog.setTitle("Cargando");
+	    	loadingDialog.setModal(false); // No bloquear otras ventanas
+	    	loadingDialog.setAlwaysOnTop(true);
+	        loadingDialog.setSize(700, 500);
+	        loadingDialog.setLocationRelativeTo(null);
+	        loadingDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	        loadingDialog.setAlwaysOnTop(true); // 🔥 Mantener por encima de otras ventanas
+
+	        JPanel panel = new JPanel();
+	        panel.setBackground(Color.decode("#FFFCF7"));
+	        panel.setLayout(null);
+
+	        JLabel title = new JLabel("Espere un momento...");
+	        title.setBounds(50, 100, 600, 70);
+	        title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	        panel.add(title);
+
+	        loadingDialog.getContentPane().add(panel, BorderLayout.CENTER);
+	    }
+
+	    loadingDialog.setVisible(true); // Mostrar el dialog
 	}
 	
 	public void closeLoading() {
-        if (loadingFrame != null) {
-            loadingFrame.dispose();
-        }
-    }
+	    if (loadingDialog != null) {
+	        loadingDialog.dispose();
+	        loadingDialog = null;
+	    }
+	}
 }

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,6 +19,7 @@ import javax.swing.SwingConstants;
 import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.PopUpsController;
 import controllers.RentalsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
@@ -103,22 +105,28 @@ public class HomeView extends JFrame{
 		btnNewButton.setOpaque(false);
 		btnNewButton.setFocusPainted(false);
 		panel_1.add(btnNewButton);
-		
+		PopUpsController pop = new PopUpsController();
 		btnNewButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();  
+		            dispose();      
+		        });
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				dispose();
-				try {
-					rooms.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
+		        new Thread(() -> {
+		            RoomTypesController rooms = new RoomTypesController();
+		            try {
+		                rooms.roomTypes(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
+		    }
 		});
 		
 		JPanel panel_1_3 = new JPanel();
@@ -146,10 +154,19 @@ public class HomeView extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
-				dispose();
-				client.clients();
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();  
+		            dispose();      
+		        });
+
+		        new Thread(() -> {
+		        	ClientsController client = new ClientsController();
+		            client.clients();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
 			}
 			
 		});
@@ -180,9 +197,20 @@ public class HomeView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				TariffsController tariffs = new TariffsController();
-				dispose();
-				tariffs.tariffs();
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();  
+		            dispose();      
+		        });
+
+		        new Thread(() -> {
+		        	TariffsController tariffs = new TariffsController();
+		        	tariffs.tariffs();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
+				
 			}
 			
 		});
@@ -209,16 +237,28 @@ public class HomeView extends JFrame{
 		panel_1_1.add(btnNewButton_1);
 		
 		btnNewButton_1.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        pop.loading();  // ahora es un JDialog encima de todo
+		        dispose();      // cerrar la ventana actual
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomsController rooms = new RoomsController();
-				dispose();
-				rooms.rooms();
-			}
-			
+		        new Thread(() -> {
+		            try {
+		                Thread.sleep(100); // pequeño retraso opcional para que loading se muestre bien
+		            } catch (InterruptedException ex) {
+		                ex.printStackTrace();
+		            }
+
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                RoomsController rooms = new RoomsController();
+		                pop.closeLoading();
+		                rooms.rooms(); // mostrar nueva UI
+		                frame.dispose();
+		            });
+		        }).start();
+		    }
 		});
+
 		
 		JPanel panel_1_2 = new JPanel();
 		panel_1_2.setLayout(null);
@@ -246,9 +286,20 @@ public class HomeView extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RentalsController rental = new RentalsController();
-				dispose();
-				rental.rentals();
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();  
+		            dispose();      
+		        });
+
+		        new Thread(() -> {
+		        	RentalsController rental = new RentalsController();
+		        	rental.rentals();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
+				
 			}
 			
 		});
