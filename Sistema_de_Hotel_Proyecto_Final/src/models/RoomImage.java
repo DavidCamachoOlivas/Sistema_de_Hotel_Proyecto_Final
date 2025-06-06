@@ -39,4 +39,7 @@ public class RoomImage {
     public void setRoom_Image(byte[] room_image) {
         this.room_image = room_image;
     }
+    public String toString() {
+    	return ""+getid_Room_image();
+    }
 }

@@ -54,6 +54,8 @@ import models.TariffsModel;
 
 public class RoomTypesView {
 
+	
+
 	private JFrame frame;
 	private RoomTypesModel functions;
 	private int currentPage = 1;
@@ -636,7 +638,6 @@ public class RoomTypesView {
 		        JOptionPane.showMessageDialog(frame, "Error al cargar tarifas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		    }
 		    
-		    // Botón Guardar
 		    JButton btnGuardar = new JButton("Guardar");
 		    btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 20));
 		    btnGuardar.setForeground(Color.WHITE);
@@ -651,7 +652,6 @@ public class RoomTypesView {
 		            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
 		            byte[] imagen = imageBytes;
 		            
-		            // Actualiza y guardar el tipo de habitación
 		            RoomTypesModel rtm = new RoomTypesModel();
 		            RoomType ActualizarTipo = new RoomType();
 		           
@@ -664,7 +664,6 @@ public class RoomTypesView {
 		            
 		            rtm.updateRoomType(ActualizarTipo);
 		           
-		            // Cerrar ventana y volver al listado
 		            frame.dispose();
 		            new RoomTypesController().roomTypes();
 		            
@@ -729,18 +728,19 @@ public class RoomTypesView {
 		List<RoomType> roomTypes = new ArrayList<>();
 		List<Tariff> tariffs = new ArrayList<>();
 		
-		System.out.println("RT ID: " + rt.getId_room_type());
-		for (Room room : rooms) {
-		    System.out.println("Room: " + room.getNum_room() + ", ID tipo: " + room.getId_room_type());
-		}
-		RoomsModel functions = new RoomsModel();
+		RoomsModel f_rm = new RoomsModel();
+		RoomTypesModel f_rtm = new RoomTypesModel();
+		TariffsModel f_tm = new TariffsModel();
+		
 		try {
-		    rooms = functions.getAvailableRoom();
-		    roomTypes = functions.getAvailableRoomType();
-		    tariffs = functions.getAvailableTariffs();
+			rooms = f_rm.getAvailableRoom();
+			roomTypes = f_rtm.getAvailableRoomType();
+			tariffs = f_tm.getAvailableTariffs();
 		} catch (SQLException e) {
-		    e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 		
 		List<Room> filteredRooms = new ArrayList<>();
 		List<Tariff> filteredTariffs = new ArrayList<>();
@@ -753,6 +753,7 @@ public class RoomTypesView {
 		        filteredRooms.add(room);
 		        filteredTariffs.add(tariff);
 		    }
+
 		}
 		
 		frame = new JFrame();
@@ -1149,7 +1150,6 @@ public class RoomTypesView {
 	        panel_5.add(btnDetalles);
 	        btnDetalles.addActionListener(e -> {
 	            RoomTypesController rooms = new RoomTypesController();
-	            frame.dispose();
 	            rooms.consultRoomType(roomType);
 	        });
 

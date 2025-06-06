@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Room;
 import views.ClientsView;
 import views.RoomsView;
 
@@ -22,8 +23,8 @@ public class RoomsController {
 		view.createRoom();
 	}
 	
-	public void editRoom() {
-		view.editRoom();
+	public void editRoom(Room r) {
+		view.editRoom(r);
 	}
 	
 	public void consultRoom() {

@@ -4,17 +4,19 @@ public class Room {
 	int id_room;
 	int id_room_image;
 	int id_room_type;
+	boolean status;
 	int num_room;
 	int beds_qty;
 	int max_guest_qty;
 	String room_name;
 	String amenities;
 	
-	public Room(int id_room, int id_room_image, int id_room_type, int num_room, int beds_qty, int max_guest_qty, String room_name, String amenities){
+	public Room(int id_room, int id_room_image, int id_room_type, boolean status, int num_room, int beds_qty, int max_guest_qty, String room_name, String amenities){
 		
 		this.id_room = id_room;
 		this.id_room_image = id_room_image;
 		this.id_room_type = id_room_type;
+		this.status = status;
 		this.num_room = num_room;
 		this.beds_qty = beds_qty;
 		this.max_guest_qty = max_guest_qty;
@@ -48,7 +50,13 @@ public class Room {
 	public void setId_room_type(int id_room_type) {
 		this.id_room_type = id_room_type;
 	}
-
+	
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 	public int getNum_room() {
 		return num_room;
 	}
