@@ -9,6 +9,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -245,13 +247,31 @@ public class RoomTypesView {
 		
 			JTextField tfTypeRoom = new JTextField();
 			tfTypeRoom.setBounds(200, 196, 400, 49);
-			tfTypeRoom.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
+			tfTypeRoom.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		    contentPane.add(tfTypeRoom);
+		    tfTypeRoom.addKeyListener(new KeyAdapter() {
+	            public void keyTyped(KeyEvent e) {
+	                char c = e.getKeyChar();
+
+	                if (!Character.isLetter(c) && !Character.isWhitespace(c) &&
+	                    "áéíóúÁÉÍÓÚñÑ".indexOf(c) == -1) {
+	                    e.consume();
+	                }
+	            }
+	        });
 		    
 		    JTextField tfIncluded = new JTextField();
 		    tfIncluded.setBounds(200, 290, 400, 49);
-		    tfIncluded.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
+		    tfIncluded.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		    contentPane.add(tfIncluded);
+		    tfIncluded.addKeyListener(new KeyAdapter() {
+		        public void keyTyped(KeyEvent e) {
+		            char c = e.getKeyChar();
+		            if (!Character.isDigit(c)) {
+		                e.consume();
+		            }
+		        }
+		    });
 		    
 		    JTextArea description = new JTextArea(5, 30); 
 		    description.setLineWrap(true); 
@@ -1150,6 +1170,7 @@ public class RoomTypesView {
 	        panel_5.add(btnDetalles);
 	        btnDetalles.addActionListener(e -> {
 	            RoomTypesController rooms = new RoomTypesController();
+	            frame.dispose();
 	            rooms.consultRoomType(roomType);
 	        });
 
