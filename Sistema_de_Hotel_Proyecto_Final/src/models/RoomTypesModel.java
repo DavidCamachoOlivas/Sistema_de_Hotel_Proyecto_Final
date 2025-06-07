@@ -24,31 +24,52 @@ import controllers.RoomTypesController;
 import views.HomeView;
 
 public class RoomTypesModel {
-    
-	 public int createRoomType(RoomType roomType) throws SQLException {
-	        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, description, image) VALUES (?, ?, ?, ?, ?, ?)";
-	        
-	        try(Connection conn = ConnectionDB.getDataSource().getConnection();
-	        		PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-	            
-	            stmt.setInt(1, roomType.getId_tariff());
-	            stmt.setInt(2, roomType.getRooms_included());
-	            stmt.setInt(3, roomType.getNum_floor());
-	            stmt.setString(4, roomType.getRoom_type());
-	            stmt.setString(5, roomType.getDescription());
-	            stmt.setBytes(6, roomType.getImage());
-	            stmt.executeUpdate();
-	            
-	            try (ResultSet rs = stmt.getGeneratedKeys()) {
-	                if (rs.next()) {
-	                    return rs.getInt(1);
-	                }
-	            }
-	        }
-	        throw new SQLException("No se pudo obtener el ID generado");
-	    }
+	int id_room_type;
+	int id_tariff;
+	int rooms_included;
+	int num_floor;
+	String room_type;
+	private byte[] image;
+	String description;
+	
+	public RoomTypesModel(int id_room_type, int id_tariff, int rooms_included, int num_floor, String room_type, byte[] image, String description) {
+		this.id_room_type = id_room_type;
+		this.id_tariff = id_tariff;
+		this.num_floor = num_floor;
+		this.rooms_included =  rooms_included;
+		this.room_type = room_type;
+		this.image = image;
+		this.description = description;
+	}
+	
+	public RoomTypesModel() {
+		
+	}
+	
+	public int createRoomType(RoomTypesModel roomType) throws SQLException {
+	    String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, description, image) VALUES (?, ?, ?, ?, ?, ?)";
+	
+		try(Connection conn = ConnectionDB.getDataSource().getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+		    
+			    stmt.setInt(1, roomType.getId_tariff());
+			    stmt.setInt(2, roomType.getRooms_included());
+			    stmt.setInt(3, roomType.getNum_floor());
+			    stmt.setString(4, roomType.getRoom_type());
+			    stmt.setString(5, roomType.getDescription());
+			    stmt.setBytes(6, roomType.getImage());
+			    stmt.executeUpdate();
+		    
+		    try (ResultSet rs = stmt.getGeneratedKeys()) {
+		        if (rs.next()) {
+		            return rs.getInt(1);
+		        }
+		    }
+		}
+		throw new SQLException("No se pudo obtener el ID generado");
+	}
 	 
-	 public boolean deleteRoomType(RoomType rm) throws SQLException {
+	 public boolean deleteRoomType(RoomTypesModel rm) throws SQLException {
 		   
 		 String sql = "DELETE FROM room_type WHERE id_room_type = ?";
 		 
@@ -60,7 +81,7 @@ public class RoomTypesModel {
 		 }
 	}
 
-	public boolean updateRoomType(RoomType roomType) throws SQLException {
+	public boolean updateRoomType(RoomTypesModel roomType) throws SQLException {
 	    String sql = "UPDATE room_type SET id_tariff = ?, rooms_included = ?, num_floor = ?, room_type = ?, image = ?, description = ? WHERE id_room_type = ?";
 	    
 	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
@@ -80,8 +101,8 @@ public class RoomTypesModel {
 	    }
 	}
 
-    public List<RoomType> getAvailableRoomType() throws SQLException {
-        List<RoomType> roomTypes = new ArrayList<>();
+    public List<RoomTypesModel> getAvailableRoomType() throws SQLException {
+        List<RoomTypesModel> roomTypes = new ArrayList<>();
         String sql = "SELECT id_room_type, id_tariff, rooms_included, num_floor, room_type, image, description FROM room_type";
         
         try (Connection conn = ConnectionDB.getDataSource().getConnection();
@@ -89,7 +110,7 @@ public class RoomTypesModel {
              ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
-            	RoomType roomType = new RoomType(
+            	RoomTypesModel roomType = new RoomTypesModel(
         			rs.getInt("id_room_type"),
         			rs.getInt("id_tariff"),
                     rs.getInt("rooms_included"),
@@ -159,4 +180,62 @@ public class RoomTypesModel {
             e.printStackTrace();
         }
     }
+    
+    public int getId_room_type() {
+		return id_room_type;
+	}
+
+	public void setId_room_type(int id_room_type) {
+		this.id_room_type = id_room_type;
+	}
+
+	public int getId_tariff() {
+		return id_tariff;
+	}
+
+	public void setId_tariff(int id_tariff) {
+		this.id_tariff = id_tariff;
+	}
+
+	public int getRooms_included() {
+		return rooms_included;
+	}
+
+	public void setRooms_included(int rooms_included) {
+		this.rooms_included = rooms_included;
+	}
+
+	public int getNum_floor() {
+		return num_floor;
+	}
+
+	public void setNum_floor(int num_floor) {
+		this.num_floor = num_floor;
+	}
+
+	public String getRoom_type() {
+		return room_type;
+	}
+
+	public void setRoom_type(String room_type) {
+		this.room_type = room_type;
+	}
+	
+	public byte[] getImage() {
+		return image; }
+	
+	public void setImage(byte[] image) { 
+		this.image = image; }
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	@Override
+	public String toString() {
+		return room_type;
+		
+	}
 }

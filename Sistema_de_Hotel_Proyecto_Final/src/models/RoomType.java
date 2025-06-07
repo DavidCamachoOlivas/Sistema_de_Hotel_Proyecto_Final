@@ -1,4 +1,4 @@
-package models;
+/*package models;
 
 public class RoomType {
 	int id_room_type;
@@ -80,3 +80,4 @@ public class RoomType {
 	}
 	
 }
+*/

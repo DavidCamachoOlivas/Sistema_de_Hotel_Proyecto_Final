@@ -48,7 +48,6 @@ import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.ClientsModel;
 import models.Room;
-import models.RoomType;
 import models.RoomTypesModel;
 import models.RoomsModel;
 import models.Tariff;
@@ -63,8 +62,8 @@ public class RoomTypesView {
 	private int currentPage = 1;
 	private final int itemsPerPage = 3;
 	private JPanel contentPane;
-	private List<RoomType> roomTypeList; // Asignado desde tu modelo
-	
+	private List<RoomTypesModel> roomTypeList; // Asignado desde tu modelo
+	private RoomTypesModel rt = new RoomTypesModel();
 	byte[] imageBytes;
 	float precioNoche = 0 ;
 	String titulo;
@@ -99,8 +98,10 @@ public class RoomTypesView {
 
 	    JButton btnHome = new JButton("");
 	    btnHome.setBounds(130, 60, 56, 56);
-		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
-		btnHome.setIcon(new ImageIcon(imgBtnHome));
+	    ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		btnHome.setIcon(lblImgScaledIcon);
 		btnHome.setBackground(null);
 		btnHome.setBorder(null);
 		header.add(btnHome);
@@ -146,9 +147,6 @@ public class RoomTypesView {
 	    frame.setVisible(true);
 	}
 
-	
-	RoomType rt = new RoomType();
-	
 	public void createRoomType() throws SQLException {
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -173,8 +171,10 @@ public class RoomTypesView {
 		
 		JButton btnHome = new JButton("");
 		btnHome.setBounds(130, 60, 56, 56);
-		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
-		btnHome.setIcon(new ImageIcon(imgBtnHome));
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		btnHome.setIcon(lblImgScaledIcon);
 		btnHome.setBackground(null);
 		btnHome.setBorder(null);
 		header.add(btnHome);
@@ -419,7 +419,7 @@ public class RoomTypesView {
 		        }
 
 		        try {
-		            RoomType nuevoTipo = new RoomType();
+		        	RoomTypesModel nuevoTipo = new RoomTypesModel();
 		            nuevoTipo.setRoom_type(tipoHabitacion);
 		            nuevoTipo.setRooms_included(habitaciones_integradas);
 		            nuevoTipo.setNum_floor(piso);
@@ -486,7 +486,7 @@ public class RoomTypesView {
 		contentPane.add(btnCancelar);
 	}
 	
-	public void editRoomType(RoomType rt) throws SQLException {
+	public void editRoomType(RoomTypesModel rt) throws SQLException {
 		if(rt.getImage()!=null) {
 			imageBytes = rt.getImage();			
 		}
@@ -506,21 +506,23 @@ public class RoomTypesView {
 		frame.setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(7, 26, 43));
-		panel.setBounds(-26, 0, 1290, 119);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		JPanel header = new JPanel();
+		header.setBackground(new Color(7, 26, 43));
+		header.setBounds(0, 0, 1280, 130);
+		contentPane.add(header);
+		header.setLayout(null);
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(130, 30, 78, 56);
-		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(78, 56, Image.SCALE_SMOOTH);
-		btnNewButton.setIcon(new ImageIcon(imgBtnHome));
-		btnNewButton.setBackground(null);
-		btnNewButton.setBorder(null);
-		panel.add(btnNewButton);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		btnHome.setIcon(lblImgScaledIcon);
+		btnHome.setBackground(null);
+		btnHome.setBorder(null);
+		header.add(btnHome);
 		
-		btnNewButton.addActionListener(new ActionListener() {
+		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -539,35 +541,25 @@ public class RoomTypesView {
 		
 		
 		
-		JLabel lblNewLabel_4 = new JLabel("Editar tipo de habitación");
-		lblNewLabel_4.setForeground(Color.WHITE);
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel_4.setBounds(238, 21, 550, 66);
-		panel.add(lblNewLabel_4);
+		JLabel lblTitle = new JLabel("Editar tipo de habitación");
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblTitle.setBounds(238, 21, 550, 66);
+		header.add(lblTitle);
 		
-		JLabel lblNewLabel_5 = new JLabel("");
-		lblNewLabel_5.setBounds(146, 21, 128, 75);
-		Image img = new ImageIcon("src/flecha.png").getImage().getScaledInstance(76, 58, Image.SCALE_SMOOTH);
-		lblNewLabel_5.setIcon(new ImageIcon(img));
-		panel.add(lblNewLabel_5);
-		
-		JLabel previewLabel = new JLabel();
-		previewLabel.setBounds(100, 270, 300, 300);
-		contentPane.add(previewLabel);
 
-		JButton btnNewButton1 = new JButton();
-		btnNewButton1.setBounds(100, 250, 470, 400);
-		btnNewButton1.setBackground(new Color(216, 216, 216));
-		btnNewButton1.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
-		panel.add(btnNewButton1);
-		contentPane.add(btnNewButton1);
+		JButton btnUpload = new JButton();
+		btnUpload.setBounds(100, 250, 470, 400);
+		btnUpload.setBackground(new Color(216, 216, 216));
+		btnUpload.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
+		contentPane.add(btnUpload);
 		if(rt.getImage() != null) {
 			ImageIcon imagenPredeterminada = new ImageIcon(rt.getImage());
 			Image scaledPredeterminada = imagenPredeterminada.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-			btnNewButton1.setIcon(new ImageIcon(scaledPredeterminada));			
+			btnUpload.setIcon(new ImageIcon(scaledPredeterminada));			
 		}
 		
-		btnNewButton1.addActionListener(new ActionListener() {
+		btnUpload.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        JFileChooser fileChooser = new JFileChooser();
@@ -584,7 +576,7 @@ public class RoomTypesView {
 		                
 		                	ImageIcon icon = new ImageIcon(imageBytes);
 		                	Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-		                	btnNewButton1.setIcon(new ImageIcon(scaled));
+		                	btnUpload.setIcon(new ImageIcon(scaled));
 
 		                System.out.println("Imagen cargada y mostrada correctamente");
 		            } catch (IOException e1) {
@@ -593,19 +585,37 @@ public class RoomTypesView {
 		        }
 		    }
 		});
-		contentPane.add(btnNewButton1);
+		contentPane.add(btnUpload);
 		
-			JTextField tipoHabitacionField = new JTextField();
-			tipoHabitacionField.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
-			tipoHabitacionField.setText(rt.getRoom_type());
-		    tipoHabitacionField.setBounds(100, 196, 470, 49);
-		    contentPane.add(tipoHabitacionField);
+			JTextField tfRoomType = new JTextField();
+			tfRoomType.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
+			tfRoomType.setText(rt.getRoom_type());
+			tfRoomType.setBounds(100, 196, 470, 49);
+		    tfRoomType.addKeyListener(new KeyAdapter() {
+	            public void keyTyped(KeyEvent e) {
+	                char c = e.getKeyChar();
+
+	                if (!Character.isLetter(c) && !Character.isWhitespace(c) &&
+	                    "áéíóúÁÉÍÓÚñÑ".indexOf(c) == -1) {
+	                    e.consume(); 
+	                }
+	            }
+	        });
+		    contentPane.add(tfRoomType);
 		    
-		    JTextField tipoHabitacionIncluidas = new JTextField();
-		    tipoHabitacionIncluidas.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
-		    tipoHabitacionIncluidas.setText(""+rt.getRooms_included());
-		    tipoHabitacionIncluidas.setBounds(646, 350, 470, 49);
-		    contentPane.add(tipoHabitacionIncluidas);
+		    JTextField tfIncluded = new JTextField();
+		    tfIncluded.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
+		    tfIncluded.setText(""+rt.getRooms_included());
+		    tfIncluded.setBounds(646, 350, 470, 49);
+		    tfIncluded.addKeyListener(new KeyAdapter() {
+		        public void keyTyped(KeyEvent e) {
+		            char c = e.getKeyChar();
+		            if (!Character.isDigit(c)) { // sólo números
+		                e.consume();
+		            }
+		        }
+		    });
+		    contentPane.add(tfIncluded);
 
 		    Integer[] opcionesPiso = {1, 2, 3, 4, 5, 6};
 		    JComboBox<Integer> pisoCombo = new JComboBox<>(opcionesPiso);
@@ -666,14 +676,14 @@ public class RoomTypesView {
 		    btnGuardar.addActionListener(e -> {
 		        try {
 		            
-		        	String tipoHabitacion = tipoHabitacionField.getText();
+		        	String tipoHabitacion = tfRoomType.getText();
 		            int piso = (int) pisoCombo.getSelectedItem();
-		            int habitaciones_integradas = Integer.parseInt(tipoHabitacionIncluidas.getText());
+		            int habitaciones_integradas = Integer.parseInt(tfRoomType.getText());
 		            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
 		            byte[] imagen = imageBytes;
 		            
 		            RoomTypesModel rtm = new RoomTypesModel();
-		            RoomType ActualizarTipo = new RoomType();
+		            RoomTypesModel ActualizarTipo = new RoomTypesModel();
 		           
 		            ActualizarTipo.setId_room_type(rt.getId_room_type());
 		            ActualizarTipo.setRoom_type(tipoHabitacion);
@@ -742,10 +752,10 @@ public class RoomTypesView {
 
 	}
 	
-	public void consultRoomType(RoomType rt) {
+	public void consultRoomType(RoomTypesModel rt) {
 		
 		List<Room> rooms = new ArrayList<>();
-		List<RoomType> roomTypes = new ArrayList<>();
+		List<RoomTypesModel> roomTypes = new ArrayList<>();
 		List<Tariff> tariffs = new ArrayList<>();
 		
 		RoomsModel f_rm = new RoomsModel();
@@ -796,21 +806,23 @@ public class RoomTypesView {
 		panel.setLayout(null);
 		
 		
-		JLabel lblNewLabel_4 = new JLabel("Detalles de tipo de habitación");
-		lblNewLabel_4.setForeground(Color.WHITE);
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblNewLabel_4.setBounds(238, 21, 600, 66);
-		panel.add(lblNewLabel_4);
+		JLabel lblTitle = new JLabel("Detalles de tipo de habitación");
+		lblTitle.setForeground(Color.WHITE);
+		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblTitle.setBounds(238, 60, 600, 66);
+		panel.add(lblTitle);
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBounds(130, 30, 78, 56);
-		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(78, 56, Image.SCALE_SMOOTH);
-		btnNewButton.setIcon(new ImageIcon(imgBtnHome));
-		btnNewButton.setBackground(null);
-		btnNewButton.setBorder(null);
-		panel.add(btnNewButton);
+		JButton btnHome = new JButton("");
+		btnHome.setBounds(130, 60, 56, 56);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		btnHome.setIcon(lblImgScaledIcon);
+		btnHome.setBackground(null);
+		btnHome.setBorder(null);
+		panel.add(btnHome);
 		
-		btnNewButton.addActionListener(new ActionListener() {
+		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -833,14 +845,14 @@ public class RoomTypesView {
 		contentPane.add(lblTipoDeTarifa);
 		
 		
-		JLabel lblNewLabel = new JLabel(rt.getDescription());
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(358, 185, 660, 61);
-		contentPane.add(lblNewLabel);
+		JLabel lblDescription = new JLabel(rt.getDescription());
+		lblDescription.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblDescription.setBounds(358, 185, 660, 61);
+		contentPane.add(lblDescription);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
-		panel_1.setBackground(new Color(7, 26, 43));
+		panel_1.setBackground(Color.red/*new Color(7, 26, 43)*/);
 		panel_1.setBounds(126, 289, 990, 272);
 		contentPane.add(panel_1);
 		
@@ -919,7 +931,7 @@ public class RoomTypesView {
 			});
 	}
 	
-	public void deleteConfirm(RoomType rm, JFrame mainFrame) {
+	public void deleteConfirm(RoomTypesModel rm, JFrame mainFrame) {
 	    JFrame confirmFrame = new JFrame(); // ¡No uses el mismo frame principal!
 	    confirmFrame.setSize(700, 500);
 	    confirmFrame.setLocationRelativeTo(null);
@@ -1087,7 +1099,7 @@ public class RoomTypesView {
 	    
 	    for (int i = start; i < end; i++) {
 	    	
-	        RoomType roomType = roomTypeList.get(i);
+	    	RoomTypesModel roomType = roomTypeList.get(i);
 	        String titulo = roomType.getRoom_type();
 	        double precio = roomType.getId_tariff();
 	        float precioNoche = 0;

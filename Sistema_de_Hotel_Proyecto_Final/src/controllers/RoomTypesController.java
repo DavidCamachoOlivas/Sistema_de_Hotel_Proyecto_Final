@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import javax.swing.JFrame;
 
-import models.RoomType;
+import models.RoomTypesModel;
 import views.ClientsView;
 import views.RoomTypesView;
 
@@ -25,15 +25,15 @@ public class RoomTypesController {
 		view.createRoomType();
 	}
 	
-	public void editRoomType(RoomType rt) throws SQLException {
+	public void editRoomType(RoomTypesModel rt) throws SQLException {
 		view.editRoomType(rt);
 	}
 	
-	public void consultRoomType(RoomType rt) {
+	public void consultRoomType(RoomTypesModel rt) {
 		view.consultRoomType(rt);
 	}
 	
-	public void deleteRoomType(RoomType rm, JFrame frame) {
+	public void deleteRoomType(RoomTypesModel rm, JFrame frame) {
 		view.deleteConfirm(rm, frame);
 	}
 	

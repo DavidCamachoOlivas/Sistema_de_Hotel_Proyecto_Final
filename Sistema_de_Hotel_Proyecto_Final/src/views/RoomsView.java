@@ -50,7 +50,6 @@ import models.ClientsModel;
 import models.Room;
 import models.RoomImage;
 import models.RoomImageModel;
-import models.RoomType;
 import models.RoomTypesModel;
 import models.RoomsModel;
 import models.Tariff;
@@ -79,7 +78,7 @@ public class RoomsView {
 		panel.setLayout(null);
 		
 		List<Room> rooms = new ArrayList<>();
-		List<RoomType> roomTypes = new ArrayList<>();
+		List<RoomTypesModel> roomTypes = new ArrayList<>();
 		
 		try {
 			rooms = f_rm.getAvailableRoom();
@@ -386,16 +385,16 @@ public class RoomsView {
 		    }
 		});
 
-		JComboBox<RoomType> roomType_Combo = new JComboBox<>();
+		JComboBox<RoomTypesModel> roomType_Combo = new JComboBox<>();
 		roomType_Combo.setBounds(130, 300, 460, 60);
 		panel.add(roomType_Combo);
 
 		try {
-		    List<RoomType> room_type = new RoomTypesModel().getAvailableRoomType();
-		    DefaultComboBoxModel<RoomType> model = new DefaultComboBoxModel<>();
+		    List<RoomTypesModel> room_type = new RoomTypesModel().getAvailableRoomType();
+		    DefaultComboBoxModel<RoomTypesModel> model = new DefaultComboBoxModel<>();
 		    model.addElement(null);
 
-		    for (RoomType roomType : room_type) {
+		    for (RoomTypesModel roomType : room_type) {
 		        model.addElement(roomType);
 		    }
 		    roomType_Combo.setModel(model);
@@ -532,7 +531,7 @@ public class RoomsView {
 		    public void actionPerformed(ActionEvent e) {
 
 		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
-		        RoomType selectedType = (RoomType) roomType_Combo.getSelectedItem();
+		        RoomTypesModel selectedType = (RoomTypesModel) roomType_Combo.getSelectedItem();
 		        Integer guests = (Integer) Guests_comboBox.getSelectedItem();
 		        Integer bedQt = (Integer) bedQtTextField.getSelectedItem();
 		        String nombre = nombreTextField.getText().trim();
@@ -698,21 +697,21 @@ public class RoomsView {
 		    }
 		});
 		
-		JComboBox<RoomType> roomType_Combo = new JComboBox<>();
+		JComboBox<RoomTypesModel> roomType_Combo = new JComboBox<>();
 		roomType_Combo.setBounds(130, 350, 510, 60);
 		panel.add(roomType_Combo);
 
 		try {
-		    List<RoomType> room_type = new RoomTypesModel().getAvailableRoomType();
-		    DefaultComboBoxModel<RoomType> model = new DefaultComboBoxModel<>();
+		    List<RoomTypesModel> room_type = new RoomTypesModel().getAvailableRoomType();
+		    DefaultComboBoxModel<RoomTypesModel> model = new DefaultComboBoxModel<>();
 		    model.addElement(null);
 
-		    for (RoomType roomType : room_type) {
+		    for (RoomTypesModel roomType : room_type) {
 		        model.addElement(roomType);
 		    }
 		    roomType_Combo.setModel(model);
 		    for (int i = 0; i < roomType_Combo.getItemCount(); i++) {
-		        RoomType rt = roomType_Combo.getItemAt(i);
+		    	RoomTypesModel rt = roomType_Combo.getItemAt(i);
 		        if (rt != null && rt.getId_room_type() == r.getId_room_type()) {
 		            roomType_Combo.setSelectedIndex(i);
 		            break;
@@ -794,7 +793,7 @@ public class RoomsView {
 		    public void actionPerformed(ActionEvent e) {
 		    	
 		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
-		        RoomType selectedType = (RoomType) roomType_Combo.getSelectedItem();
+		        RoomTypesModel selectedType = (RoomTypesModel) roomType_Combo.getSelectedItem();
 		        Integer guests = (Integer) Guests_comboBox.getSelectedItem();
 		        Integer bedQt = (Integer) bedQt_comboBox.getSelectedItem();
 		        String nombre = nombreTextField.getText();
