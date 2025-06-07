@@ -18,7 +18,9 @@ import java.io.Serial;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -50,6 +52,7 @@ import models.ClientsModel;
 import models.Room;
 import models.RoomImage;
 import models.RoomImageModel;
+import models.RoomType;
 import models.RoomTypesModel;
 import models.RoomsModel;
 import models.Tariff;
@@ -63,7 +66,7 @@ public class RoomsView {
 	private TariffsModel f_tm = new TariffsModel();
 	byte[] imageBytes;
 	
-	public void rooms() {
+	public void rooms() throws SQLException {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -77,16 +80,15 @@ public class RoomsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
-		List<Room> rooms = new ArrayList<>();
-		List<RoomTypesModel> roomTypes = new ArrayList<>();
+		RoomsModel f_rm = new RoomsModel();
+		List<Room> rooms = f_rm.getAvailableRoom(); 
 		
-		try {
-			rooms = f_rm.getAvailableRoom();
-			roomTypes = f_rtm.getAvailableRoomType();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		List<RoomType> allTypes = new RoomTypesModel().getAvailableRoomType();
+		Map<Integer, RoomType> typeById = new HashMap<>();
+		for (RoomType rt : allTypes) {
+		    typeById.put(rt.getId_room_type(), rt);
 		}
+
 		
 		JButton btnCreate = new JButton("Añadir");
 		btnCreate.setBounds(830,580,300,70);
@@ -136,18 +138,23 @@ public class RoomsView {
 		btnHome.setIcon(btnHomeScaledIcon);
 		
 		String[] columnas = {"Num_room", "Tipo", "Estado", "Acciones"};
-		Object[][] datos = new Object[rooms.size()][3];
+		Object[][] datos = new Object[rooms.size()][4];
 
 		for (int i = 0; i < rooms.size(); i++) {
-		    datos[i][0] = rooms.get(i).getNum_room();
-		    datos[i][1] = roomTypes.get(i).getRoom_type();
-		    if(rooms.get(i).isStatus()) {
-		    	datos[i][2] = "No disponible";    	
-		    }
-		    else {
-		    	datos[i][2] = "Disponible";
-		    }
+		    Room   r = rooms.get(i);
+
+		    datos[i][0] = r.getNum_room();
+
+		    // Busca el RoomType correspondiente
+		    RoomType rt = typeById.get(r.getId_room_type());
+		    datos[i][1] = rt != null ? rt.getRoom_type() : "—";
+
+		    datos[i][2] = r.isStatus() ? "No disponible" : "Disponible";
+
+		    // Deja columna Acciones vacía (será renderizada por el TableActionCellRender)
+		    datos[i][3] = "Acciones";
 		}
+
 		
 		JPanel RoomTablePanel = new JPanel();
 		RoomTablePanel.setBounds(130, 240, 1000, 310);
@@ -385,16 +392,18 @@ public class RoomsView {
 		    }
 		});
 
-		JComboBox<RoomTypesModel> roomType_Combo = new JComboBox<>();
+		JComboBox<RoomType> roomType_Combo = new JComboBox<>();
 		roomType_Combo.setBounds(130, 300, 460, 60);
 		panel.add(roomType_Combo);
+		
+
 
 		try {
-		    List<RoomTypesModel> room_type = new RoomTypesModel().getAvailableRoomType();
-		    DefaultComboBoxModel<RoomTypesModel> model = new DefaultComboBoxModel<>();
+		    List<RoomType> room_type = new RoomTypesModel().getAvailableRoomType();
+		    DefaultComboBoxModel<RoomType> model = new DefaultComboBoxModel<>();
 		    model.addElement(null);
 
-		    for (RoomTypesModel roomType : room_type) {
+		    for (RoomType roomType : room_type) {
 		        model.addElement(roomType);
 		    }
 		    roomType_Combo.setModel(model);
@@ -402,6 +411,22 @@ public class RoomsView {
 		    e1.printStackTrace();
 		}
 
+		JComboBox<Tariff> tariff_Combo = new JComboBox<>();
+		tariff_Combo.setBounds(130, 300, 460, 60);
+		panel.add(tariff_Combo);
+		
+		try {
+		    List<Tariff> tariffs = new TariffsModel().getAvailableTariffs();
+		    DefaultComboBoxModel<Tariff> model = new DefaultComboBoxModel<>();
+		    model.addElement(null);
+
+		    for (Tariff tariff : tariffs) {
+		        model.addElement(tariff);
+		    }
+		    tariff_Combo.setModel(model);
+		} catch (SQLException e1) {
+		    e1.printStackTrace();
+		}
 		
 		JTextField nombreTextField = new JTextField();
 		nombreTextField.setText("Nombre de la habitación");
@@ -529,36 +554,55 @@ public class RoomsView {
 		btnSave.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-
 		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
-		        RoomTypesModel selectedType = (RoomTypesModel) roomType_Combo.getSelectedItem();
-		        Integer guests = (Integer) Guests_comboBox.getSelectedItem();
-		        Integer bedQt = (Integer) bedQtTextField.getSelectedItem();
-		        String nombre = nombreTextField.getText().trim();
-		        String numero = numeroTextField.getText().trim();
-		        String amenities = amenities_textField.getText().trim();
+		        RoomType selectedType  = (RoomType) roomType_Combo.getSelectedItem();
+		        Tariff   selectedTariff= (Tariff) tariff_Combo.getSelectedItem(); // ← CORRECTO
+
+		        Integer guests  = (Integer) Guests_comboBox.getSelectedItem();
+		        Integer bedQt   = (Integer) bedQtTextField.getSelectedItem();
+		        String  nombre  = nombreTextField.getText().trim();
+		        String  numero  = numeroTextField.getText().trim();
+		        String  amenities = amenities_textField.getText().trim();
+
 		        try {
+		            // 1) Crear y guardar la habitación
 		            Room nuevaHabitacion = new Room();
 		            nuevaHabitacion.setRoom_name(nombre);
 		            nuevaHabitacion.setNum_room(Integer.parseInt(numero));
 		            nuevaHabitacion.setId_room_type(selectedType.getId_room_type());
-		            nuevaHabitacion.setId_room_image(selectedImage != null ? selectedImage.getid_Room_image() : null);
+		            nuevaHabitacion.setId_room_image(
+		                selectedImage != null 
+		                    ? selectedImage.getid_Room_image() 
+		                    : null
+		            );
 		            nuevaHabitacion.setMax_guest_qty(guests);
 		            nuevaHabitacion.setBeds_qty(bedQt);
 		            nuevaHabitacion.setAmenities(amenities);
 		            nuevaHabitacion.setStatus(false);
 
-		            int idGenerado = new RoomsModel().createRoom(nuevaHabitacion);
+		            // 2) Crear la tarifa y asociar más adelante el id_room
+		            Tariff editTariff = new Tariff();
+		            editTariff.setId_room(nuevaHabitacion.getId_room());
+
+		            // 3) Llamar al controlador que inserta room y tarifa en secuencia
+		            RoomsController rc = new RoomsController();
+		            rc.createRoomWithTariff(nuevaHabitacion, editTariff);
 
 		            JOptionPane.showMessageDialog(frame, "Habitación guardada exitosamente.");
 		            frame.dispose();
 		            new RoomsController().rooms();
 		        } catch (SQLException ex) {
 		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		            JOptionPane.showMessageDialog(
+		              frame,
+		              "Error al guardar: " + ex.getMessage(),
+		              "Error",
+		              JOptionPane.ERROR_MESSAGE
+		            );
 		        }
 		    }
 		});
+
 
 
 		
@@ -697,21 +741,21 @@ public class RoomsView {
 		    }
 		});
 		
-		JComboBox<RoomTypesModel> roomType_Combo = new JComboBox<>();
+		JComboBox<RoomType> roomType_Combo = new JComboBox<>();
 		roomType_Combo.setBounds(130, 350, 510, 60);
 		panel.add(roomType_Combo);
 
 		try {
-		    List<RoomTypesModel> room_type = new RoomTypesModel().getAvailableRoomType();
-		    DefaultComboBoxModel<RoomTypesModel> model = new DefaultComboBoxModel<>();
+		    List<RoomType> room_type = new RoomTypesModel().getAvailableRoomType();
+		    DefaultComboBoxModel<RoomType> model = new DefaultComboBoxModel<>();
 		    model.addElement(null);
 
-		    for (RoomTypesModel roomType : room_type) {
+		    for (RoomType roomType : room_type) {
 		        model.addElement(roomType);
 		    }
 		    roomType_Combo.setModel(model);
 		    for (int i = 0; i < roomType_Combo.getItemCount(); i++) {
-		    	RoomTypesModel rt = roomType_Combo.getItemAt(i);
+		        RoomType rt = roomType_Combo.getItemAt(i);
 		        if (rt != null && rt.getId_room_type() == r.getId_room_type()) {
 		            roomType_Combo.setSelectedIndex(i);
 		            break;
@@ -793,7 +837,7 @@ public class RoomsView {
 		    public void actionPerformed(ActionEvent e) {
 		    	
 		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
-		        RoomTypesModel selectedType = (RoomTypesModel) roomType_Combo.getSelectedItem();
+		        RoomType selectedType = (RoomType) roomType_Combo.getSelectedItem();
 		        Integer guests = (Integer) Guests_comboBox.getSelectedItem();
 		        Integer bedQt = (Integer) bedQt_comboBox.getSelectedItem();
 		        String nombre = nombreTextField.getText();

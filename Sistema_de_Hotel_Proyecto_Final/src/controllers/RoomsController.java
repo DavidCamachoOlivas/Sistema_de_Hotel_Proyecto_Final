@@ -1,6 +1,11 @@
 package controllers;
 
+import java.sql.SQLException;
+
 import models.Room;
+import models.RoomsModel;
+import models.Tariff;
+import models.TariffsModel;
 import views.ClientsView;
 import views.RoomsView;
 
@@ -12,11 +17,13 @@ public class RoomsController {
 		
 		view = new RoomsView();
 	}
-	
-	
-	
 	public void rooms(){
-		view.rooms();
+		try {
+			view.rooms();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRoom() {
@@ -46,5 +53,23 @@ public class RoomsController {
 	public void errorDelete() {
 		view.errorDelete();
 	}
+    private RoomsModel   roomsModel   = new RoomsModel();
+    private TariffsModel tariffsModel = new TariffsModel();
+
+    public void createRoomWithTariff(Room room, Tariff tariff) throws SQLException {
+        // 1) Inserta la habitación y recupera el nuevo id
+        int newRoomId = roomsModel.createRoom(room);
+
+        // 2) Asocia ese id_room al objeto Tariff
+        tariff.setId_room(newRoomId);
+
+        // 3) Inserta la tarifa ya con el id_room correcto
+        int newTariffId = tariffsModel.createTariff(tariff);
+
+        // Opcional: notificar al usuario
+        System.out.println("Habitación ID=" + newRoomId + "  Tarifa ID=" + newTariffId);
+    }
+
+
 	
 }

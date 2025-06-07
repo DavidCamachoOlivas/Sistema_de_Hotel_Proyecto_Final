@@ -25,7 +25,6 @@ public class RoomsModel {
 	        } else {
 	            stmt.setNull(1, Types.INTEGER);
 	        }
-
 	        stmt.setInt(2, room.getId_room_type());
 	        stmt.setBoolean(3, room.isStatus());
 	        stmt.setInt(4, room.getNum_room());

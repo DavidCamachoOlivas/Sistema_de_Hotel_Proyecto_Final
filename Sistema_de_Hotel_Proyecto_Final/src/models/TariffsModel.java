@@ -73,6 +73,28 @@ public class TariffsModel {
 	        }
 	        return tariffs;
 	 }
+	 public Tariff getRoomById(int idTariff) throws SQLException {
+		    String sql = "SELECT * FROM tariff WHERE id_tariff = ?";
+		    try (Connection conn = ConnectionDB.getDataSource().getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql)) {
+		        stmt.setInt(1, idTariff);
+
+		        try (ResultSet rs = stmt.executeQuery()) {
+		            if (rs.next()) {
+		                Tariff tariff = new Tariff();
+		                tariff.setId_tariff(rs.getInt("id_tariff"));
+		                tariff.setId_room(rs.getInt("id_room"));
+		                tariff.setPrice_per_night(rs.getInt("price_per_night"));
+		                tariff.setCapacity(rs.getInt("capacity"));
+		                tariff.setTariff_type(rs.getString("tariff_type"));
+		                tariff.setRefundable(rs.getBoolean("refundable"));
+		                tariff.setDescription(rs.getString("description"));
+		                return tariff;
+		            }
+		        }
+		    }
+		    return null;
+		}
 	 public boolean isTariffInUse(Tariff t) throws SQLException {
 		    Connection conn = ConnectionDB.getDataSource().getConnection();
 		    String sql = "SELECT COUNT(*) FROM room_type WHERE id_tariff = ?";

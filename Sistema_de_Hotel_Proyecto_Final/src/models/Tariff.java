@@ -19,6 +19,9 @@ public class Tariff {
 		this.description = description;
 	}
 
+	public Tariff() {
+	}
+
 	public int getId_tariff() {
 		return id_tariff;
 	}
