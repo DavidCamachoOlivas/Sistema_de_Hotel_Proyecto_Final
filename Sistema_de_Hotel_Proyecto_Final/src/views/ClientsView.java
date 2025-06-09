@@ -220,6 +220,8 @@ public class ClientsView {
 			}
 			
 		});
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void createClient() {
@@ -384,7 +386,8 @@ public class ClientsView {
 		        home.clients();
 		    }
 		});
-
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void editClient() {
@@ -547,11 +550,11 @@ public class ClientsView {
 			}
 					
 		});
-
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void consultClient() {
-		JFrame frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
 		frame.setBounds(0,0,1280,720);
@@ -714,6 +717,8 @@ public class ClientsView {
 			}
 			
 		});
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void deleteConfirm() {
