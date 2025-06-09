@@ -31,10 +31,18 @@ public class PopUpsView {
 		panel.setLayout(null);
 		
 		JLabel title = new JLabel("PDF descargado con exito");
-		title.setBounds(50,100,600,70);
+		title.setBounds(50,30,600,70);
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
 		panel.add(title);
+		
+		JLabel img = new JLabel();
+        img.setBounds(225,80,250,250);
+        ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/success.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		img.setIcon(lblImgScaledIcon);
+		panel.add(img);
 		
 		JButton accept = new JButton("Aceptar");
 		accept.setBounds(350,350,300,70);

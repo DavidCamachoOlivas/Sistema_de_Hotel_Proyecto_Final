@@ -46,6 +46,7 @@ import buttonCells.TableActionCellRender;
 import buttonCells.TableActionEvent;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.PopUpsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.ClientsModel;
@@ -72,7 +73,7 @@ public class RoomTypesView {
 	String titulo;
 	double precio;
 	int x = 120;
-	
+	PopUpsController pop = new PopUpsController();
 	
 	public RoomTypesView() {
 		functions = new RoomTypesModel();
@@ -166,14 +167,22 @@ public class RoomTypesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				try {
-					rooms.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				javax.swing.SwingUtilities.invokeLater(() -> {
+						pop.loading(); 
+					});
+
+				new Thread(() -> {
+		        	frame.dispose();
+		            RoomTypesController rooms = new RoomTypesController();
+		            try {
+		                rooms.roomTypes(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
 			}
 			
 		});
@@ -191,7 +200,7 @@ public class RoomTypesView {
 		contentPane.add(previewLabel);
 
 		JButton btnUpload = new JButton();
-		btnUpload.setBounds(200, 350, 400, 300);
+		btnUpload.setBounds(150, 350, 400, 300);
 		btnUpload.setBackground(new Color(216, 216, 216));
 		btnUpload.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
 		contentPane.add(btnUpload);
@@ -228,7 +237,7 @@ public class RoomTypesView {
 		contentPane.add(btnUpload);
 		
 			JTextField tfTypeRoom = new JTextField();
-			tfTypeRoom.setBounds(200, 196, 400, 49);
+			tfTypeRoom.setBounds(150, 196, 400, 49);
 			tfTypeRoom.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		    contentPane.add(tfTypeRoom);
 		    tfTypeRoom.addKeyListener(new KeyAdapter() {
@@ -243,7 +252,7 @@ public class RoomTypesView {
 	        });
 		    
 		    JTextField tfIncluded = new JTextField();
-		    tfIncluded.setBounds(200, 290, 400, 49);
+		    tfIncluded.setBounds(150, 290, 400, 49);
 		    tfIncluded.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		    contentPane.add(tfIncluded);
 		    tfIncluded.addKeyListener(new KeyAdapter() {
@@ -429,7 +438,7 @@ public class RoomTypesView {
 		    
 		JLabel lblName = new JLabel("Nombre del tipo habitación");
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblName.setBounds(200, 158, 300, 27);
+		lblName.setBounds(150, 158, 300, 27);
 		contentPane.add(lblName);
 		
 		JLabel lblRate = new JLabel("Tipo de tarifa");
@@ -439,7 +448,7 @@ public class RoomTypesView {
 		
 		JLabel lblIncluded = new JLabel("No. de habitaciones incluidas");
 		lblIncluded.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblIncluded.setBounds(200, 260, 340, 27);
+		lblIncluded.setBounds(150, 260, 340, 27);
 		contentPane.add(lblIncluded);
 		
 		JLabel lblFloor = new JLabel("No. piso");
@@ -462,14 +471,22 @@ public class RoomTypesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomTypesController rtc = new RoomTypesController();
-				frame.dispose();
-				try {
-					rtc.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				javax.swing.SwingUtilities.invokeLater(() -> {
+						pop.loading(); 
+					});
+	
+				new Thread(() -> {
+		        	frame.dispose();
+		            RoomTypesController rooms = new RoomTypesController();
+		            try {
+		                rooms.roomTypes(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
 			}
 		});
 		contentPane.add(btnCancelar);
@@ -516,14 +533,22 @@ public class RoomTypesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				try {
-					rooms.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				javax.swing.SwingUtilities.invokeLater(() -> {
+						pop.loading(); 
+					});
+	
+				new Thread(() -> {
+		        	frame.dispose();
+		            RoomTypesController rooms = new RoomTypesController();
+		            try {
+		                rooms.roomTypes(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
 			}
 			
 		});
@@ -541,7 +566,7 @@ public class RoomTypesView {
 		contentPane.add(previewLabel);
 
 		JButton btnNewButton1 = new JButton();
-		btnNewButton1.setBounds(100, 250, 470, 400);
+		btnNewButton1.setBounds(130, 250, 470, 400);
 		btnNewButton1.setBackground(new Color(216, 216, 216));
 		btnNewButton1.setBorder(BorderFactory.createLineBorder(new Color(120, 120, 120), 2));
 		panel.add(btnNewButton1);
@@ -583,7 +608,7 @@ public class RoomTypesView {
 			JTextField tipoHabitacionField = new JTextField();
 			tipoHabitacionField.setFont(new Font("Inter_18pt Bold", Font.BOLD, 20));
 			tipoHabitacionField.setText(rt.getRoom_type());
-		    tipoHabitacionField.setBounds(100, 196, 470, 49);
+		    tipoHabitacionField.setBounds(130, 196, 470, 49);
 		    contentPane.add(tipoHabitacionField);
 		    
 		    JTextField tipoHabitacionIncluidas = new JTextField();
@@ -680,7 +705,7 @@ public class RoomTypesView {
 		    
 		JLabel lblNewLabel = new JLabel("Tipo de habitación");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel.setBounds(100, 158, 309, 27);
+		lblNewLabel.setBounds(130, 158, 309, 27);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblTipoDeTarifa = new JLabel("Tipo de tarifa");
@@ -713,14 +738,22 @@ public class RoomTypesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomTypesController rtc = new RoomTypesController();
-				frame.dispose();
-				try {
-					rtc.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				javax.swing.SwingUtilities.invokeLater(() -> {
+						pop.loading(); 
+					});
+	
+				new Thread(() -> {
+		        	frame.dispose();
+		            RoomTypesController rooms = new RoomTypesController();
+		            try {
+		                rooms.roomTypes(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
 			}
 		});
 		contentPane.add(btnCancelar);
@@ -793,14 +826,22 @@ public class RoomTypesView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomTypesController rooms = new RoomTypesController();
-				frame.dispose();
-				try {
-					rooms.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				javax.swing.SwingUtilities.invokeLater(() -> {
+						pop.loading(); 
+					});
+	
+				new Thread(() -> {
+		        	frame.dispose();
+		            RoomTypesController rooms = new RoomTypesController();
+		            try {
+		                rooms.roomTypes(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
 			}
 			
 		});
@@ -892,6 +933,8 @@ public class RoomTypesView {
 			            File carpeta = fileChooser.getSelectedFile();
 			            url = carpeta.getAbsolutePath() + "/tipoHabitacion.pdf";
 			            rtm.exportarTablaPDF(roomTable, url);
+			            PopUpsController rtc = new PopUpsController();
+			            rtc.successDownload();
 			        }
 			        else{
 			        	System.out.println("ruta no valida");

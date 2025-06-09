@@ -166,8 +166,6 @@ public class RoomTypesModel {
             }
 
             document.add(pdfTable);
-            RoomTypesController rtc = new RoomTypesController();
-            rtc.successDownload();
             document.close();
 
         } catch (Exception e) {
