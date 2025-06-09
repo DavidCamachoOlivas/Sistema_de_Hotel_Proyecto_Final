@@ -1237,22 +1237,24 @@ public class RoomTypesView {
 	private void createPaginationButtons() {
 	    int totalPages = (int) Math.ceil((double) roomTypeList.size() / itemsPerPage);
 	    int startX = 524;
-
+	    System.out.println(totalPages);
 	    for (int i = 1; i <= totalPages; i++) {
-	        JButton pageButton = new JButton(String.valueOf(i));
-	        pageButton.setBounds(startX + ((i - 1) * 54), 561, 44, 44);
-	        contentPane.add(pageButton);
+	    	if(totalPages>=2) {
+	    		JButton pageButton = new JButton(String.valueOf(i));
+		        pageButton.setBounds(startX + ((i - 1) * 54), 561, 44, 44);
+		        contentPane.add(pageButton);
 
-	        int targetPage = i;
-	        pageButton.addActionListener(e -> {
-	            currentPage = targetPage;
-	            try {
-					loadPage(currentPage);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	        });
+		        int targetPage = i;
+		        pageButton.addActionListener(e -> {
+		            currentPage = targetPage;
+		            try {
+						loadPage(currentPage);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        });
+	    	}
 	    }
 	}
 }
