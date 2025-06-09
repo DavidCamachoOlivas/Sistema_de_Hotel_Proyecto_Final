@@ -284,6 +284,8 @@ public class RoomsView {
 			}
 			
 		});
+		frame.revalidate();
+		frame.repaint();
 	}
 	Room r = new Room();
 	

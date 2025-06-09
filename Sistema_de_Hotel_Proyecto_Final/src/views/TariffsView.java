@@ -209,6 +209,9 @@ public class TariffsView {
 			}
 			
 		});
+
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void createTariff() {
@@ -371,6 +374,9 @@ public class TariffsView {
 			}
 			
 		});
+
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void editTariff() {
@@ -533,6 +539,9 @@ public class TariffsView {
 			}
 			
 		});
+
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void consultTariff() {
@@ -595,6 +604,9 @@ public class TariffsView {
 			}
 			
 		});
+
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void deleteConfirm(int row, Tariff t, DefaultTableModel model) {

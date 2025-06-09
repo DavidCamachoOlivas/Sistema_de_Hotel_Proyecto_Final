@@ -250,6 +250,8 @@ public class RentalsView {
 				JScrollPane scrollPane = new JScrollPane(clientsTable);
 				scrollPane.setBounds(0, 0, 1100, 270);
 				panel_2.add(scrollPane);
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void createRental() {

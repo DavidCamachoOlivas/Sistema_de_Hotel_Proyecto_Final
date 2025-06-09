@@ -106,7 +106,7 @@ public class HomeView extends JFrame{
 		lblRoomTypes.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
-		    	javax.swing.SwingUtilities.invokeLater(() -> {
+		    	/*javax.swing.SwingUtilities.invokeLater(() -> {
 		            pop.loading(); 
 		        });
 
@@ -121,7 +121,18 @@ public class HomeView extends JFrame{
 		            javax.swing.SwingUtilities.invokeLater(() -> {
 		                pop.closeLoading();
 		            });
-		        }).start();
+		        }).start();*/
+		    	
+		    	pop.loading();
+		    	dispose();
+		    	RoomTypesController rooms = new RoomTypesController();
+		    	try {
+					rooms.roomTypes();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    	pop.closeLoading();
 		    }
 		});
 		

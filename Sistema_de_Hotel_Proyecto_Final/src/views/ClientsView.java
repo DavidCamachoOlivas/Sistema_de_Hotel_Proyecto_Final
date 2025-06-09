@@ -200,6 +200,9 @@ public class ClientsView {
 			}
 			
 		});
+
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void createClient() {
@@ -348,6 +351,9 @@ public class ClientsView {
 		        home.clients();
 		    }
 		});
+
+		frame.revalidate();
+		frame.repaint();
 
 	}
 	
@@ -511,6 +517,9 @@ public class ClientsView {
 			}
 					
 		});
+
+		frame.revalidate();
+		frame.repaint();
 
 	}
 	
@@ -678,6 +687,9 @@ public class ClientsView {
 			}
 			
 		});
+
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void deleteConfirm() {
