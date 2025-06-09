@@ -34,12 +34,12 @@ public class RoomsController {
 		view.editRoom(r);
 	}
 	
-	public void consultRoom() {
-		view.consultRoom();
+	public void consultRoom(Room r) throws SQLException {
+		view.consultRoom(r);
 	}
 	
-	public void deleteRoom() {
-		view.deleteConfirm();
+	public void deleteRoom(int r) {
+		view.deleteConfirm(r);
 	}
 	
 	public void successDelete() {

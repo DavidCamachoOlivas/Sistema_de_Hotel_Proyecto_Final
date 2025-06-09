@@ -26,27 +26,27 @@ import views.HomeView;
 public class RoomTypesModel {
     
 	 public int createRoomType(RoomType roomType) throws SQLException {
-	        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, description, image) VALUES (?, ?, ?, ?, ?, ?)";
-	        
-	        try(Connection conn = ConnectionDB.getDataSource().getConnection();
-	        		PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-	            
-	            stmt.setInt(1, roomType.getId_tariff());
-	            stmt.setInt(2, roomType.getRooms_included());
-	            stmt.setInt(3, roomType.getNum_floor());
-	            stmt.setString(4, roomType.getRoom_type());
-	            stmt.setString(5, roomType.getDescription());
-	            stmt.setBytes(6, roomType.getImage());
-	            stmt.executeUpdate();
-	            
-	            try (ResultSet rs = stmt.getGeneratedKeys()) {
-	                if (rs.next()) {
-	                    return rs.getInt(1);
-	                }
-	            }
-	        }
-	        throw new SQLException("No se pudo obtener el ID generado");
-	    }
+        String sql = "INSERT INTO room_type (id_tariff, rooms_included, num_floor, room_type, description, image) VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try(Connection conn = ConnectionDB.getDataSource().getConnection();
+        		PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            
+            stmt.setInt(1, roomType.getId_tariff());
+            stmt.setInt(2, roomType.getRooms_included());
+            stmt.setInt(3, roomType.getNum_floor());
+            stmt.setString(4, roomType.getRoom_type());
+            stmt.setString(5, roomType.getDescription());
+            stmt.setBytes(6, roomType.getImage());
+            stmt.executeUpdate();
+            
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        throw new SQLException("No se pudo obtener el ID generado");
+    }
 	 
 	 public boolean deleteRoomTypeAllowOrphans(int oldTypeId) throws SQLException {
 		    String sqlUnassign = "UPDATE room SET id_room_type = NULL WHERE id_room_type = ?";
@@ -119,6 +119,29 @@ public class RoomTypesModel {
         return roomTypes;
     }
     
+    public RoomType getRoomTypeById(int idRoomType) throws SQLException {
+	    String sql = "SELECT * FROM room_type WHERE id_room_type = ?";
+	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, idRoomType);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                RoomType roomType = new RoomType();
+	                roomType.setId_room_type(rs.getInt("id_room_type"));
+	                roomType.setId_tariff(rs.getInt("id_tariff"));
+	                roomType.setNum_floor(rs.getInt("num_floor"));
+	                roomType.setRooms_included(rs.getInt("rooms_included"));
+	                roomType.setRoom_type(rs.getString("room_type"));
+	                roomType.setImage(rs.getBytes("image"));
+	                roomType.setDescription(rs.getString("description"));
+	                return roomType;
+	            }
+	        }
+	    }
+	    return null;
+	}
+    
     public boolean tariffExists(int tariffId) throws SQLException {
         String sql = "SELECT 1 FROM tariff WHERE id_tariff = ?";
         try (Connection conn = ConnectionDB.getDataSource().getConnection();
@@ -166,6 +189,8 @@ public class RoomTypesModel {
             }
 
             document.add(pdfTable);
+            RoomTypesController rtc = new RoomTypesController();
+            rtc.successDownload();
             document.close();
 
         } catch (Exception e) {

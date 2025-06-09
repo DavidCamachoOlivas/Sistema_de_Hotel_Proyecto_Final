@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.ScrollPane;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +28,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -185,27 +187,33 @@ public class RoomsView {
 					        ex.printStackTrace();
 					    }
 					}
-
-
-
-
-		            @Override
-		            public void onDelete(int row) {
-		            	RoomsController rc = new RoomsController();
-						rc.deleteRoom();
-						//lo de abajo se implementará al dar click en el boton "aceptar"
-		                /*if (clientsTable.isEditing()) {
-		                	clientsTable.getCellEditor().stopCellEditing();
-		                }
-		                model.removeRow(row);*/
-		            }
-
+				
+					@Override
+					public void onDelete(int row) {
+					    try {
+					        int idRoom = Integer.parseInt(RoomTable.getValueAt(row, 0).toString());
+					        System.out.println("Solicitando eliminación de habitación con ID: " + idRoom);
+					        deleteConfirm(idRoom);
+					    } catch (Exception ex) {
+					        ex.printStackTrace();
+					        // Mostrar mensaje de error al usuario
+					        JOptionPane.showMessageDialog(null, "Error al obtener ID de habitación", "Error", JOptionPane.ERROR_MESSAGE);
+					    }
+					}
+					
 		            @Override
 		            public void onView(int row) {
-		            	RoomsController rc = new RoomsController();
-						frame.dispose();
-						rc.consultRoom();
-		                System.out.println("View row : " + row);
+		            	try {
+					        int idRoom = Integer.parseInt(RoomTable.getValueAt(row, 0).toString());
+					        System.out.println("Editando habitación con ID: " + idRoom);
+					        RoomsController rc = new RoomsController();
+					        RoomsModel rm = new RoomsModel();
+					        
+					        frame.dispose();
+					        rc.consultRoom(rm.getRoomById(idRoom));
+					    } catch (Exception ex) {
+					        ex.printStackTrace();
+					    }
 		            }
 		        };
 		        RoomTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
@@ -284,8 +292,6 @@ public class RoomsView {
 			}
 			
 		});
-		frame.revalidate();
-		frame.repaint();
 	}
 	Room r = new Room();
 	
@@ -364,7 +370,7 @@ public class RoomsView {
 		try {
 		    List<RoomImage> room_images = new RoomImageModel().getAvailableRoomImage();
 		    DefaultComboBoxModel<RoomImage> model = new DefaultComboBoxModel<>();
-		    model.addElement(null); // Primer elemento vacío
+		    model.addElement(null);
 
 		    for (RoomImage roomImage : room_images) {
 		        model.addElement(roomImage);
@@ -380,8 +386,8 @@ public class RoomsView {
 		    public void itemStateChanged(ItemEvent e) {
 		        if (e.getStateChange() == ItemEvent.SELECTED) {
 		            RoomImage selected = (RoomImage) roomImage_Combo.getSelectedItem();
-		            if (selected != null && selected.getRoom_Image() != null) {
-		                ImageIcon icon = new ImageIcon(selected.getRoom_Image());
+		            if (selected != null && selected.getRoom_image() != null) {
+		                ImageIcon icon = new ImageIcon(selected.getRoom_image());
 		                Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
 		                lblImg.setIcon(new ImageIcon(scaled));
 		            } else {
@@ -553,57 +559,68 @@ public class RoomsView {
 		btnSave.setBackground(Color.decode("#071A2B"));
 		panel.add(btnSave);
 		
-		btnSave.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
+		btnSave.addActionListener(e -> {
+		    try {
+		        // 1) Leer selección del usuario
 		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
-		        RoomType selectedType  = (RoomType) roomType_Combo.getSelectedItem();
-		        Tariff   selectedTariff= (Tariff) tariff_Combo.getSelectedItem(); // ← CORRECTO
+		        RoomType  selectedType  = (RoomType) roomType_Combo.getSelectedItem();
+		        Tariff    selectedTariff= (Tariff) tariff_Combo.getSelectedItem();
 
-		        Integer guests  = (Integer) Guests_comboBox.getSelectedItem();
-		        Integer bedQt   = (Integer) bedQtTextField.getSelectedItem();
-		        String  nombre  = nombreTextField.getText().trim();
-		        String  numero  = numeroTextField.getText().trim();
-		        String  amenities = amenities_textField.getText().trim();
+		        // 2) Construir el objeto Room
+		        Room nuevaHabitacion = new Room();
+		        nuevaHabitacion.setRoom_name(nombreTextField.getText().trim());
+		        nuevaHabitacion.setNum_room(Integer.parseInt(numeroTextField.getText().trim()));
+		        nuevaHabitacion.setId_room_type(selectedType.getId_room_type());
+		        nuevaHabitacion.setId_room_image(
+		            selectedImage != null ? selectedImage.getId_room_image() : null
+		        );
+		        nuevaHabitacion.setMax_guest_qty((Integer) Guests_comboBox.getSelectedItem());
+		        nuevaHabitacion.setBeds_qty((Integer) bedQtTextField.getSelectedItem());
+		        nuevaHabitacion.setAmenities(amenities_textField.getText().trim());
+		        nuevaHabitacion.setStatus(false);
 
-		        try {
-		            // 1) Crear y guardar la habitación
-		            Room nuevaHabitacion = new Room();
-		            nuevaHabitacion.setRoom_name(nombre);
-		            nuevaHabitacion.setNum_room(Integer.parseInt(numero));
-		            nuevaHabitacion.setId_room_type(selectedType.getId_room_type());
-		            nuevaHabitacion.setId_room_image(
-		                selectedImage != null 
-		                    ? selectedImage.getid_Room_image() 
-		                    : null
-		            );
-		            nuevaHabitacion.setMax_guest_qty(guests);
-		            nuevaHabitacion.setBeds_qty(bedQt);
-		            nuevaHabitacion.setAmenities(amenities);
-		            nuevaHabitacion.setStatus(false);
+		        // 3) Guardar habitación y recuperar su ID
+		        RoomsModel     roomsModel   = new RoomsModel();
+		        int newRoomId = roomsModel.createRoom(nuevaHabitacion);
 
-		            // 2) Crear la tarifa y asociar más adelante el id_room
-		            Tariff editTariff = new Tariff();
-		            editTariff.setId_room(nuevaHabitacion.getId_room());
+		        // 4) Construir y guardar la tarifa asociada
+		        Tariff t = new Tariff();
+		        TariffsModel tm = new TariffsModel();
+		        
+		        Tariff editTariff = new Tariff();
 
-		            // 3) Llamar al controlador que inserta room y tarifa en secuencia
-		            RoomsController rc = new RoomsController();
-		            rc.createRoomWithTariff(nuevaHabitacion, editTariff);
+		        RoomTypesModel rtm = new RoomTypesModel();
+		        
+		        RoomType rt = new RoomType();
+		        rt = rtm.getRoomTypeById(nuevaHabitacion.getId_room_type());
+		        
+		        t = tm.getTariffById(rt.getId_tariff());
+		        
+		        editTariff.setCapacity(t.getCapacity());
+		        editTariff.setPrice_per_night(t.getPrice_per_night());
 
-		            JOptionPane.showMessageDialog(frame, "Habitación guardada exitosamente.");
-		            frame.dispose();
-		            new RoomsController().rooms();
-		        } catch (SQLException ex) {
-		            ex.printStackTrace();
-		            JOptionPane.showMessageDialog(
-		              frame,
-		              "Error al guardar: " + ex.getMessage(),
-		              "Error",
-		              JOptionPane.ERROR_MESSAGE
-		            );
-		        }
+		        editTariff.setTariff_type(t.getTariff_type());
+		        editTariff.setRefundable(t.isRefundable());
+		        
+		        TariffsModel tariffsModel = new TariffsModel();
+		        tariffsModel.createTariff(editTariff);
+
+		        // 5) Feedback y recarga
+		        JOptionPane.showMessageDialog(frame, "Habitación guardada exitosamente.");
+		        frame.dispose();
+		        new RoomsController().rooms();
+
+		    } catch (SQLException ex) {
+		        ex.printStackTrace();
+		        JOptionPane.showMessageDialog(
+		            frame,
+		            "Error al guardar: " + ex.getMessage(),
+		            "Error",
+		            JOptionPane.ERROR_MESSAGE
+		        );
 		    }
 		});
+
 
 
 
@@ -702,7 +719,7 @@ public class RoomsView {
 		    roomImage_Combo.setModel(model);
 		    for (int i = 0; i < roomImage_Combo.getItemCount(); i++) {
 		        RoomImage ri = roomImage_Combo.getItemAt(i);
-		        if (ri != null && ri.getid_Room_image() == r.getId_room_image()) {
+		        if (ri != null && ri.getId_room_image() == r.getId_room_image()) {
 		            roomImage_Combo.setSelectedIndex(i);
 		            break;
 		        }
@@ -715,9 +732,9 @@ public class RoomsView {
 		}
 		RoomImage seleccionada = (RoomImage) roomImage_Combo.getSelectedItem();
 
-		if (seleccionada != null && seleccionada.getRoom_Image() != null) {
+		if (seleccionada != null && seleccionada.getRoom_image() != null) {
 			System.out.println("1- Imagen cargada y mostrada");
-		    ImageIcon icon = new ImageIcon(seleccionada.getRoom_Image());
+		    ImageIcon icon = new ImageIcon(seleccionada.getRoom_image());
 		    Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
 		    lblImg.setIcon(new ImageIcon(scaled));
 		}
@@ -729,8 +746,8 @@ public class RoomsView {
 		        	System.out.println("2- Imagen cargada y mostrada");
 
 		            RoomImage selected = (RoomImage) roomImage_Combo.getSelectedItem();
-		            if (selected != null && selected.getRoom_Image() != null) {
-		                ImageIcon icon = new ImageIcon(selected.getRoom_Image());
+		            if (selected != null && selected.getRoom_image() != null) {
+		                ImageIcon icon = new ImageIcon(selected.getRoom_image());
 		                Image scaled = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
 		                lblImg.setIcon(new ImageIcon(scaled));
 		            } 
@@ -853,7 +870,7 @@ public class RoomsView {
 		            r.setRoom_name(nombre);
 		            r.setNum_room(Integer.parseInt(numero));
 		            r.setId_room_type(selectedType.getId_room_type());
-		            r.setId_room_image(selectedImage != null ? selectedImage.getid_Room_image() : null);
+		            r.setId_room_image(selectedImage != null ? selectedImage.getId_room_image() : null);
 		            r.setMax_guest_qty(guests);
 		            r.setBeds_qty(bedQt);
 		            r.setAmenities(amenities);
@@ -861,7 +878,7 @@ public class RoomsView {
 		            boolean actualizado = new RoomsModel().updateRoomType(r);
 
 		            if (actualizado) {
-		                int idImagenNueva = selectedImage != null ? selectedImage.getid_Room_image() : -1;
+		                int idImagenNueva = selectedImage != null ? selectedImage.getId_room_image() : -1;
 
 		                if (idImagenAnterior != idImagenNueva) {
 		                    new RoomImageModel().updateRoomImageReference(idImagenAnterior, idImagenNueva, r.getId_room());
@@ -907,7 +924,7 @@ public class RoomsView {
 		frame.setVisible(true);
 	}
 	
-	public void consultRoom() {
+	public void consultRoom(Room r) throws SQLException {
 		frame = new JFrame();
 	    frame.setTitle("Hotel Ancla de Paz");
 	    frame.setResizable(false);
@@ -961,59 +978,60 @@ public class RoomsView {
 	    roomImagePanel.setBorder(BorderFactory.createLineBorder(Color.decode("#E0E0E0"), 1));
 	    roomInfoPanel.add(roomImagePanel);
 	    
-	    JLabel roomImageLabel = new JLabel("Imagen de habitación", SwingConstants.CENTER);
+	    RoomImageModel rim = new RoomImageModel();
+	    RoomImage ri = new RoomImage();
+	    ri = rim.getRoomImageById(r.getId_room_image());
+	    
+	    Image icon = new ImageIcon(ri.getRoom_image()).getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
+	    ImageIcon backgroundIcon = new ImageIcon(icon);
+	    
+	    JLabel roomImageLabel = new JLabel(backgroundIcon, SwingConstants.CENTER);
 	    roomImageLabel.setBounds(0, 0, 360, 200);
 	    roomImageLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
 	    roomImageLabel.setForeground(Color.decode("#888888"));
 	    roomImagePanel.add(roomImageLabel);
 	    
-	    JLabel lblRoomTitle = new JLabel("Habitación de lujo");
+	    JLabel lblRoomTitle = new JLabel(r.getRoom_name());
 	    lblRoomTitle.setBounds(20, 240, 300, 30);
 	    lblRoomTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 	    lblRoomTitle.setForeground(Color.decode("#071A2B"));
 	    roomInfoPanel.add(lblRoomTitle);
+	    
+	    RoomTypesModel rtm = new RoomTypesModel();
+	    RoomType rt = new RoomType();
+	    rt = rtm.getRoomTypeById(r.getId_room_type());
+	    
+	    TariffsModel tariff = new TariffsModel();
+	    Tariff t = new Tariff();
+	    t = tariff.getTariffById(rt.getId_tariff());
 
-	    JLabel lblPrice = new JLabel("$2,000.00 MXN/noche");
+	    JLabel lblPrice = new JLabel("$"+t.getPrice_per_night()+"/noche");
 	    lblPrice.setBounds(20, 275, 200, 25);
 	    lblPrice.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 	    lblPrice.setForeground(Color.decode("#071A2B"));
 	    roomInfoPanel.add(lblPrice);
 
-	    JLabel lblTariff = new JLabel("Tarifa variable");
+	    JLabel lblTariff = new JLabel(t.getTariff_type());
 	    lblTariff.setBounds(20, 300, 150, 20);
 	    lblTariff.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
 	    lblTariff.setForeground(Color.decode("#666666"));
 	    roomInfoPanel.add(lblTariff);
 
-	    JLabel lblStars = new JLabel("5 estrellas");
-	    lblStars.setBounds(20, 320, 100, 20);
-	    lblStars.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
-	    lblStars.setForeground(Color.decode("#666666"));
-	    roomInfoPanel.add(lblStars);
-
-	    JLabel lblAmenidadesTitle = new JLabel("Amenidades");
-	    lblAmenidadesTitle.setBounds(20, 345, 120, 25);
-	    lblAmenidadesTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
-	    lblAmenidadesTitle.setForeground(Color.decode("#071A2B"));
-	    roomInfoPanel.add(lblAmenidadesTitle);
+	    JLabel lblAmenitiesTitle = new JLabel("Amenidades: ");
+	    lblAmenitiesTitle.setBounds(20, 345, 120, 25);
+	    lblAmenitiesTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
+	    lblAmenitiesTitle.setForeground(Color.decode("#071A2B"));
+	    roomInfoPanel.add(lblAmenitiesTitle);
 	    
-	    JLabel lblWifi = new JLabel("Wifi");
-	    lblWifi.setBounds(20, 370, 60, 20);
-	    lblWifi.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
-	    lblWifi.setForeground(Color.decode("#666666"));
-	    roomInfoPanel.add(lblWifi);
+	    JLabel lblAmenities = new JLabel(r.getAmenities());
+	    lblAmenities.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
+	    lblAmenities.setForeground(Color.decode("#666666"));
+	    lblAmenities.setBackground(new Color(255,255,255));
 	    
-	    JLabel lblHotWater = new JLabel("Agua caliente");
-	    lblHotWater.setBounds(90, 370, 100, 20);
-	    lblHotWater.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
-	    lblHotWater.setForeground(Color.decode("#666666"));
-	    roomInfoPanel.add(lblHotWater);
-	    
-	    JLabel lblJacuzzi = new JLabel("Jacuzzi");
-	    lblJacuzzi.setBounds(200, 370, 60, 20);
-	    lblJacuzzi.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 14));
-	    lblJacuzzi.setForeground(Color.decode("#666666"));
-	    roomInfoPanel.add(lblJacuzzi);
+	    ScrollPane sp = new ScrollPane();
+	    sp.setBounds(20, 370, 200, 50);
+	    sp.add(lblAmenities);
+	    roomInfoPanel.add(sp);
 	    
 	    String[] columnNames = {
 	        "Cliente",
@@ -1079,63 +1097,65 @@ public class RoomsView {
 	    });
 	}
 	
-	public void deleteConfirm() {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("Confirmar eliminación ");
-		title.setBounds(100,100,400,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		title.setVisible(true);
-		panel.add(title);
-		
-		JButton accept = new JButton("Aceptar");
-		accept.setBounds(350,350,300,70);
-		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		accept.setForeground(Color.decode("#FFFFFF"));
-		accept.setBackground(Color.decode("#071A2B"));
-		panel.add(accept);
-		
-		accept.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomsController client = new RoomsController();
-				frame.dispose();
-				client.successDelete();
-			}
-			
-		});
-		
-		JButton deny = new JButton("Cancelar");
-		deny.setBounds(50,350,300,70);
-		deny.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		deny.setForeground(Color.decode("#FFFFFF"));
-		deny.setBackground(Color.decode("#071A2B"));
-		panel.add(deny);
-		
-		deny.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				RoomsController client = new RoomsController();
-				frame.dispose();
-				client.errorDelete();
-			}
-			
-		});
+	public void deleteConfirm(int roomId) {
+	    JDialog confirmDialog = new JDialog();
+	    confirmDialog.setTitle("Confirmar eliminación");
+	    confirmDialog.setSize(700, 500);
+	    confirmDialog.setLocationRelativeTo(null);
+	    confirmDialog.setModal(true);
+	    confirmDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	    
+	    JPanel panel = new JPanel();
+	    panel.setBackground(Color.decode("#FFFCF7"));
+	    panel.setLayout(null);
+	    confirmDialog.add(panel);
+	    
+	    JLabel title = new JLabel("Confirmar eliminación");
+	    title.setBounds(100, 100, 400, 70);
+	    title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    panel.add(title);
+	    
+	    JLabel info = new JLabel("<html><div style='text-align: center; width: 600px;'>"
+	            + "Las imágenes asociadas permanecerán en el sistema, pero dejarán de estar vinculadas a esta habitación"
+	            + "</div></html>");
+	    info.setBounds(50, 180, 600, 100);
+	    info.setFont(new Font("Inter", Font.PLAIN, 18));
+	    panel.add(info);
+	    
+	    JButton accept = new JButton("Aceptar");
+	    accept.setBounds(350, 350, 300, 70);
+	    styleButton(accept);
+	    panel.add(accept);
+	    
+	    JButton deny = new JButton("Cancelar");
+	    deny.setBounds(50, 350, 300, 70);
+	    styleButton(deny);
+	    panel.add(deny);
+	    
+	    accept.addActionListener(e -> {
+	        try {
+	            RoomsModel rm = new RoomsModel();
+	            Room roomToDelete = rm.getRoomById(roomId);
+	            
+	            if (roomToDelete != null) {
+	                rm.deleteRoom(roomToDelete);
+	                new RoomsController().successDelete();
+	            } else {
+	                new RoomsController().errorDelete();
+	            }
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	            new RoomsController().errorDelete();
+	        } finally {
+	            confirmDialog.dispose();
+	        }
+	    });
+	    
+	    deny.addActionListener(e -> confirmDialog.dispose());
+	    
+	    confirmDialog.setVisible(true);
 	}
-	
 	public void successDelete() {
 		frame = new JFrame();
 		frame.setSize(700, 500);
@@ -1148,7 +1168,7 @@ public class RoomsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
-		JLabel title = new JLabel("Cliente eliminado con exito");
+		JLabel title = new JLabel("Habitación eliminado con exito");
 		title.setBounds(50,100,600,70);
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
@@ -1193,4 +1213,12 @@ public class RoomsView {
 		title.setVisible(true);
 		panel.add(title);
 	}
+	
+	private void styleButton(JButton button) {
+	    button.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    button.setForeground(Color.WHITE);
+	    button.setBackground(Color.decode("#071A2B"));
+	    button.setFocusPainted(false);
+	}
+		
 }

@@ -1,5 +1,7 @@
 package controllers;
 
+import java.sql.SQLException;
+
 import views.ClientsView;
 
 public class ClientsController {
@@ -12,7 +14,12 @@ public class ClientsController {
 	}
 	
 	public void clients(){
-		view.clients();
+		try {
+			view.clients();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void createClient() {

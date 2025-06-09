@@ -6,11 +6,18 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
 
 import buttonCells.TableActionCellEditor;
 import buttonCells.TableActionCellRender;
@@ -27,17 +35,22 @@ import controllers.ClientsController;
 import controllers.HomeController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
+import models.Client;
 import models.ClientsModel;
+import models.Room;
+import models.RoomType;
 
 public class ClientsView {
 
 	private JFrame frame;
 	private ClientsModel functions;
+	byte[] imageBytes;
+	
 	public ClientsView() {
 		functions = new ClientsModel();
 	}
 	
-	public void clients() {
+	public void clients() throws SQLException {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -50,25 +63,33 @@ public class ClientsView {
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
+
+		ClientsModel cm = new ClientsModel();
+		List<Client> clients = new ArrayList<>();
 		
-		String[] columnNames = {
-				"ID",
-				"Cliente",
-				"Email",
-				"Telefono",
-				"Acciones"
-		};
+		if(cm.getAvailableRoomType() != null) {
+			clients = cm.getAvailableRoomType();			
+		}
+		else {
+			System.out.println("No hay clientes");
+		}
 		
-		Object [][] data = {
-				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
-				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
-				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
-				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
-				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
-				{"1", "Axdiael","Ax@gmail.com","6121234567",""},
-				
-		};
-		
+		String[] columnNames = {"ID", "Cliente", "Email", "Telefono", "Acciones"};
+		Object[][] data = new Object[clients.size()][5];
+
+		for (int i = 0; i < clients.size(); i++) {
+		    Client   c = clients.get(i);
+
+		    data[i][0] = c.getId_client();
+
+		    data[i][1] = c.getClient_name();
+
+		    data[i][2] = c.getEmail();
+
+		    data[i][3] = c.getPhone_number();
+		   
+		    data[i][4] = "Acciones";
+		}
 		
 		
 		JButton btnCreate = new JButton("Crear");
@@ -87,7 +108,6 @@ public class ClientsView {
 				frame.dispose();
 				client.createClient();
 			}
-			
 		});
 		
 		
@@ -200,12 +220,11 @@ public class ClientsView {
 			}
 			
 		});
-
-		frame.revalidate();
-		frame.repaint();
 	}
 	
 	public void createClient() {
+		Client c = new Client();
+		
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -258,13 +277,13 @@ public class ClientsView {
 		userImageLabel.setBounds(130, 150, 400, 300);
 		userImageLabel.setText(null);
 		userImageLabel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		ImageIcon userImageOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
 		Image userImageScaled = userImageOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 		ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);
 		userImageLabel.setHorizontalAlignment(JLabel.CENTER);
 		userImageLabel.setVerticalAlignment(JLabel.CENTER);
 		userImageLabel.setIcon(userImageScaledIcon);
-		mainPanel.add(userImageLabel);
 
 		JButton addImageButton = new JButton("Agregar imagen");
 		addImageButton.setBounds(130, 450, 400, 70);
@@ -276,9 +295,23 @@ public class ClientsView {
 		addImageButton.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        // TODO: Implementar agregar imagen
+		        JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Selecciona una imagen");
+		        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+		        int resultado = fileChooser.showOpenDialog(null);
+		        if (resultado == JFileChooser.APPROVE_OPTION) {
+		            File imagenSeleccionada = fileChooser.getSelectedFile();
+
+		            try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
+		            	imageBytes = fis.readAllBytes();
+		            } catch (IOException e1) {
+		                e1.printStackTrace();
+		            }
+		        }
 		    }
 		});
+		mainPanel.add(addImageButton);
 
 		JLabel nameLabel = new JLabel("Nombre");
 		nameLabel.setBounds(700, 160, 100, 15);
@@ -351,9 +384,6 @@ public class ClientsView {
 		        home.clients();
 		    }
 		});
-
-		frame.revalidate();
-		frame.repaint();
 
 	}
 	
@@ -517,9 +547,6 @@ public class ClientsView {
 			}
 					
 		});
-
-		frame.revalidate();
-		frame.repaint();
 
 	}
 	
@@ -687,9 +714,6 @@ public class ClientsView {
 			}
 			
 		});
-
-		frame.revalidate();
-		frame.repaint();
 	}
 	
 	public void deleteConfirm() {

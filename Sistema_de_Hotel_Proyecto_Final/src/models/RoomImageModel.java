@@ -45,18 +45,11 @@ public class RoomImageModel {
 	}
 	
 	public static int createRoomImage(RoomImage roomImage) throws SQLException {
-	    String sql = "INSERT INTO `room_image` (`id_room`, `room_image`) VALUES (?, ?)";
+	    String sql = "INSERT INTO `room_image` (`room_image`) VALUES (?)";
 	   
 	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-	        if (roomImage.getId_Room() == 0) {
-	            stmt.setNull(1, java.sql.Types.INTEGER);
-	        } else {
-	            stmt.setInt(1, roomImage.getId_Room());
-	        }
-
-	        stmt.setBytes(2, roomImage.getRoom_Image());
+	        stmt.setBytes(1, roomImage.getRoom_image());
 	        
 	        stmt.executeUpdate();
 	        
@@ -71,19 +64,16 @@ public class RoomImageModel {
 	
 	public boolean updateRoomImageReference(int oldImageId, int newImageId, int roomId) throws SQLException {
 	    try (Connection conn = ConnectionDB.getDataSource().getConnection()) {
-	        conn.setAutoCommit(false);  // Transacción manual
+	        conn.setAutoCommit(false);
 
 	        try {
-	            // 1. Liberar la imagen anterior
 	            if (oldImageId > 0) {
 	                try (PreparedStatement stmt = conn.prepareStatement(
-	                        "UPDATE room_image SET id_room = NULL WHERE id_room_image = ?")) {
+	                        "UPDATE room_image WHERE id_room_image = ?")) {
 	                    stmt.setInt(1, oldImageId);
 	                    stmt.executeUpdate();
 	                }
 	            }
-
-	            // 2. Asignar la nueva imagen
 	            if (newImageId > 0) {
 	                try (PreparedStatement stmt = conn.prepareStatement(
 	                        "UPDATE room_image SET id_room = ? WHERE id_room_image = ?")) {
@@ -105,7 +95,7 @@ public class RoomImageModel {
 		
 	public List<RoomImage> getAvailableRoomImage() throws SQLException {
 		List<RoomImage> roomsImages = new ArrayList<>();
-		String sql = "SELECT id_room_image, id_room, room_image FROM room_image";
+		String sql = "SELECT id_room_image, room_image FROM room_image";
 		
 		try (Connection conn = ConnectionDB.getDataSource().getConnection();
 		     Statement stmt = conn.createStatement();
@@ -114,7 +104,6 @@ public class RoomImageModel {
 		    while (rs.next()) {
 		    	RoomImage roomImage = new RoomImage(
 		    	rs.getInt("id_room_image"),
-				rs.getInt("id_room"),
 		        rs.getBytes("room_image")
 		        );
 		    	roomsImages.add(roomImage);
@@ -122,6 +111,24 @@ public class RoomImageModel {
 		}
 		return roomsImages;
     }
+	
+	 public RoomImage getRoomImageById(int idRoomImage) throws SQLException {
+		    String sql = "SELECT * FROM room_image WHERE id_room_image = ?";
+		    try (Connection conn = ConnectionDB.getDataSource().getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql)) {
+		        stmt.setInt(1, idRoomImage);
+
+		        try (ResultSet rs = stmt.executeQuery()) {
+		            if (rs.next()) {
+		                RoomImage roomImage = new RoomImage();
+		                roomImage.setRoom_image(rs.getBytes("room_image"));
+		                roomImage.getId_room_image(rs.getInt("id_room_image"));
+		                return roomImage;
+		            }
+		        }
+		    }
+		    return null;
+		}
 	
 	public static void cargarImagen() {
 		JFrame frame = new JFrame();
@@ -213,8 +220,7 @@ public class RoomImageModel {
 		    public void actionPerformed(ActionEvent e) {
 		        RoomImage roomimage = new RoomImage();
 
-		        roomimage.setId_Room(0);
-		        roomimage.setRoom_Image(imageBytes);
+		        roomimage.setRoom_image(imageBytes);
 
 		        try {
 		            createRoomImage(roomimage);

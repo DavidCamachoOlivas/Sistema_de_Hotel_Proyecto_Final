@@ -73,7 +73,7 @@ public class TariffsModel {
 	        }
 	        return tariffs;
 	 }
-	 public Tariff getRoomById(int idTariff) throws SQLException {
+	 public Tariff getTariffById(int idTariff) throws SQLException {
 		    String sql = "SELECT * FROM tariff WHERE id_tariff = ?";
 		    try (Connection conn = ConnectionDB.getDataSource().getConnection();
 		         PreparedStatement stmt = conn.prepareStatement(sql)) {

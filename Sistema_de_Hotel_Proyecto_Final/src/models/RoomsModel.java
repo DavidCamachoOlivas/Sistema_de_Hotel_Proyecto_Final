@@ -70,10 +70,17 @@ public class RoomsModel {
 	        return affected > 0;
 	    }
 	}
-	
-	
-
-
+	public boolean deleteRoom(Room r) throws SQLException {
+		   
+		 String sql = "DELETE FROM room WHERE id_room = ?";
+		 
+		 try (Connection conn = ConnectionDB.getDataSource().getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql)) {
+		        stmt.setInt(1, r.getId_room());
+		        int affected = stmt.executeUpdate();
+		        return affected > 0;
+		 }
+	}
 	
 	public List<Room> getAvailableRoom() throws SQLException {
 		List<Room> rooms = new ArrayList<>();
