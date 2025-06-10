@@ -292,6 +292,8 @@ public class RoomsView {
 			}
 			
 		});
+		frame.revalidate();
+		frame.repaint();
 	}
 	Room r = new Room();
 	
@@ -643,6 +645,8 @@ public class RoomsView {
 			}
 			
 		});
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void editRoom(Room r) {
@@ -922,6 +926,8 @@ public class RoomsView {
 			
 		});
 		frame.setVisible(true);
+		frame.revalidate();
+		frame.repaint();
 	}
 	
 	public void consultRoom(Room r) throws SQLException {
@@ -1095,6 +1101,8 @@ public class RoomsView {
 	            System.out.println("Descargando PDF...");
 	        }
 	    });
+	    frame.revalidate();
+	    frame.repaint();
 	}
 	
 
@@ -1155,6 +1163,8 @@ public class RoomsView {
 	    deny.addActionListener(e -> confirmDialog.dispose());
 	    
 	    confirmDialog.setVisible(true);
+
+	
 	}
 	public void successDelete() {
 		frame = new JFrame();

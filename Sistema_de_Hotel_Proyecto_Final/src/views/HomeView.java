@@ -267,21 +267,16 @@ public class HomeView extends JFrame{
 		lblRooms.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
-		    	pop.loading(); 
+		    	javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
 
 		        new Thread(() -> {
-
-			        dispose();
-		            try {
-		                Thread.sleep(100); 
-		            } catch (InterruptedException ex) {
-		                ex.printStackTrace();
-		            }
-
+		        	dispose();
+		        	RoomsController rooms = new RoomsController();
+		        	rooms.rooms();
 		            javax.swing.SwingUtilities.invokeLater(() -> {
-		                RoomsController rooms = new RoomsController();
 		                pop.closeLoading();
-		                rooms.rooms(); 
 		                frame.dispose();
 		            });
 		        }).start();
@@ -299,21 +294,16 @@ public class HomeView extends JFrame{
 		btnRooms.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        pop.loading();  // ahora es un JDialog encima de todo
+		    	javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
 
 		        new Thread(() -> {
-
-			        dispose();
-		            try {
-		                Thread.sleep(100); // pequeño retraso opcional para que loading se muestre bien
-		            } catch (InterruptedException ex) {
-		                ex.printStackTrace();
-		            }
-
+		        	dispose();
+		        	RoomsController rooms = new RoomsController();
+		        	rooms.rooms();
 		            javax.swing.SwingUtilities.invokeLater(() -> {
-		                RoomsController rooms = new RoomsController();
 		                pop.closeLoading();
-		                rooms.rooms(); // mostrar nueva UI
 		                frame.dispose();
 		            });
 		        }).start();
