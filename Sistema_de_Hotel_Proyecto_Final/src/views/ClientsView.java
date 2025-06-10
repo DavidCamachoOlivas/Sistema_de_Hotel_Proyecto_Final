@@ -555,6 +555,7 @@ public class ClientsView {
 	}
 	
 	public void consultClient() {
+		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
 		frame.setBounds(0,0,1280,720);

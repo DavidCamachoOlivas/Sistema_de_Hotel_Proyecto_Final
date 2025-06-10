@@ -63,7 +63,7 @@ public class RentalsView {
 		header.setLayout(null);
 		
 		JButton btnHome = new JButton("");
-		btnHome.setBounds(130, 60, 56, 56);
+		btnHome.setBounds(110, 60, 56, 56);
 		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
@@ -87,7 +87,7 @@ public class RentalsView {
 		});
 		
 		JLabel lblTitle = new JLabel("Rentas");
-		lblTitle.setBounds(200, 42, 250, 82);
+		lblTitle.setBounds(180, 42, 250, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -96,6 +96,7 @@ public class RentalsView {
 		
 		JTextField textField = new JTextField();
 		textField.setBounds(100, 160, 659, 58);
+		textField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -154,6 +155,7 @@ public class RentalsView {
 		
 		JTextField textField_1 = new JTextField();
 		textField_1.setBounds(100, 83, 200, 35);
+		textField_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_1);
 		textField_1.setColumns(10);
 		
@@ -174,16 +176,19 @@ public class RentalsView {
 		JTextField textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		textField_2.setBounds(325, 83, 200, 35);
+		textField_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_2);
 		
 		JTextField textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		textField_3.setBounds(557, 83, 200, 35);
+		textField_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_3);
 		
 		JTextField textField_4 = new JTextField();
 		textField_4.setColumns(10);
 		textField_4.setBounds(788, 83, 200, 35);
+		textField_4.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_4);
 		String[] columnNames = {
 				"ID renta",
