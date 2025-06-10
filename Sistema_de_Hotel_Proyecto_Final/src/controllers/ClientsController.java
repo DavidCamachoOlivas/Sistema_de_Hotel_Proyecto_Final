@@ -27,8 +27,8 @@ public class ClientsController {
 		view.createClient();
 	}
 	
-	public void editClient() {
-		view.editClient();
+	public void editClient(Client c) {
+		view.editClient(c);
 	}
 	
 	public void consultClient() {
