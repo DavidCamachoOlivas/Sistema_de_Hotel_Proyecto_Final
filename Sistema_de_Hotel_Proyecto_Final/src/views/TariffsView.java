@@ -622,14 +622,22 @@ public class TariffsView {
 		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
-		JLabel title = new JLabel("Confirmar eliminación ");
-		title.setBounds(100,100,400,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		JLabel title = new JLabel("¿Seguro que desea eliminar?");
+		title.setBounds(50,20,550,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.BOLD, 32));
 		title.setVisible(true);
 		panel.add(title);
 		
+		JLabel img = new JLabel();
+		img.setBounds(225,90,250,250);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnDelete.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		img.setIcon(lblImgScaledIcon);
+		panel.add(img);
+		
 		JButton accept = new JButton("Aceptar");
-		accept.setBounds(350,350,300,70);
+		accept.setBounds(380,350,270,70);
 		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		accept.setForeground(Color.decode("#FFFFFF"));
 		accept.setBackground(Color.decode("#071A2B"));
@@ -649,7 +657,9 @@ public class TariffsView {
 		            if (deleted) {
 		                model.removeRow(row);
 		                confirmFrame.dispose();
-		                JOptionPane.showMessageDialog(null, "Tarifa eliminada con éxito.");
+		                TariffsController success = new TariffsController();
+		                success.successDelete();
+		                //JOptionPane.showMessageDialog(null, "Tarifa eliminada con éxito.");
 		            } else {
 		                JOptionPane.showMessageDialog(null, "No se pudo eliminar la tarifa.");
 		            }
@@ -660,10 +670,10 @@ public class TariffsView {
 		});
 		
 		JButton deny = new JButton("Cancelar");
-		deny.setBounds(50,350,300,70);
+		deny.setBounds(50,350,270,70);
 		deny.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		deny.setForeground(Color.decode("#FFFFFF"));
-		deny.setBackground(Color.decode("#071A2B"));
+		deny.setBackground(new Color(153, 89, 45));
 		panel.add(deny);
 		
 		deny.addActionListener(new ActionListener() {
@@ -671,9 +681,7 @@ public class TariffsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				TariffsController tariff = new TariffsController();
 				confirmFrame.dispose();
-				tariff.errorDelete();
 			}
 			
 		});
@@ -692,10 +700,31 @@ public class TariffsView {
 		panel.setLayout(null);
 		
 		JLabel title = new JLabel("Tarifa eliminado con exito");
-		title.setBounds(50,100,600,70);
+		title.setBounds(50,40,600,70);
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
 		panel.add(title);
+		
+		JLabel img = new JLabel();
+		img.setBounds(225,90,250,250);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/success.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		img.setIcon(lblImgScaledIcon);
+		panel.add(img);
+		
+		JButton accept = new JButton("Aceptar");
+		accept.setBounds(350,350,300,70);
+		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		accept.setForeground(Color.decode("#FFFFFF"));
+		accept.setBackground(Color.decode("#071A2B"));
+		panel.add(accept);
+		
+		accept.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        frame.dispose();
+		    }
+		});
 		
 	}
 	
@@ -718,22 +747,4 @@ public class TariffsView {
 		panel.add(title);
 	}
 	
-	public void errorDelete() {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("Hubo un error en la eliminación");
-		title.setBounds(50,100,600,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		title.setVisible(true);
-		panel.add(title);
-	}
 }

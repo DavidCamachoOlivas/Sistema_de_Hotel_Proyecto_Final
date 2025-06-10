@@ -1086,15 +1086,17 @@ public class RoomTypesView {
 	    contentPane.add(panel);
 	    panel.setLayout(null);
 	    
-	    JButton btnNewButton = new JButton("");
-	    btnNewButton.setBounds(150, 60, 56, 56);
-		Image imgBtnHome = new ImageIcon("src/images/btnHome.png").getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
-		btnNewButton.setIcon(new ImageIcon(imgBtnHome));
-		btnNewButton.setBackground(null);
-		btnNewButton.setBorder(null);
-		panel.add(btnNewButton);
+	    JButton btnHome = new JButton("");
+	    btnHome.setBounds(150, 60, 56, 56);
+	    ImageIcon btnHomeOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnHome.png"));
+		Image btnHomeScaledImage = btnHomeOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
+		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
+		btnHome.setIcon(btnHomeScaledIcon);
+		btnHome.setBackground(null);
+		btnHome.setBorder(null);
+		panel.add(btnHome);
 		
-		btnNewButton.addActionListener(new ActionListener() {
+		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

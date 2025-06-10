@@ -43,7 +43,4 @@ public class TariffsController {
 		view.succesDownload();
 	}
 	
-	public void errorDelete() {
-		view.errorDelete();
-	}
 }
