@@ -48,6 +48,7 @@ import buttonCells.TableActionEvent;
 import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.PopUpsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.ClientsModel;
@@ -66,6 +67,7 @@ public class RoomsView {
 	private RoomsModel f_rm = new RoomsModel();
 	private RoomTypesModel f_rtm = new RoomTypesModel();
 	private TariffsModel f_tm = new TariffsModel();
+	PopUpsController pop = new PopUpsController();
 	byte[] imageBytes;
 	
 	public void rooms() throws SQLException {
@@ -343,9 +345,19 @@ public class RoomsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomsController home = new RoomsController();
-				frame.dispose();
-				home.rooms();
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
+
+		        new Thread(() -> {
+		        	frame.dispose();
+		        	RoomsController rooms = new RoomsController();
+		        	rooms.rooms();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
 			}
 			
 		});
@@ -696,9 +708,19 @@ public class RoomsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RoomsController home = new RoomsController();
-				frame.dispose();
-				home.rooms();
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
+
+		        new Thread(() -> {
+		        	frame.dispose();
+		        	RoomsController rooms = new RoomsController();
+		        	rooms.rooms();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
 			}
 			
 		});
@@ -970,6 +992,25 @@ public class RoomsView {
 	    Image btnBackScaledImage = btnBackOriginalIcon.getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH);
 	    ImageIcon btnBackScaledIcon = new ImageIcon(btnBackScaledImage);
 	    btnBack.setIcon(btnBackScaledIcon);
+	    
+	    btnBack.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
+
+		        new Thread(() -> {
+		        	frame.dispose();
+		        	RoomsController rooms = new RoomsController();
+		        	rooms.rooms();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		                frame.dispose();
+		            });
+		        }).start();
+	        }
+	    });
 
 	    JPanel roomInfoPanel = new JPanel();
 	    roomInfoPanel.setBounds(130, 160, 400, 500);
@@ -1086,15 +1127,6 @@ public class RoomsView {
 	    btnDownloadPDF.setBackground(Color.decode("#0E651B")); 
 	    panel.add(btnDownloadPDF);
 
-	    btnBack.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	        	RoomsController home = new RoomsController();
-				frame.dispose();
-				home.rooms();
-	        }
-	    });
-	    
 	    btnDownloadPDF.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
