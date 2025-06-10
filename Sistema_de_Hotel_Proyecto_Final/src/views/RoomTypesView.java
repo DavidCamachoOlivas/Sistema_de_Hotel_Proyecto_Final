@@ -244,7 +244,6 @@ public class RoomTypesView {
 		    tfTypeRoom.addKeyListener(new KeyAdapter() {
 	            public void keyTyped(KeyEvent e) {
 	                char c = e.getKeyChar();
-
 	                if (!Character.isLetter(c) && !Character.isWhitespace(c) &&
 	                    "áéíóúÁÉÍÓÚñÑ".indexOf(c) == -1) {
 	                    e.consume();

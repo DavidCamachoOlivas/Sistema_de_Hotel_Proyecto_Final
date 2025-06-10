@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -320,7 +322,7 @@ public class RoomsView {
 		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Añadir Habitacion");
+		JLabel lblTitle = new JLabel("Añadir habitación");
 		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
@@ -364,7 +366,7 @@ public class RoomsView {
 		
 		// JLabel para mostrar la imagen seleccionada
 		lblImg = new JLabel();
-		lblImg.setBounds(130, 150, 510, 200);
+		lblImg.setBounds(130, 150, 510, 250);
 		lblImg.setText(null);
 		lblImg.setBorder(BorderFactory.createLineBorder(Color.black));
 		lblImg.setHorizontalAlignment(JLabel.CENTER);
@@ -376,9 +378,13 @@ public class RoomsView {
 		lblImg.setIcon(new ImageIcon(scaledPredeterminada));
 		panel.add(lblImg);
 
+		JLabel roomImage_Combolbl = new JLabel("Seleccione imagen:");
+		roomImage_Combolbl.setBounds(700, 300, 460, 40);
+		roomImage_Combolbl.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
+		panel.add(roomImage_Combolbl);
 		// JComboBox para seleccionar una imagen
 		JComboBox<RoomImage> roomImage_Combo = new JComboBox<>();
-		roomImage_Combo.setBounds(700, 300, 460, 60);
+		roomImage_Combo.setBounds(700, 340, 460, 50);
 		panel.add(roomImage_Combo);
 
 		try {
@@ -414,8 +420,12 @@ public class RoomsView {
 		    }
 		});
 
+		JLabel roomType_Combo_lbl = new JLabel("Tipo de habitación:");
+		roomType_Combo_lbl.setBounds(130, 410, 230, 40);
+		roomType_Combo_lbl.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
+		panel.add(roomType_Combo_lbl);
 		JComboBox<RoomType> roomType_Combo = new JComboBox<>();
-		roomType_Combo.setBounds(130, 300, 460, 60);
+		roomType_Combo.setBounds(130, 450, 230, 50);
 		panel.add(roomType_Combo);
 		
 
@@ -433,8 +443,12 @@ public class RoomsView {
 		    e1.printStackTrace();
 		}
 
+		JLabel tariff_Combo_lbl = new JLabel("Tarifa:");
+		tariff_Combo_lbl.setBounds(410, 410, 230, 40);
+		tariff_Combo_lbl.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
+		panel.add(tariff_Combo_lbl);
 		JComboBox<Tariff> tariff_Combo = new JComboBox<>();
-		tariff_Combo.setBounds(130, 300, 460, 60);
+		tariff_Combo.setBounds(410, 450, 230, 50);
 		panel.add(tariff_Combo);
 		
 		try {
@@ -453,7 +467,7 @@ public class RoomsView {
 		JTextField nombreTextField = new JTextField();
 		nombreTextField.setText("Nombre de la habitación");
 		nombreTextField.setBounds(700, 150, 460, 50);
-		nombreTextField.setForeground(Color.gray);
+		nombreTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		nombreTextField.setColumns(10);
 		nombreTextField.addMouseListener(new MouseListener() {
 			
@@ -491,11 +505,21 @@ public class RoomsView {
 			}
 				
 		});
+		nombreTextField.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isLetter(c) && !Character.isWhitespace(c) &&
+                    "áéíóúÁÉÍÓÚñÑ".indexOf(c) == -1) {
+                    e.consume();
+                }
+            }
+        });
 		panel.add(nombreTextField);
 
 		JTextField numeroTextField = new JTextField();
 		numeroTextField.setText("Número de habitación");
 		numeroTextField.setBounds(700, 230, 460, 50);
+		numeroTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		numeroTextField.setColumns(10);
 		numeroTextField.addMouseListener(new MouseListener() {
 			
@@ -533,18 +557,26 @@ public class RoomsView {
 			}
 				
 		});
+		numeroTextField.addKeyListener(new KeyAdapter() {
+	        public void keyTyped(KeyEvent e) {
+	            char c = e.getKeyChar();
+	            if (!Character.isDigit(c)) {
+	                e.consume();
+	            }
+	        }
+	    });
 		panel.add(numeroTextField);
 		
 		JLabel guestLabel = new JLabel("Num. Huespedes:");
-		guestLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
-		guestLabel.setBounds(410, 450, 250, 50);
+		guestLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
+		guestLabel.setBounds(410, 500, 250, 50);
 		guestLabel.setBackground(null);
 		guestLabel.setBorder(null);
 		panel.add(guestLabel);
 		
 		JLabel bedQtLabel = new JLabel("Cant. Camas:");
-		bedQtLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
-		bedQtLabel.setBounds(130, 450, 250, 50);
+		bedQtLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
+		bedQtLabel.setBounds(130, 500, 250, 50);
 		bedQtLabel.setBackground(null);
 		bedQtLabel.setBorder(null);
 		panel.add(bedQtLabel);
@@ -552,18 +584,25 @@ public class RoomsView {
 		Integer[] guests = {1,2,3,4,5,6} ;
 		JComboBox Guests_comboBox = new JComboBox(guests);
 		Guests_comboBox.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
-		Guests_comboBox.setBounds(410, 500, 230, 50);
+		Guests_comboBox.setBounds(410, 550, 230, 50);
 		panel.add(Guests_comboBox);
 		
 		Integer[] bedQt = {1,2,3,4,5,6} ;
 		JComboBox bedQtTextField = new JComboBox(bedQt);
 		bedQtTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
-		bedQtTextField.setBounds(130, 500, 230, 50);
+		bedQtTextField.setBounds(130, 550, 230, 50);
 		panel.add(bedQtTextField);
 
+		JLabel amenitiesLabel = new JLabel("Amenidades:");
+		amenitiesLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
+		amenitiesLabel.setBounds(700, 410, 250, 40);
+		amenitiesLabel.setBackground(null);
+		amenitiesLabel.setBorder(null);
+		panel.add(amenitiesLabel);
+		
 		TextArea amenities_textField = new TextArea();
 		amenities_textField.setColumns(10);
-		amenities_textField.setBounds(700, 390, 460, 160);
+		amenities_textField.setBounds(700, 450, 460, 150);
 		panel.add(amenities_textField);
 		
 		JButton btnSave = new JButton("Guardar");
@@ -683,7 +722,7 @@ public class RoomsView {
 		header.setLayout(null);
 		
 		
-		JLabel lblTitle = new JLabel("Añadir Habitacion");
+		JLabel lblTitle = new JLabel("Editar habitación");
 		lblTitle.setBounds(200, 42, 550, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
@@ -1137,7 +1176,6 @@ public class RoomsView {
 	    frame.repaint();
 	}
 	
-
 	public void deleteConfirm(int roomId) {
 	    JDialog confirmDialog = new JDialog();
 	    confirmDialog.setTitle("Confirmar eliminación");
@@ -1210,6 +1248,7 @@ public class RoomsView {
 
 	
 	}
+	
 	public void successDelete() {
 		frame = new JFrame();
 		frame.setSize(700, 500);
