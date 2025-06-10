@@ -181,7 +181,6 @@ public class ClientsView {
 						        ClientsController rc = new ClientsController();
 						        ClientsModel cm = new ClientsModel();
 						        
-						        frame.dispose();
 						        try {
 									rc.deleteClient(cm.getClientById(idClient));
 								}
@@ -823,25 +822,34 @@ public class ClientsView {
 	}
 	
 	public void deleteConfirm(Client c) {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
+		JFrame confirmFrame = new JFrame();
+
+		confirmFrame.setSize(700, 500);
+		confirmFrame.setLocationRelativeTo(null);
+		confirmFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		confirmFrame.setVisible(true);
 		
 		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));
+		confirmFrame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
 		panel.setLayout(null);
 		
-		JLabel title = new JLabel("Confirmar eliminación");
-		title.setBounds(100,100,400,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		JLabel title = new JLabel("¿Seguro que desea eliminar?");
+		title.setBounds(50,20,550,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.BOLD, 32));
 		title.setVisible(true);
 		panel.add(title);
 		
+		JLabel img = new JLabel();
+		img.setBounds(225,90,250,250);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnDelete.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		img.setIcon(lblImgScaledIcon);
+		panel.add(img);
+		
 		JButton accept = new JButton("Aceptar");
-		accept.setBounds(350,350,300,70);
+		accept.setBounds(380,350,270,70);
 		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		accept.setForeground(Color.decode("#FFFFFF"));
 		accept.setBackground(Color.decode("#071A2B"));
@@ -873,10 +881,10 @@ public class ClientsView {
 		});
 		
 		JButton deny = new JButton("Cancelar");
-		deny.setBounds(50,350,300,70);
+		deny.setBounds(50,350,270,70);
 		deny.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		deny.setForeground(Color.decode("#FFFFFF"));
-		deny.setBackground(Color.decode("#99592D"));
+		deny.setBackground(new Color(153, 89, 45));
 		panel.add(deny);
 		
 		deny.addActionListener(new ActionListener() {
@@ -884,8 +892,7 @@ public class ClientsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
-				frame.dispose();
+				confirmFrame.dispose();
 			}
 			
 		});
