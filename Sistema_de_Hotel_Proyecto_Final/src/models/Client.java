@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Client {
 	int id_client;
-	int phone_number;
+	String phone_number;
 	String client_name;
 	String email;
 	Date birth_date;
@@ -14,7 +14,7 @@ public class Client {
 		
 	}
 	
-	public Client(int id_client, int phone_number, String client_name, String email, Date birth_date, byte[] profile_picture) {
+	public Client(int id_client, String phone_number, String client_name, String email, Date birth_date, byte[] profile_picture) {
 		this.id_client = id_client;
 		this.phone_number = phone_number;
 		this.client_name = client_name;
@@ -31,11 +31,11 @@ public class Client {
 		this.id_client = id_client;
 	}
 
-	public int getPhone_number() {
+	public String getPhone_number() {
 		return phone_number;
 	}
 
-	public void setPhone_number(int phone_number) {
+	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
 	}
 

@@ -67,8 +67,8 @@ public class ClientsView {
 		ClientsModel cm = new ClientsModel();
 		List<Client> clients = new ArrayList<>();
 		
-		if(cm.getAvailableRoomType() != null) {
-			clients = cm.getAvailableRoomType();			
+		if(cm.getAvailableClient() != null) {
+			clients = cm.getAvailableClient();			
 		}
 		else {
 			System.out.println("No hay clientes");
