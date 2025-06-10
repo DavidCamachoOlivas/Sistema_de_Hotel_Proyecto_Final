@@ -33,7 +33,7 @@ public class ClientsModel {
         throw new SQLException("No se pudo obtener el ID generado");
     }
 	public boolean updateClient(Client client) throws SQLException {
-	    String sql = "UPDATE client SET phone_number = ?, client_name = ?, email = ?, birth_date = ?, profile_picture = ?, WHERE id_client = ?";
+	    String sql = "UPDATE client SET phone_number = ?, client_name = ?, email = ?, birth_date = ?, profile_picture = ? WHERE id_client = ?";
 	    
 	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
 	    
@@ -44,7 +44,7 @@ public class ClientsModel {
             stmt.setString(3, client.getEmail());
             stmt.setDate(4, client.getBirth_date());
             stmt.setBytes(5, client.getProfile_picture());
-	        stmt.setInt(7, client.getId_client());
+	        stmt.setInt(6, client.getId_client());
 	    
 	        int affected = stmt.executeUpdate();
 	        return affected > 0;
@@ -59,18 +59,31 @@ public class ClientsModel {
 
 	        try (ResultSet rs = stmt.executeQuery()) {
 	            if (rs.next()) {
-	            	Client roomType = new Client();
-	                roomType.setId_client(rs.getInt("id_client"));
-	                roomType.setClient_name(rs.getString("client_name"));
-	                roomType.setEmail(rs.getString("email"));
-	                roomType.setBirth_date(rs.getDate("birth_date"));
-	                roomType.setProfile_picture(rs.getBytes("profile_picture"));
-	                return roomType;
+	            	Client client = new Client();
+	            	client.setId_client(rs.getInt("id_client"));
+	            	client.setPhone_number(rs.getString("phone_number"));
+	            	client.setClient_name(rs.getString("client_name"));
+	            	client.setEmail(rs.getString("email"));
+	            	client.setBirth_date(rs.getDate("birth_date"));
+	            	client.setProfile_picture(rs.getBytes("profile_picture"));
+	                return client;
 	            }
 	        }
 	    }
 	    return null;
 	 }
+	
+	public boolean deleteClient(Client c) throws SQLException {
+		   
+		 String sql = "DELETE FROM client WHERE id_client = ?";
+		 
+		 try (Connection conn = ConnectionDB.getDataSource().getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql)) {
+		        stmt.setInt(1, c.getId_client());
+		        int affected = stmt.executeUpdate();
+		        return affected > 0;
+		 }
+	}
 	  
 	 public List<Client> getAvailableClient() throws SQLException {
 	        List<Client> clients = new ArrayList<>();

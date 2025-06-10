@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JDateChooser;
 
 import buttonCells.TableActionCellEditor;
 import buttonCells.TableActionCellRender;
@@ -153,7 +154,7 @@ public class ClientsView {
 				clientsTable.getColumnModel().getColumn(4).setPreferredWidth(150);
 				clientsTable.setDefaultEditor(Object.class,null);
 				TableActionEvent event = new TableActionEvent() {
-		            @Override
+					@Override
 		            public void onEdit(int row) {
 		            	ClientsController client = new ClientsController();
 						frame.dispose();
@@ -171,7 +172,7 @@ public class ClientsView {
 		                }
 		                model.removeRow(row);*/
 		            }
-
+		            
 		            @Override
 		            public void onView(int row) {
 		            	ClientsController client = new ClientsController();
@@ -275,120 +276,151 @@ public class ClientsView {
 		    }
 		});
 
+
 		JLabel userImageLabel = new JLabel();
-		userImageLabel.setBounds(130, 150, 400, 300);
-		userImageLabel.setText(null);
-		userImageLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		ImageIcon userImageOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
-		Image userImageScaled = userImageOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-		ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);
-		userImageLabel.setHorizontalAlignment(JLabel.CENTER);
-		userImageLabel.setVerticalAlignment(JLabel.CENTER);
-		userImageLabel.setIcon(userImageScaledIcon);
-
-		JButton addImageButton = new JButton("Agregar imagen");
-		addImageButton.setBounds(130, 450, 400, 70);
-		addImageButton.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		addImageButton.setForeground(Color.decode("#FFFFFF"));
-		addImageButton.setBackground(Color.decode("#071A2B"));
-		mainPanel.add(addImageButton);
-
-		addImageButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        JFileChooser fileChooser = new JFileChooser();
-		        fileChooser.setDialogTitle("Selecciona una imagen");
-		        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-		        int resultado = fileChooser.showOpenDialog(null);
-		        if (resultado == JFileChooser.APPROVE_OPTION) {
-		            File imagenSeleccionada = fileChooser.getSelectedFile();
-
-		            try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
-		            	imageBytes = fis.readAllBytes();
-		            } catch (IOException e1) {
-		                e1.printStackTrace();
-		            }
-		        }
-		    }
-		});
-		mainPanel.add(addImageButton);
-
-		JLabel nameLabel = new JLabel("Nombre");
-		nameLabel.setBounds(700, 160, 100, 15);
-		nameLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		mainPanel.add(nameLabel);
-
-		JTextField nameTextField = new JTextField();
-		nameTextField.setBounds(700, 180, 460, 50);
-		nameTextField.setColumns(10);
-		mainPanel.add(nameTextField);
-
-		JLabel phoneLabel = new JLabel("Telefono");
-		phoneLabel.setBounds(700, 240, 100, 15);
-		phoneLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		mainPanel.add(phoneLabel);
-
-		JTextField phoneTextField = new JTextField();
-		phoneTextField.setBounds(700, 260, 460, 50);
-		phoneTextField.setColumns(10);
-		mainPanel.add(phoneTextField);
-
-		JLabel emailLabel = new JLabel("Email");
-		emailLabel.setBounds(700, 320, 100, 15);
-		emailLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		mainPanel.add(emailLabel);
-
-		JTextField emailTextField = new JTextField();
-		emailTextField.setBounds(700, 340, 460, 50);
-		emailTextField.setColumns(10);
-		mainPanel.add(emailTextField);
-
-		JLabel birthDateLabel = new JLabel("Fecha de nacimiento");
-		birthDateLabel.setBounds(700, 400, 200, 15);
-		birthDateLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
-		mainPanel.add(birthDateLabel);
-
-		JTextField birthDateTextField = new JTextField();
-		birthDateTextField.setBounds(700, 420, 249, 50);
-		birthDateTextField.setColumns(10);
-		mainPanel.add(birthDateTextField);
-
-		JButton saveButton = new JButton("Guardar");
-		saveButton.setBounds(950, 540, 220, 70);
-		saveButton.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		saveButton.setForeground(Color.decode("#FFFFFF"));
-		saveButton.setBackground(Color.decode("#071A2B"));
-		mainPanel.add(saveButton);
-
-		saveButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        ClientsController home = new ClientsController();
-		        frame.dispose();
+	    userImageLabel.setBounds(130, 150, 400, 300);
+	    userImageLabel.setText(null);
+	    userImageLabel.setBorder(BorderFactory.createLineBorder(Color.black));
+	    
+	    ImageIcon userImageOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
+	    Image userImageScaled = userImageOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+	    ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);
+	    
+	    userImageLabel.setHorizontalAlignment(JLabel.CENTER);
+	    userImageLabel.setVerticalAlignment(JLabel.CENTER);
+	    userImageLabel.setIcon(userImageScaledIcon);
+	    mainPanel.add(userImageLabel);
+	    
+	    JButton addImageButton = new JButton("Agregar imagen");
+	    addImageButton.setBounds(130, 450, 400, 70);
+	    addImageButton.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    addImageButton.setForeground(Color.decode("#FFFFFF"));
+	    addImageButton.setBackground(Color.decode("#071A2B"));
+	    mainPanel.add(addImageButton);
+	    
+	    addImageButton.addActionListener(new ActionListener() {
+	    	@Override
+	    	public void actionPerformed(ActionEvent e) {
+	    		JFileChooser fileChooser = new JFileChooser();
+	    		fileChooser.setDialogTitle("Selecciona una imagen");
+	    		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	    		
+	    		int resultado = fileChooser.showOpenDialog(null);
+	    		if (resultado == JFileChooser.APPROVE_OPTION) {
+	    			File imagenSeleccionada = fileChooser.getSelectedFile();
+	    			
+	    			try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
+	    				imageBytes = fis.readAllBytes();
+	    				System.out.println("Se leyo la imagen");
+	    				ImageIcon userImageSeleccionarIcon = new ImageIcon(imageBytes);
+	    				Image userImageScaled = userImageSeleccionarIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+	    				ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);
+	    				userImageLabel.setIcon(userImageScaledIcon);
+	    				
+	    			} catch (IOException e1) {
+	    				e1.printStackTrace();
+	    			}
+	    		}
+	    	}
+	    });
+	    mainPanel.add(addImageButton);
+	    
+	    JLabel nameLabel = new JLabel("Nombre");
+	    nameLabel.setBounds(700, 160, 100, 15);
+	    nameLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+	    mainPanel.add(nameLabel);
+	    
+	    JTextField nameTextField = new JTextField();
+	    nameTextField.setBounds(700, 180, 460, 50);
+	    nameTextField.setColumns(10);
+	    mainPanel.add(nameTextField);
+	    
+	    JLabel phoneLabel = new JLabel("Telefono");
+	    phoneLabel.setBounds(700, 240, 100, 15);
+	    phoneLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+	    mainPanel.add(phoneLabel);
+	    
+	    JTextField phoneTextField = new JTextField();
+	    phoneTextField.setBounds(700, 260, 460, 50);
+	    phoneTextField.setColumns(10);
+	    mainPanel.add(phoneTextField);
+	    
+	    JLabel emailLabel = new JLabel("Email");
+	    emailLabel.setBounds(700, 320, 100, 15);
+	    emailLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+	    mainPanel.add(emailLabel);
+	    
+	    JTextField emailTextField = new JTextField();
+	    emailTextField.setBounds(700, 340, 460, 50);
+	    emailTextField.setColumns(10);
+	    mainPanel.add(emailTextField);
+	    
+	    JLabel birthDateLabel = new JLabel("Fecha de nacimiento");
+	    birthDateLabel.setBounds(700, 400, 200, 15);
+	    birthDateLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
+	    mainPanel.add(birthDateLabel);
+	    
+	    
+	    JDateChooser birthDateCalendar = new JDateChooser();
+	    birthDateCalendar.setBounds(700, 400, 460, 50);
+	    mainPanel.add(birthDateCalendar);
+	   
+	    JButton saveButton = new JButton("Guardar");
+	    saveButton.setBounds(950, 540, 220, 70);
+	    saveButton.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    saveButton.setForeground(Color.decode("#FFFFFF"));
+	    saveButton.setBackground(Color.decode("#071A2B"));
+	    mainPanel.add(saveButton);
+	    
+	    saveButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent e) {
+	    	ClientsController home = new ClientsController();
+	    	ClientsModel cm = new ClientsModel();
+	    	Client nuevaCliente = new Client();
+	    	java.util.Date fechaUtil = birthDateCalendar.getDate();
+	        java.sql.Date fechaNacimiento = null;
+	        
+	        if (fechaUtil != null) {
+	             fechaNacimiento = new java.sql.Date(fechaUtil.getTime());
+	        }
+	        
+	    	nuevaCliente.setClient_name(nameTextField.getText());
+	    	nuevaCliente.setPhone_number(phoneTextField.getText());
+	    	nuevaCliente.setEmail(emailTextField.getText());
+	    	nuevaCliente.setBirth_date(fechaNacimiento);
+	    	nuevaCliente.setProfile_picture(imageBytes);
+	    	
+	    	try {
+				cm.createClient(nuevaCliente);
+				frame.dispose();
 		        home.clients();
-		    }
-		});
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	    	
+	        
+	    }
+	});
 
-		JButton cancelButton = new JButton("Cancelar");
-		cancelButton.setBounds(700, 540, 220, 70);
-		cancelButton.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		cancelButton.setForeground(Color.decode("#FFFFFF"));
-		cancelButton.setBackground(new Color(153, 89, 45));
-		mainPanel.add(cancelButton);
+	JButton cancelButton = new JButton("Cancelar");
+	cancelButton.setBounds(700, 540, 220, 70);
+	cancelButton.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	cancelButton.setForeground(Color.decode("#FFFFFF"));
+	cancelButton.setBackground(new Color(153, 89, 45));
+	mainPanel.add(cancelButton);
 
-		cancelButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        ClientsController home = new ClientsController();
-		        frame.dispose();
-		        home.clients();
-		    }
-		});
-		frame.revalidate();
-		frame.repaint();
-	}
+	cancelButton.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+	        ClientsController home = new ClientsController();
+	        frame.dispose();
+	        home.clients();
+	    }
+	});
+	frame.revalidate();
+	frame.repaint();
+}
 	
 	public void editClient() {
 		String name = "david";

@@ -59,8 +59,8 @@ public class Client {
 		return birth_date;
 	}
 
-	public void setBirth_date(Date birth_date) {
-		this.birth_date = birth_date;
+	public void setBirth_date(Date fecha) {
+		this.birth_date = fecha;
 	}
 
 	public byte[] getProfile_picture() {

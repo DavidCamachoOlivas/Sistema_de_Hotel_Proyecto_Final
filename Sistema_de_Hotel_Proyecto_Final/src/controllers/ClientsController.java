@@ -2,6 +2,7 @@ package controllers;
 
 import java.sql.SQLException;
 
+import models.Client;
 import views.ClientsView;
 
 public class ClientsController {
