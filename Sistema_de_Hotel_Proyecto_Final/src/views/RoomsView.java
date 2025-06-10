@@ -945,13 +945,13 @@ public class RoomsView {
 	    panel.setLayout(null);
 
 	    JPanel header = new JPanel();
-	    header.setBounds(0, 0, 1266, 130);
+	    header.setBounds(0, 0, 1280, 130);
 	    header.setBackground(Color.decode("#071A2B"));
 	    panel.add(header);
 	    header.setLayout(null);
 	    
-	    JLabel lblTitle = new JLabel("Detalles");
-	    lblTitle.setBounds(200, 42, 250, 82);
+	    JLabel lblTitle = new JLabel("Detalles de la habitación");
+	    lblTitle.setBounds(200, 42, 550, 82);
 	    header.add(lblTitle);
 	    lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 	    lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -972,7 +972,7 @@ public class RoomsView {
 	    btnBack.setIcon(btnBackScaledIcon);
 
 	    JPanel roomInfoPanel = new JPanel();
-	    roomInfoPanel.setBounds(130, 160, 400, 400);
+	    roomInfoPanel.setBounds(130, 160, 400, 500);
 	    roomInfoPanel.setBackground(Color.decode("#FFFFFF"));
 	    roomInfoPanel.setBorder(BorderFactory.createLineBorder(Color.decode("#E0E0E0"), 1));
 	    panel.add(roomInfoPanel);
@@ -1024,7 +1024,7 @@ public class RoomsView {
 	    roomInfoPanel.add(lblTariff);
 
 	    JLabel lblAmenitiesTitle = new JLabel("Amenidades: ");
-	    lblAmenitiesTitle.setBounds(20, 345, 120, 25);
+	    lblAmenitiesTitle.setBounds(20, 345, 200, 25);
 	    lblAmenitiesTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
 	    lblAmenitiesTitle.setForeground(Color.decode("#071A2B"));
 	    roomInfoPanel.add(lblAmenitiesTitle);
@@ -1080,10 +1080,10 @@ public class RoomsView {
 	    historialTablePanel.add(scrollPane);
 	    
 	    JButton btnDownloadPDF = new JButton("Descargar detalles (PDF)");
-	    btnDownloadPDF.setBounds(560, 580, 350, 50);
+	    btnDownloadPDF.setBounds(560, 600, 570, 50);
 	    btnDownloadPDF.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
 	    btnDownloadPDF.setForeground(Color.decode("#FFFFFF"));
-	    btnDownloadPDF.setBackground(Color.decode("#28A745")); 
+	    btnDownloadPDF.setBackground(Color.decode("#0E651B")); 
 	    panel.add(btnDownloadPDF);
 
 	    btnBack.addActionListener(new ActionListener() {

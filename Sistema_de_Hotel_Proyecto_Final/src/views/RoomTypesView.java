@@ -850,11 +850,11 @@ public class RoomTypesView {
 		contentPane.add(lblTipoDeTarifa);
 		
 		
-		JTextField lblDescripcion = new JTextField();
+		JLabel lblDescripcion = new JLabel();
 		lblDescripcion.setText(rt.getDescription());
 		lblDescripcion.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 		lblDescripcion.setEnabled(false);
-		lblDescripcion.setBounds(358, 185, 660, 61);
+		lblDescripcion.setBounds(358, 185, 680, 61);
 		contentPane.add(lblDescripcion);
 		
 		JPanel panel_1 = new JPanel();

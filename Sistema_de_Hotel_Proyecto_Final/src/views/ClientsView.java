@@ -668,7 +668,7 @@ public class ClientsView {
 		panel.setLayout(null);
 	
 		JPanel header = new JPanel();
-		header.setBounds(0, 0, 1266, 130);
+		header.setBounds(0, 0, 1280, 130);
 		header.setBackground(Color.decode("#071A2B"));
 		panel.add(header);
 		header.setLayout(null);
