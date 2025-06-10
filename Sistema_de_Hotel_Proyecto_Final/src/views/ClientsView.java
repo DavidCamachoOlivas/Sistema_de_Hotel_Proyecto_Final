@@ -174,16 +174,22 @@ public class ClientsView {
 			            }
 
 
-		            @Override
-		            public void onDelete(int row) {
-		            	ClientsController client = new ClientsController();
-						client.deleteClient();
-						//lo de abajo se implementará al dar click en el boton "aceptar"
-		                /*if (clientsTable.isEditing()) {
-		                	clientsTable.getCellEditor().stopCellEditing();
-		                }
-		                model.removeRow(row);*/
-		            }
+					  @Override
+			            public void onDelete(int row) {
+			            	 int idClient = Integer.parseInt(clientsTable.getValueAt(row, 0).toString());
+						        System.out.println("Eliminando cliente con ID: " + idClient);
+						        ClientsController rc = new ClientsController();
+						        ClientsModel cm = new ClientsModel();
+						        
+						        frame.dispose();
+						        try {
+									rc.deleteClient(cm.getClientById(idClient));
+								}
+						        catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+			            }
 		            
 		            @Override
 		            public void onView(int row) {
@@ -816,7 +822,7 @@ public class ClientsView {
 		frame.repaint();
 	}
 	
-	public void deleteConfirm() {
+	public void deleteConfirm(Client c) {
 		frame = new JFrame();
 		frame.setSize(700, 500);
 		frame.setLocationRelativeTo(null);
@@ -825,10 +831,10 @@ public class ClientsView {
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
+		panel.setBackground(Color.decode("#FFFCF7"));
 		panel.setLayout(null);
 		
-		JLabel title = new JLabel("Confirmar eliminación ");
+		JLabel title = new JLabel("Confirmar eliminación");
 		title.setBounds(100,100,400,70);
 		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		title.setVisible(true);
@@ -847,10 +853,23 @@ public class ClientsView {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
-				frame.dispose();
-				client.successDelete();
+				ClientsModel cm = new ClientsModel();
+				
+				try {
+					cm.deleteClient(c);
+					if(cm.getClientById(c.getId_client()) == null) {
+						frame.dispose();
+						client.clients();
+						client.successDelete();
+					}
+					else {
+						client.errorDelete();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
-			
 		});
 		
 		JButton deny = new JButton("Cancelar");
@@ -867,7 +886,6 @@ public class ClientsView {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
 				frame.dispose();
-				client.errorDelete();
 			}
 			
 		});

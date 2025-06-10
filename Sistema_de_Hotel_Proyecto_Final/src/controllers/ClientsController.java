@@ -35,8 +35,8 @@ public class ClientsController {
 		view.consultClient();
 	}
 	
-	public void deleteClient() {
-		view.deleteConfirm();
+	public void deleteClient(Client c) {
+		view.deleteConfirm(c);
 	}
 	
 	public void successDelete() {
