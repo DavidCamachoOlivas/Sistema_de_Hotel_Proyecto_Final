@@ -1119,27 +1119,39 @@ public class RoomsView {
 	    panel.setLayout(null);
 	    confirmDialog.add(panel);
 	    
-	    JLabel title = new JLabel("Confirmar eliminación");
-	    title.setBounds(100, 100, 400, 70);
-	    title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-	    panel.add(title);
-	    
-	    JLabel info = new JLabel("<html><div style='text-align: center; width: 600px;'>"
+	    JLabel title = new JLabel("¿Seguro que desea eliminar?");
+		title.setBounds(50,20,550,70);
+		title.setFont(new Font("Inter_18pt Bold", Font.BOLD, 32));
+		title.setVisible(true);
+		panel.add(title);	    
+		
+		JLabel img = new JLabel();
+		img.setBounds(225,90,250,250);
+		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/btnDelete.png"));
+		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+		img.setIcon(lblImgScaledIcon);
+		panel.add(img);
+	    /*JLabel info = new JLabel("<html><div style='text-align: center; width: 600px;'>"
 	            + "Las imágenes asociadas permanecerán en el sistema, pero dejarán de estar vinculadas a esta habitación"
 	            + "</div></html>");
 	    info.setBounds(50, 180, 600, 100);
 	    info.setFont(new Font("Inter", Font.PLAIN, 18));
-	    panel.add(info);
+	    panel.add(info);*/
 	    
-	    JButton accept = new JButton("Aceptar");
-	    accept.setBounds(350, 350, 300, 70);
-	    styleButton(accept);
-	    panel.add(accept);
+		JButton accept = new JButton("Aceptar");
+		accept.setBounds(380,350,270,70);
+		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		accept.setForeground(Color.decode("#FFFFFF"));
+		accept.setBackground(Color.decode("#071A2B"));
+		panel.add(accept);
 	    
-	    JButton deny = new JButton("Cancelar");
-	    deny.setBounds(50, 350, 300, 70);
-	    styleButton(deny);
-	    panel.add(deny);
+		JButton deny = new JButton("Cancelar");
+		deny.setBounds(50,350,270,70);
+		deny.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		deny.setForeground(Color.decode("#FFFFFF"));
+		deny.setBackground(new Color(153, 89, 45));
+		panel.add(deny);
 	    
 	    accept.addActionListener(e -> {
 	        try {
