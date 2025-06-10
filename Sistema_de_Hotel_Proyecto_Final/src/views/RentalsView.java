@@ -27,9 +27,11 @@ import buttonCells.TableActionEvent;
 import buttonCells.TableActionEvent2;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.PopUpsController;
 import controllers.RentalsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
+import controllers.TariffsController;
 import models.ClientsModel;
 import models.RentalsModel;
 import models.Tariff;
@@ -38,6 +40,7 @@ public class RentalsView {
 
 	private JFrame frame;
 	private RentalsModel functions;
+	private PopUpsController pop = new PopUpsController();
 	public RentalsView() {
 		RentalsModel functions = new RentalsModel();
 	}
@@ -382,6 +385,27 @@ public class RentalsView {
 		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
 		panel.add(btnNewButton_1);
 		
+		btnNewButton_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
+
+		        new Thread(() -> {
+		        	frame.dispose();
+		        	TariffsController tariffs = new TariffsController();
+		        	tariffs.tariffs();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
+			}
+			
+		});
+		
 		JButton btnNewButton_1_1 = new JButton("Aceptar");
 		btnNewButton_1_1.setBounds(927, 601, 188, 51);
 		btnNewButton_1_1.setForeground(Color.WHITE);
@@ -394,9 +418,18 @@ public class RentalsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				RentalsController rent = new RentalsController();
-				frame.dispose();
-				rent.rentals();
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
+
+		        new Thread(() -> {
+		        	frame.dispose();
+		        	TariffsController tariffs = new TariffsController();
+		        	tariffs.tariffs();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
 			}
 			
 		});
