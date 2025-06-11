@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -216,14 +217,85 @@ public class ClientsView {
 		search.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
 		panel.add(search);
 		search.setColumns(10);
-		
+		List<Client> allClients = new ArrayList<>(clients);
+    	clients = cm.getAvailableClient();
 		JButton btnSearch = new JButton("Ver");
 		btnSearch.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
 		btnSearch.setBackground(Color.decode("#071A2B"));
 		btnSearch.setForeground(Color.decode("#FFFFFF"));
 		btnSearch.setBounds(935, 200, 195, 50);
 		panel.add(btnSearch);
-		
+		btnSearch.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		        String keyword = search.getText().trim().toLowerCase();
+
+		        if (keyword.isEmpty()) {
+		            model.setRowCount(0);
+		            for (Object[] row : toData(allClients)) {
+		                model.addRow(row);
+		            }
+		            return;
+		        }
+		        
+		        List<ClientMatch> matches = new ArrayList<>();
+
+		        for (Client c : allClients) {
+		            int score = calculateMatchScore(c, keyword);
+		            if (score > 0) {
+		                matches.add(new ClientMatch(c, score));
+		            }
+		        }
+
+		        matches.sort((a, b) -> Integer.compare(b.score, a.score));
+		        List<Client> filtered = matches.stream().map(m -> m.client).collect(Collectors.toList());
+
+		        model.setRowCount(0);
+		        for (Object[] row : toData(filtered)) {
+		            model.addRow(row);
+		        }
+		    }
+
+		    private int calculateMatchScore(Client c, String keyword) {
+		        int score = 0;
+		        String name = c.getClient_name().toLowerCase();
+		        String email = c.getEmail().toLowerCase();
+		        String phone = c.getPhone_number().toLowerCase();
+
+		        if (name.equals(keyword)) score += 100;
+		        else if (name.startsWith(keyword)) score += 80;
+		        else if (name.contains(keyword)) score += 60;
+
+		        if (email.contains(keyword)) score += 40;
+		        if (phone.contains(keyword)) score += 40;
+
+		        return score;
+		    }
+
+		    private Object[][] toData(List<Client> list) {
+		        Object[][] data = new Object[list.size()][5];
+		        for (int i = 0; i < list.size(); i++) {
+		            Client c = list.get(i);
+		            data[i][0] = c.getId_client();
+		            data[i][1] = c.getClient_name();
+		            data[i][2] = c.getEmail();
+		            data[i][3] = c.getPhone_number();
+		            data[i][4] = "Acciones";
+		        }
+		        return data;
+		    }
+
+		    class ClientMatch {
+		        final Client client;
+		        final int score;
+
+		        ClientMatch(Client client, int score) {
+		            this.client = client;
+		            this.score = score;
+		        }
+		    }
+		});
 		
 		
 		
