@@ -28,6 +28,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -945,7 +946,6 @@ public class RoomTypesView {
 		confirmFrame.setSize(700, 500);
 		confirmFrame.setLocationRelativeTo(null);
 		confirmFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		confirmFrame.setVisible(true);
 		
 		JPanel panel = new JPanel();
 		confirmFrame.getContentPane().add(panel, BorderLayout.CENTER);
@@ -973,42 +973,32 @@ public class RoomTypesView {
 		accept.setBackground(Color.decode("#071A2B"));
 		panel.add(accept);
 
-	    accept.addActionListener(e -> {
-	        try {
-	            RoomTypesModel rtm = new RoomTypesModel();
-	            // 🔧 Usa 'rm' aquí, no 'rt'
-	            boolean ok = rtm.deleteRoomTypeAllowOrphans(rm.getId_room_type());
+		accept.addActionListener(e -> {
+		    try {
+		        RoomTypesModel rtm = new RoomTypesModel();
+		        boolean ok = rtm.deleteRoomTypeAllowOrphans(rm.getId_room_type());
 
-	            if (ok) {
-	                successDelete();
-	            } else {
-	                errorDelete();
-	            }
+		        if (ok) {
+		            confirmFrame.dispose();
 
-	            // Cierra ambas ventanas
-	            confirmFrame.dispose();
-	            mainFrame.dispose();
+		            new RoomTypesController().successDelete();
 
-	            JOptionPane.showMessageDialog(
-	                null,
-	                "Tipo de habitación eliminado con éxito",
-	                "Eliminado",
-	                JOptionPane.INFORMATION_MESSAGE
-	            );
+		            mainFrame.dispose();
+		            new RoomTypesController().roomTypes();
+		        } else {
+		            errorDelete();
+		        }
 
-	            // Vuelve a cargar la vista principal
-	            new RoomTypesController().roomTypes();
-
-	        } catch (SQLException ex) {
-	            ex.printStackTrace();
-	            JOptionPane.showMessageDialog(
-	                confirmFrame,
-	                "Error al eliminar: " + ex.getMessage(),
-	                "Error",
-	                JOptionPane.ERROR_MESSAGE
-	            );
-	        }
-	    });
+		    } catch (SQLException ex) {
+		        ex.printStackTrace();
+		        JOptionPane.showMessageDialog(
+		            confirmFrame,
+		            "Error al eliminar: " + ex.getMessage(),
+		            "Error",
+		            JOptionPane.ERROR_MESSAGE
+		        );
+		    }
+		});
 
 	    JButton deny = new JButton("Cancelar");
 		deny.setBounds(50,350,270,70);
@@ -1026,23 +1016,39 @@ public class RoomTypesView {
 	}
 	
 	public void successDelete() {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("Tipo de habitación eliminado con exito");
-		title.setBounds(50,100,600,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		title.setVisible(true);
-		panel.add(title);
-		
+	    JDialog successDialog = new JDialog();
+	    successDialog.setTitle("Éxito");
+	    successDialog.setModal(true);
+	    successDialog.setSize(700, 500);
+	    successDialog.setLocationRelativeTo(null);
+	    successDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+	    JPanel panel = new JPanel();
+	    panel.setBackground(Color.decode("#FFFCF7")); 
+	    panel.setLayout(null);
+	    successDialog.getContentPane().add(panel);
+
+	    JLabel title = new JLabel("Tipo de habitación eliminado con éxito");
+	    title.setBounds(50, 20, 600, 70);
+	    title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    panel.add(title);
+
+	    JLabel img = new JLabel();
+	    img.setBounds(200, 90, 250, 250);
+	    ImageIcon originalIcon = new ImageIcon(AuthView.class.getResource("/images/success.png"));
+	    Image scaledImage = originalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+	    img.setIcon(new ImageIcon(scaledImage));
+	    panel.add(img);
+
+	    JButton accept = new JButton("Aceptar");
+	    accept.setBounds(350, 350, 300, 70);
+	    accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    accept.setForeground(Color.decode("#FFFFFF"));
+	    accept.setBackground(Color.decode("#071A2B"));
+	    accept.addActionListener(e -> successDialog.dispose());
+	    panel.add(accept);
+
+	    successDialog.setVisible(true);
 	}
 	
 	public void succesDownload() {
