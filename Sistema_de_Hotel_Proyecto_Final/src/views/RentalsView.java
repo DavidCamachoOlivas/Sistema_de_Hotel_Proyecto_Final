@@ -25,7 +25,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -203,6 +206,7 @@ public class RentalsView {
 		btnNewButton_3_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 18));
 		panel_1.add(btnNewButton_3_1_1);
 		
+		
 		JTextField textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		textField_2.setBounds(325, 83, 200, 35);
@@ -327,7 +331,51 @@ public class RentalsView {
 		};
 		RentalTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());
 		RentalTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event, new ArrayList<>(), model));
-		
+		btnNewButton_3_1_1.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String cliente = textField_1.getText().trim().toLowerCase();
+		        String habitacion = textField_2.getText().trim().toLowerCase();
+		        String fechaInicio = textField_3.getText().trim();
+		        String fechaFin = textField_4.getText().trim();
+
+		        TableRowSorter<TableModel> sorter = new TableRowSorter<>(RentalTable.getModel());
+		        RentalTable.setRowSorter(sorter);
+
+		        List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+		        if (!cliente.isEmpty()) {
+		            filters.add(RowFilter.regexFilter("(?i)" + cliente, 1)); // Columna cliente
+		        }
+
+		        if (!habitacion.isEmpty()) {
+		            filters.add(RowFilter.regexFilter("(?i)" + habitacion, 2)); // Columna habitación
+		        }
+
+		        if (!fechaInicio.isEmpty()) {
+		            filters.add(RowFilter.regexFilter(".*" + fechaInicio + ".*", 3)); // Check-in
+		        }
+
+		        if (!fechaFin.isEmpty()) {
+		            filters.add(RowFilter.regexFilter(".*" + fechaFin + ".*", 4)); // Check-out
+		        }
+
+		        RowFilter<Object, Object> compoundRowFilter = RowFilter.andFilter(filters);
+		        sorter.setRowFilter(compoundRowFilter);
+		    }
+		});
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        textField_1.setText("");
+		        textField_2.setText("");
+		        textField_3.setText("");
+		        textField_4.setText("");
+
+		        TableRowSorter<?> sorter = (TableRowSorter<?>) RentalTable.getRowSorter();
+		        if (sorter != null) {
+		            sorter.setRowFilter(null);
+		        }
+		    }
+		});
 		JScrollPane scrollPane = new JScrollPane(RentalTable);
 		scrollPane.setBounds(0, 0, 1100, 270);
 		panel_2.add(scrollPane);
@@ -879,10 +927,7 @@ public class RentalsView {
 			}
 		});
 }
-	
-	
-	
-	
+		
 	public void deleteConfirm(Rental r) {
 		frame = new JFrame();
 		frame.setSize(700, 500);
