@@ -675,32 +675,42 @@ public class RoomTypesView {
 		    btnGuardar.setBackground(new Color(7, 26, 43));
 		    btnGuardar.setBounds(976, 571, 140, 72);
 		    btnGuardar.addActionListener(e -> {
-		        try {
-		            
-		        	String tipoHabitacion = tipoHabitacionField.getText();
-		            int piso = (int) pisoCombo.getSelectedItem();
-		            int habitaciones_integradas = Integer.parseInt(tipoHabitacionIncluidas.getText());
-		            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
-		            byte[] imagen = imageBytes;
-		            
-		            RoomTypesModel rtm = new RoomTypesModel();
-		            RoomType ActualizarTipo = new RoomType();
-		           
-		            ActualizarTipo.setId_room_type(rt.getId_room_type());
-		            ActualizarTipo.setRoom_type(tipoHabitacion);
-		            ActualizarTipo.setRooms_included(habitaciones_integradas);
-		            ActualizarTipo.setNum_floor(piso);
-		            ActualizarTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
-		            ActualizarTipo.setImage(imagen);
-		            
-		            rtm.updateRoomType(ActualizarTipo);
-		           
-		            frame.dispose();
-		            new RoomTypesController().roomTypes();
-		            
-		        } catch (SQLException ex) {
-		            JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(),  "Error", JOptionPane.ERROR_MESSAGE);
-		        }
+		    	javax.swing.SwingUtilities.invokeLater(() -> {
+						pop.loading(); 
+					});
+	
+				new Thread(() -> {
+					try {
+			            
+			        	String tipoHabitacion = tipoHabitacionField.getText();
+			            int piso = (int) pisoCombo.getSelectedItem();
+			            int habitaciones_integradas = Integer.parseInt(tipoHabitacionIncluidas.getText());
+			            Tariff tarifaSeleccionada = (Tariff) tarifaCombo.getSelectedItem();
+			            byte[] imagen = imageBytes;
+			            
+			            RoomTypesModel rtm = new RoomTypesModel();
+			            RoomType ActualizarTipo = new RoomType();
+			           
+			            ActualizarTipo.setId_room_type(rt.getId_room_type());
+			            ActualizarTipo.setRoom_type(tipoHabitacion);
+			            ActualizarTipo.setRooms_included(habitaciones_integradas);
+			            ActualizarTipo.setNum_floor(piso);
+			            ActualizarTipo.setId_tariff(tarifaSeleccionada.getId_tariff());
+			            ActualizarTipo.setImage(imagen);
+			            
+			            rtm.updateRoomType(ActualizarTipo);
+			           
+			            frame.dispose();
+			            new RoomTypesController().roomTypes();
+			            
+			        } catch (SQLException ex) {
+			            JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(),  "Error", JOptionPane.ERROR_MESSAGE);
+			        }
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
+		        
 		    });
 		    contentPane.add(btnGuardar);
 		    
