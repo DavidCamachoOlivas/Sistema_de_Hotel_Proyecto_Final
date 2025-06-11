@@ -10,7 +10,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -100,25 +101,16 @@ public class TariffsView {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Ver");
-		btnNewButton.setBounds(917, 207, 213, 58);
-		btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
-		btnNewButton.setForeground(Color.decode("#FFFFFF"));
-		btnNewButton.setBackground(new Color(7, 26, 43));
-		panel.add(btnNewButton);
-		
-		
-		String[] columnNames = {
-				"Tarifas",
-				"Precios",
-				"Capacidad",
-				"Descripción",
-				"Acciones"
-		};
-		
 		TariffsModel tm = new TariffsModel();
 		List<Tariff> tariffs = new ArrayList<>();
+		List<Tariff> allTariffs = new ArrayList<>();
 		
+		try {
+		    tariffs = tm.getAvailableTariffs();
+		    allTariffs.addAll(tariffs);
+		} catch (SQLException e1) {
+		    e1.printStackTrace();
+		}
 		try {
 			tariffs = tm.getAvailableTariffs();
 		} catch (SQLException e1) {
@@ -140,6 +132,19 @@ public class TariffsView {
 		    }
 		    datos[i][4] = tariffs.get(i).getDescription();
 		}
+		
+		
+		
+		
+		String[] columnNames = {
+				"Tarifas",
+				"Precios",
+				"Capacidad",
+				"Descripción",
+				"Acciones"
+		};
+		
+		
 		
 		
 		JPanel panel_1 = new JPanel();
@@ -192,6 +197,86 @@ public class TariffsView {
 			scrollPane.setBounds(0, 0, 1000, 300);
 			panel_1.add(scrollPane);
 	
+			
+			JButton btnNewButton = new JButton("Ver");
+			btnNewButton.setBounds(917, 207, 213, 58);
+			btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+			btnNewButton.setForeground(Color.decode("#FFFFFF"));
+			btnNewButton.setBackground(new Color(7, 26, 43));
+			panel.add(btnNewButton);
+			
+			btnNewButton.addActionListener(new ActionListener() {
+			    @Override
+			    public void actionPerformed(ActionEvent e) {
+			        String keyword = textField.getText().trim();
+			        if (keyword.isEmpty()) {
+			            model.setRowCount(0);
+			            for (Object[] row : toData(allTariffs)) {
+			                model.addRow(row);
+			            }
+			            return;
+			        }
+			        
+			        List<TariffMatch> matches = new ArrayList<>();
+			        String keywordLower = keyword.toLowerCase();
+			        
+			        for (Tariff t : allTariffs) {
+			            int score = calculateMatchScore(t, keywordLower);
+			            if (score > 0) {
+			                matches.add(new TariffMatch(t, score));
+			            }
+			        }
+			        matches.sort((a, b) -> Integer.compare(b.score, a.score));
+
+			        List<Tariff> filtered = matches.stream().map(match -> match.tariff).collect(Collectors.toList());	        
+			        model.setRowCount(0);
+			        for (Object[] row : toData(filtered)) {
+			            model.addRow(row);
+			        }
+			    }
+			    
+			    private int calculateMatchScore(Tariff tariff, String keyword) {
+			        int score = 0;
+			        String tariffType = tariff.getTariff_type().toLowerCase();
+
+			        if (tariffType.equals(keyword)) {
+			            score += 100;
+			        }
+
+			        else if (tariffType.startsWith(keyword)) {
+			            score += 80;
+			        }
+
+			        else if (containsWholeWord(tariffType, keyword)) {
+			            score += 60;
+			        }
+
+			        else if (tariffType.contains(keyword)) {
+			            score += 30;
+			        }
+
+			        if (Math.abs(tariffType.length() - keyword.length()) <= 2) {
+			            score += 10;
+			        }
+			        
+			        return score;
+			    }
+			    
+			    private boolean containsWholeWord(String text, String word) {
+			        return text.matches(".\\b" + Pattern.quote(word) + "\\b.");
+			    }
+
+			    class TariffMatch {
+			        final Tariff tariff;
+			        final int score;
+			        
+			        TariffMatch(Tariff tariff, int score) {
+			            this.tariff = tariff;
+			            this.score = score;
+			        }
+			    }
+			});
+			
 		JButton btnNewButton1 = new JButton("Añadir");
 		btnNewButton1.setBounds(917, 600, 213, 58);
 		btnNewButton1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 32));
@@ -209,11 +294,24 @@ public class TariffsView {
 			}
 			
 		});
+		
+		
 
 		frame.revalidate();
 		frame.repaint();
 	}
-	
+	private Object[][] toData(List<Tariff> list) {
+		Object[][] data = new Object[list.size()][5];
+		for (int i = 0; i < list.size(); i++) {
+			Tariff t = list.get(i);
+	        data[i][0] = t.getTariff_type();
+	        data[i][1] = t.getPrice_per_night();
+	        data[i][2] = t.getCapacity();
+	        data[i][3] = t.isRefundable() ? "Reembolsable" : "No reembolsable";
+	        data[i][4] = t.getDescription();
+		}
+		return data;
+	}
 	public void createTariff() {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
