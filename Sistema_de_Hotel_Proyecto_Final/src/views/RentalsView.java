@@ -162,7 +162,7 @@ public class RentalsView {
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Filtros de busqueda");
+		JLabel lblNewLabel = new JLabel("Filtros de búsqueda");
 		lblNewLabel.setBounds(10, 10, 240, 35);
 		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
 		panel_1.add(lblNewLabel);

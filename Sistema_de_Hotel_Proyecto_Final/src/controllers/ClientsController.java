@@ -2,6 +2,8 @@ package controllers;
 
 import java.sql.SQLException;
 
+import javax.swing.JFrame;
+
 import models.Client;
 import views.ClientsView;
 
@@ -43,8 +45,8 @@ public class ClientsController {
 		}
 	}
 	
-	public void deleteClient(Client c) {
-		view.deleteConfirm(c);
+	public void deleteClient(Client c,JFrame frame) {
+		view.deleteConfirm(c,frame);
 	}
 	
 	public void successDelete() {

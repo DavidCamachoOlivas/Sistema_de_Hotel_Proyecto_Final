@@ -36,6 +36,7 @@ import buttonCells.TableActionEvent;
 import controllers.AuthController;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.PopUpsController;
 import controllers.RentalsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
@@ -188,7 +189,7 @@ public class ClientsView {
 						        ClientsModel cm = new ClientsModel();
 						        
 						        try {
-									rc.deleteClient(cm.getClientById(idClient));
+									rc.deleteClient(cm.getClientById(idClient),frame);
 								}
 						        catch (SQLException e) {
 									// TODO Auto-generated catch block
@@ -1139,7 +1140,7 @@ public class ClientsView {
 		frame.repaint();
 	}
 	
-	public void deleteConfirm(Client c) {
+	public void deleteConfirm(Client c,JFrame mainFrame) {
 		JFrame confirmFrame = new JFrame();
 
 		confirmFrame.setSize(700, 500);
@@ -1178,15 +1179,18 @@ public class ClientsView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				ClientsController client = new ClientsController();
-				ClientsModel cm = new ClientsModel();
 				
 				try {
+					ClientsController client = new ClientsController();
+					ClientsModel cm = new ClientsModel();
+					
 					cm.deleteClient(c);
 					if(cm.getClientById(c.getId_client()) == null) {
-						frame.dispose();
-						client.clients();
-						client.successDelete();
+						confirmFrame.dispose();
+						
+						new PopUpsController().successDelete();
+						mainFrame.dispose();
+						new ClientsController().clients();
 					}
 					else {
 						client.errorDelete();
@@ -1197,6 +1201,7 @@ public class ClientsView {
 				}
 			}
 		});
+		
 		
 		JButton deny = new JButton("Cancelar");
 		deny.setBounds(50,350,270,70);

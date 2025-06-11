@@ -65,39 +65,39 @@ public class PopUpsView {
 	}
 	
 	public void successDelete() {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("Eliminado con exito");
-		title.setBounds(50,100,600,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		title.setVisible(true);
-		panel.add(title);
-		
-		JButton accept = new JButton("Aceptar");
-		accept.setBounds(350,350,300,70);
-		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		accept.setForeground(Color.decode("#FFFFFF"));
-		accept.setBackground(Color.decode("#071A2B")); 
-		panel.add(accept);
-		
-		accept.addActionListener(new ActionListener() {
+		JDialog successDialog = new JDialog();
+	    successDialog.setTitle("Éxito");
+	    successDialog.setModal(true);
+	    successDialog.setSize(700, 500);
+	    successDialog.setLocationRelativeTo(null);
+	    successDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				frame.dispose();
-			}
-			
-		});
+	    JPanel panel = new JPanel();
+	    panel.setBackground(Color.decode("#FFFCF7")); 
+	    panel.setLayout(null);
+	    successDialog.getContentPane().add(panel);
+
+	    JLabel title = new JLabel("Eliminado con éxito");
+	    title.setBounds(50, 20, 600, 70);
+	    title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    panel.add(title);
+
+	    JLabel img = new JLabel();
+	    img.setBounds(200, 90, 250, 250);
+	    ImageIcon originalIcon = new ImageIcon(AuthView.class.getResource("/images/success.png"));
+	    Image scaledImage = originalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+	    img.setIcon(new ImageIcon(scaledImage));
+	    panel.add(img);
+
+	    JButton accept = new JButton("Aceptar");
+	    accept.setBounds(350, 350, 300, 70);
+	    accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	    accept.setForeground(Color.decode("#FFFFFF"));
+	    accept.setBackground(Color.decode("#071A2B"));
+	    accept.addActionListener(e -> successDialog.dispose());
+	    panel.add(accept);
+
+	    successDialog.setVisible(true);
 		
 	}
 	
