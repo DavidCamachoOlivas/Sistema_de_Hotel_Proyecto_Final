@@ -29,10 +29,13 @@ import buttonCells.TableActionCellRender2;
 import buttonCells.TableActionEvent2;
 import controllers.ClientsController;
 import controllers.HomeController;
+import controllers.PopUpsController;
 import controllers.RentalsController;
+import controllers.RoomTypesController;
 import controllers.RoomsController;
 import controllers.TariffsController;
 import models.ClientsModel;
+import models.RoomTypesModel;
 import models.Tariff;
 import models.TariffsModel;
 
@@ -184,7 +187,7 @@ public class TariffsView {
 	                	clientsTable.getCellEditor().stopCellEditing();
 	                }
 	                
-	                deleteConfirm(row,t,model);
+	                deleteConfirm(row,t,model,frame);
 	            }
 
 				
@@ -707,7 +710,7 @@ public class TariffsView {
 		frame.repaint();
 	}
 	
-	public void deleteConfirm(int row, Tariff t, DefaultTableModel model) {
+	public void deleteConfirm(int row, Tariff t, DefaultTableModel model, JFrame mainFrame) {
 		JFrame confirmFrame = new JFrame();
 
 		confirmFrame.setSize(700, 500);
@@ -740,18 +743,43 @@ public class TariffsView {
 		accept.setForeground(Color.decode("#FFFFFF"));
 		accept.setBackground(Color.decode("#071A2B"));
 		panel.add(accept);
-		
-		accept.addActionListener(new ActionListener() {
+		accept.addActionListener(e -> {
+		    try {
+		    	TariffsModel tm = new TariffsModel();
+		    	boolean deleted = tm.deleteRoomType(t);
+
+		        if (deleted) {
+		            confirmFrame.dispose();
+
+		            new PopUpsController().successDelete();
+
+		            mainFrame.dispose();
+		            new TariffsController().tariffs();
+		        } else {
+		        	JOptionPane.showMessageDialog(null, "No se pudo eliminar la tarifa.");
+		        }
+
+		    } catch (SQLException ex) {
+		        ex.printStackTrace();
+		        JOptionPane.showMessageDialog(
+		            confirmFrame,
+		            "Error al eliminar: " + ex.getMessage(),
+		            "Error",
+		            JOptionPane.ERROR_MESSAGE
+		        );
+		    }
+		});
+		/*accept.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        try {
-		            TariffsModel tm = new TariffsModel();
+		            
 
 		            if (tm.isTariffInUse(t)) {
 		                JOptionPane.showMessageDialog(null, "No puedes eliminar esta tarifa porque está en uso por algún tipo de habitación.");
 		                return; // Salimos sin hacer nada
 		            }
 
-		            boolean deleted = tm.deleteRoomType(t);
+		            
 		            if (deleted) {
 		                model.removeRow(row);
 		                confirmFrame.dispose();
@@ -759,13 +787,13 @@ public class TariffsView {
 		                success.successDelete();
 		                //JOptionPane.showMessageDialog(null, "Tarifa eliminada con éxito.");
 		            } else {
-		                JOptionPane.showMessageDialog(null, "No se pudo eliminar la tarifa.");
+		                
 		            }
 		        } catch (SQLException e1) {
 		            JOptionPane.showMessageDialog(null, "Error: " + e1.getMessage());
 		        }
 		    }
-		});
+		});*/
 		
 		JButton deny = new JButton("Cancelar");
 		deny.setBounds(50,350,270,70);

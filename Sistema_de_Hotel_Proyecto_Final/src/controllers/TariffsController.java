@@ -1,5 +1,6 @@
 package controllers;
 
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 import models.Tariff;
@@ -31,8 +32,8 @@ public class TariffsController {
 		view.consultTariff();
 	}
 	
-	public void deleteConfirm(int row, Tariff t, DefaultTableModel model) {
-		view.deleteConfirm(row, t, model);
+	public void deleteConfirm(int row, Tariff t, DefaultTableModel model,JFrame frame) {
+		view.deleteConfirm(row, t, model,frame);
 	}
 	
 	public void successDelete() {
