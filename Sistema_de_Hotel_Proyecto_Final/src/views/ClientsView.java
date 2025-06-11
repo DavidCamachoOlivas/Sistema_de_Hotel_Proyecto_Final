@@ -199,30 +199,30 @@ public class ClientsView {
 		                System.out.println("View row : " + row);
 		            }
 		        };
-		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
-		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
-				JScrollPane scrollPane = new JScrollPane(clientsTable);
-				scrollPane.setBounds(0, 50, 1000, 260);
-				clientsTablePanel.add(scrollPane);
-				
-				JLabel lblTableTitle = new JLabel("Clientes");
-				lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				lblTableTitle.setForeground(Color.decode("#FFFFFF"));
-				lblTableTitle.setBounds(450, 10, 200, 40);
-				clientsTablePanel.add(lblTableTitle);
-				
-				JTextField search = new JTextField();
-				search.setBounds(130, 200, 800, 50);
-				search.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-				panel.add(search);
-				search.setColumns(10);
-				
-				JButton btnSearch = new JButton("Ver");
-				btnSearch.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
-				btnSearch.setBackground(Color.decode("#071A2B"));
-				btnSearch.setForeground(Color.decode("#FFFFFF"));
-				btnSearch.setBounds(935, 200, 195, 50);
-				panel.add(btnSearch);
+        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
+        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor(event));
+		JScrollPane scrollPane = new JScrollPane(clientsTable);
+		scrollPane.setBounds(0, 50, 1000, 260);
+		clientsTablePanel.add(scrollPane);
+			
+		JLabel lblTableTitle = new JLabel("Clientes");
+		lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+		lblTableTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTableTitle.setBounds(450, 10, 200, 40);
+		clientsTablePanel.add(lblTableTitle);
+		
+		JTextField search = new JTextField();
+		search.setBounds(130, 200, 800, 50);
+		search.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+		panel.add(search);
+		search.setColumns(10);
+		
+		JButton btnSearch = new JButton("Ver");
+		btnSearch.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		btnSearch.setBackground(Color.decode("#071A2B"));
+		btnSearch.setForeground(Color.decode("#FFFFFF"));
+		btnSearch.setBounds(935, 200, 195, 50);
+		panel.add(btnSearch);
 		
 		
 		
