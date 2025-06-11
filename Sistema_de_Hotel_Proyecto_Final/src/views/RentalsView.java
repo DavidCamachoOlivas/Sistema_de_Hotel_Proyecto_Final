@@ -424,12 +424,12 @@ public class RentalsView {
 		lblTitle.setBackground(null);
 		
 		JLabel lblNewLabel = new JLabel("Nombre del cliente");
-		lblNewLabel.setBounds(117, 175, 178, 34);
+		lblNewLabel.setBounds(130, 175, 178, 34);
 		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel);
 		
 		JButton btnNewButton = new JButton("Nuevo cliente");
-		btnNewButton.setBounds(481, 219, 146, 44);
+		btnNewButton.setBounds(481, 219, 146, 50);
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(new Color(7, 26, 43));
 		btnNewButton.setFont(new Font("Inter_18pt Bold", Font.BOLD, 16));
@@ -441,13 +441,13 @@ public class RentalsView {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
 				frame.dispose();
-				client.createClient();
+				client.createClient2();
 			}
 			
 		});
 
 		JComboBox<Client> client_Combo = new JComboBox<>();
-		client_Combo.setBounds(117, 219, 344, 44);
+		client_Combo.setBounds(130, 219, 344, 50);
 		panel.add(client_Combo);
 
 		List<Client> clients = new ClientsModel().getAvailableClient();
@@ -469,7 +469,7 @@ public class RentalsView {
 		});
 		
 		JLabel lblNewLabel_1 = new JLabel("Tipo de habitación");
-		lblNewLabel_1.setBounds(117, 270, 178, 34);
+		lblNewLabel_1.setBounds(130, 270, 178, 34);
 		lblNewLabel_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_1);
 		
@@ -492,7 +492,7 @@ public class RentalsView {
 		panel.add(dateCheckOut);
 		
 		JComboBox<Room> room_Combo = new JComboBox<>();
-		room_Combo.setBounds(130, 300, 460, 60);
+		room_Combo.setBounds(130, 300, 500, 50);//117, 219, 344, 44
 		panel.add(room_Combo);
 
 		List<Room> rooms = new RoomsModel().getAvailableRoom();
