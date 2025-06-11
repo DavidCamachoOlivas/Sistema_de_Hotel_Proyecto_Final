@@ -38,6 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -384,7 +385,7 @@ public class RoomsView {
 		panel.add(roomImage_Combolbl);
 		// JComboBox para seleccionar una imagen
 		JComboBox<RoomImage> roomImage_Combo = new JComboBox<>();
-		roomImage_Combo.setBounds(700, 340, 460, 50);
+		roomImage_Combo.setBounds(700, 340, 450, 50);
 		panel.add(roomImage_Combo);
 
 		try {
@@ -466,7 +467,7 @@ public class RoomsView {
 		
 		JTextField nombreTextField = new JTextField();
 		nombreTextField.setText("Nombre de la habitación");
-		nombreTextField.setBounds(700, 150, 460, 50);
+		nombreTextField.setBounds(700, 150, 450, 50);
 		nombreTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		nombreTextField.setColumns(10);
 		nombreTextField.addMouseListener(new MouseListener() {
@@ -518,7 +519,7 @@ public class RoomsView {
 
 		JTextField numeroTextField = new JTextField();
 		numeroTextField.setText("Número de habitación");
-		numeroTextField.setBounds(700, 230, 460, 50);
+		numeroTextField.setBounds(700, 230, 450, 50);
 		numeroTextField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 20));
 		numeroTextField.setColumns(10);
 		numeroTextField.addMouseListener(new MouseListener() {
@@ -600,13 +601,13 @@ public class RoomsView {
 		amenitiesLabel.setBorder(null);
 		panel.add(amenitiesLabel);
 		
-		TextArea amenities_textField = new TextArea();
+		JTextArea amenities_textField = new JTextArea();
 		amenities_textField.setColumns(10);
-		amenities_textField.setBounds(700, 450, 460, 150);
-		panel.add(amenities_textField);
+		amenities_textField.setBounds(700, 450, 450, 150);
+		panel.add(amenities_textField);				
 		
 		JButton btnSave = new JButton("Guardar");
-		btnSave.setBounds(970,600,200,70);
+		btnSave.setBounds(960,605,200,70);
 		btnSave.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnSave.setForeground(Color.decode("#FFFFFF"));
 		btnSave.setBackground(Color.decode("#071A2B"));
@@ -614,72 +615,132 @@ public class RoomsView {
 		
 		btnSave.addActionListener(e -> {
 		    try {
-		        // 1) Leer selección del usuario
-		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
-		        RoomType  selectedType  = (RoomType) roomType_Combo.getSelectedItem();
-		        Tariff    selectedTariff= (Tariff) tariff_Combo.getSelectedItem();
+		        // Recuperamos el borde por defecto para restaurar en los campos válidos
+		        Border defaultBorder = nombreTextField.getBorder();
+		        Border redBorder = BorderFactory.createLineBorder(Color.RED);
 
-		        // 2) Construir el objeto Room
+		        // Asumimos que todos son válidos al inicio
+		        boolean valid = true;
+
+		        // Validar nombre
+		        if (nombreTextField.getText().trim().isEmpty() ||
+		            nombreTextField.getText().trim().equals("Nombre de la habitación")) {
+		            nombreTextField.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            nombreTextField.setBorder(defaultBorder);
+		        }
+
+		        // Validar número de habitación
+		        int numeroHabitacion = -1;
+		        if (numeroTextField.getText().trim().isEmpty() ||
+		            numeroTextField.getText().trim().equals("Número de habitación")) {
+		            numeroTextField.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            try {
+		                numeroHabitacion = Integer.parseInt(numeroTextField.getText().trim());
+		                numeroTextField.setBorder(defaultBorder);
+		            } catch (NumberFormatException ex) {
+		                numeroTextField.setBorder(redBorder);
+		                valid = false;
+		            }
+		        }
+
+		        // Validar RoomType
+		        if (roomType_Combo.getSelectedItem() == null) {
+		            roomType_Combo.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            roomType_Combo.setBorder(defaultBorder);
+		        }
+
+		        // Validar Tariff
+		        if (tariff_Combo.getSelectedItem() == null) {
+		            tariff_Combo.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            tariff_Combo.setBorder(defaultBorder);
+		        }
+
+		        // Validar cantidad de huéspedes
+		        if (Guests_comboBox.getSelectedItem() == null) {
+		            Guests_comboBox.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            Guests_comboBox.setBorder(defaultBorder);
+		        }
+
+		        // Validar cantidad de camas
+		        if (bedQtTextField.getSelectedItem() == null) {
+		            bedQtTextField.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            bedQtTextField.setBorder(defaultBorder);
+		        }
+
+		        // Validar amenidades (si deseas permitirlo vacío, comenta esto)
+		        if (amenities_textField.getText().trim().isEmpty()) {
+		            amenities_textField.setBorder(redBorder);
+		            valid = false;
+		        } else {
+		            amenities_textField.setBorder(defaultBorder);
+		        }
+
+		        if (!valid) {
+		            JOptionPane.showMessageDialog(frame, "Por favor complete todos los campos obligatorios correctamente.", "Campos inválidos", JOptionPane.WARNING_MESSAGE);
+		            return;
+		        }
+
+		        // Crear la habitación si todo es válido
+		        RoomImage selectedImage = (RoomImage) roomImage_Combo.getSelectedItem();
+		        RoomType selectedType = (RoomType) roomType_Combo.getSelectedItem();
+		        Tariff selectedTariff = (Tariff) tariff_Combo.getSelectedItem();
+
 		        Room nuevaHabitacion = new Room();
 		        nuevaHabitacion.setRoom_name(nombreTextField.getText().trim());
-		        nuevaHabitacion.setNum_room(Integer.parseInt(numeroTextField.getText().trim()));
+		        nuevaHabitacion.setNum_room(numeroHabitacion);
 		        nuevaHabitacion.setId_room_type(selectedType.getId_room_type());
-		        nuevaHabitacion.setId_room_image(
-		            selectedImage != null ? selectedImage.getId_room_image() : null
-		        );
+		        nuevaHabitacion.setId_room_image(selectedImage != null ? selectedImage.getId_room_image() : null);
 		        nuevaHabitacion.setMax_guest_qty((Integer) Guests_comboBox.getSelectedItem());
 		        nuevaHabitacion.setBeds_qty((Integer) bedQtTextField.getSelectedItem());
 		        nuevaHabitacion.setAmenities(amenities_textField.getText().trim());
 		        nuevaHabitacion.setStatus(false);
 
-		        // 3) Guardar habitación y recuperar su ID
-		        RoomsModel     roomsModel   = new RoomsModel();
+		        RoomsModel roomsModel = new RoomsModel();
 		        int newRoomId = roomsModel.createRoom(nuevaHabitacion);
 
-		        // 4) Construir y guardar la tarifa asociada
-		        Tariff t = new Tariff();
 		        TariffsModel tm = new TariffsModel();
-		        
-		        Tariff editTariff = new Tariff();
-
 		        RoomTypesModel rtm = new RoomTypesModel();
-		        
-		        RoomType rt = new RoomType();
-		        rt = rtm.getRoomTypeById(nuevaHabitacion.getId_room_type());
-		        
-		        t = tm.getTariffById(rt.getId_tariff());
-		        
-		        editTariff.setCapacity(t.getCapacity());
-		        editTariff.setPrice_per_night(t.getPrice_per_night());
+		        RoomType rt = rtm.getRoomTypeById(nuevaHabitacion.getId_room_type());
+		        Tariff originalTariff = tm.getTariffById(rt.getId_tariff());
 
-		        editTariff.setTariff_type(t.getTariff_type());
-		        editTariff.setRefundable(t.isRefundable());
-		        
-		        TariffsModel tariffsModel = new TariffsModel();
-		        tariffsModel.createTariff(editTariff);
+		        Tariff editTariff = new Tariff();
+		        editTariff.setCapacity(originalTariff.getCapacity());
+		        editTariff.setPrice_per_night(originalTariff.getPrice_per_night());
+		        editTariff.setTariff_type(originalTariff.getTariff_type());
+		        editTariff.setRefundable(originalTariff.isRefundable());
 
-		        // 5) Feedback y recarga
+		        tm.createTariff(editTariff);
+
 		        JOptionPane.showMessageDialog(frame, "Habitación guardada exitosamente.");
 		        frame.dispose();
 		        new RoomsController().rooms();
 
 		    } catch (SQLException ex) {
 		        ex.printStackTrace();
-		        JOptionPane.showMessageDialog(
-		            frame,
-		            "Error al guardar: " + ex.getMessage(),
-		            "Error",
-		            JOptionPane.ERROR_MESSAGE
-		        );
+		        JOptionPane.showMessageDialog(frame, "Error al guardar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		    }
 		});
 
 
 
 
+
+
 		
 		JButton btnCancel = new JButton("Cancelar");
-		btnCancel.setBounds(760,600,200,70);
+		btnCancel.setBounds(750,605,200,70);
 		btnCancel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnCancel.setForeground(Color.decode("#FFFFFF"));
 		btnCancel.setBackground(new Color(153, 89, 45));
