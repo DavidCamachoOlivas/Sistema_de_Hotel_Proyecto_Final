@@ -86,7 +86,7 @@ public class PopUpsView {
 		accept.setBounds(350,350,300,70);
 		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		accept.setForeground(Color.decode("#FFFFFF"));
-		accept.setBackground(Color.decode("#071A2B"));
+		accept.setBackground(Color.decode("#071A2B")); 
 		panel.add(accept);
 		
 		accept.addActionListener(new ActionListener() {
