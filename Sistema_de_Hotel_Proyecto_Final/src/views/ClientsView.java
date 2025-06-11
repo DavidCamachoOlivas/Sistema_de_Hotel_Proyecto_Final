@@ -170,19 +170,19 @@ public class ClientsView {
 					 @Override
 			            public void onEdit(int row) {
 			            	
-			            	 int idClient = Integer.parseInt(clientsTable.getValueAt(row, 0).toString());
-						        System.out.println("Editando cliente con ID: " + idClient);
-						        ClientsController rc = new ClientsController();
-						        ClientsModel cm = new ClientsModel();
-						        
-						        frame.dispose();
-						        try {
-									rc.editClient(cm.getClientById(idClient));
-								}
-						        catch (SQLException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+						 	int idClient = Integer.parseInt(clientsTable.getValueAt(row, 0).toString());
+							System.out.println("Editando cliente con ID: " + idClient);
+							ClientsController rc = new ClientsController();
+							ClientsModel cm = new ClientsModel();
+							
+							frame.dispose();
+							try {
+								rc.editClient(cm.getClientById(idClient));
+							}
+							catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 			            }
 
 
@@ -831,7 +831,7 @@ public class ClientsView {
 		mainPanel.add(headerPanel);
 		headerPanel.setLayout(null);
 
-		JLabel titleLabel = new JLabel("Añadir cliente");
+		JLabel titleLabel = new JLabel("Editar cliente");
 		titleLabel.setBounds(200, 42, 350, 82);
 		headerPanel.add(titleLabel);
 		titleLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
@@ -960,50 +960,68 @@ public class ClientsView {
 		mainPanel.add(saveButton);
 
 		saveButton.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		        ClientsController home = new ClientsController();
-		        ClientsModel cm = new ClientsModel();
-		        Client clientEdit;
+	        public void actionPerformed(ActionEvent e) {
+	            Border defaultBorder = nameTextField.getBorder();
+	            Border redBorder = BorderFactory.createLineBorder(Color.RED);
 
-		        try {
-		            clientEdit = cm.getClientById(c.getId_client());
-		        } catch (SQLException e1) {
-		            e1.printStackTrace();
-		            return;
-		        }
+	            boolean valid = true;
 
-		        clientEdit.setClient_name(nameTextField.getText());
-		        clientEdit.setPhone_number(phoneTextField.getText());
-		        clientEdit.setEmail(emailTextField.getText());
+	            if (nameTextField.getText().trim().isEmpty()) {
+	                nameTextField.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                nameTextField.setBorder(defaultBorder);
+	            }
 
-		        java.util.Date selectedDate = birthDateCalendar.getDate();
-		        if (selectedDate == null) {
-		            JOptionPane.showMessageDialog(null, "Por favor selecciona una fecha de nacimiento.");
-		            return;
-		        }
-		        clientEdit.setBirth_date(new java.sql.Date(selectedDate.getTime()));
+	            if (phoneTextField.getText().trim().isEmpty()) {
+	                phoneTextField.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                phoneTextField.setBorder(defaultBorder);
+	            }
 
-		        //VALIDACION TAMAÑO LIMITE IMAGEN
-		        if (imageBytes != null) {
-		            if (imageBytes.length > 16_000_000) {
-		                JOptionPane.showMessageDialog(null, "La imagen es demasiado grande (máx 16 MB).");
-		                return;
-		            }
-		            clientEdit.setProfile_picture(imageBytes);
-		        } else {
-		            clientEdit.setProfile_picture(c.getProfile_picture());
-		        }
+	            if (emailTextField.getText().trim().isEmpty()) {
+	                emailTextField.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                emailTextField.setBorder(defaultBorder);
+	            }
 
-		        try {
-		            cm.updateClient(clientEdit);
-		            frame.dispose();
-		            home.clients();
-		        } catch (SQLException e1) {
-		            e1.printStackTrace();
-		        }
-		    }
-		});
+	            java.util.Date fechaUtil = birthDateCalendar.getDate();
+	            java.sql.Date fechaNacimiento = null;
+	            if (fechaUtil == null) {
+	                birthDateCalendar.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                birthDateCalendar.setBorder(defaultBorder);
+	                fechaNacimiento = new java.sql.Date(fechaUtil.getTime());
+	            }
+
+	            if (!valid) {
+	                JOptionPane.showMessageDialog(frame, "Por favor, complete todos los campos obligatorios.", "Campos inválidos", JOptionPane.WARNING_MESSAGE);
+	                return;
+	            }
+
+	            Client nuevaCliente = new Client();
+	            nuevaCliente.setClient_name(nameTextField.getText().trim());
+	            nuevaCliente.setPhone_number(phoneTextField.getText().trim());
+	            nuevaCliente.setEmail(emailTextField.getText().trim());
+	            nuevaCliente.setBirth_date(fechaNacimiento);
+	            nuevaCliente.setProfile_picture(imageBytes);
+
+	            ClientsModel cm = new ClientsModel();
+	            ClientsController home = new ClientsController();
+
+	            try {
+	                cm.createClient(nuevaCliente);
+	                frame.dispose();
+	                home.clients();
+	            } catch (SQLException ex) {
+	                ex.printStackTrace();
+	                JOptionPane.showMessageDialog(frame, "Error al guardar cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	        }
+	    });
 
 
 		JButton cancelButton = new JButton("Cancelar");
