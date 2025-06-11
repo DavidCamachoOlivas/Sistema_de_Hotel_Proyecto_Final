@@ -34,8 +34,13 @@ public class ClientsController {
 		view.editClient(c);
 	}
 	
-	public void consultClient() {
-		view.consultClient();
+	public void consultClient(Client c) {
+		try {
+			view.consultClient(c);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteClient(Client c) {

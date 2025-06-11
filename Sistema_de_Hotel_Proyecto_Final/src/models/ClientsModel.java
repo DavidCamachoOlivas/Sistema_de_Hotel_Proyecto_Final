@@ -1,5 +1,6 @@
 package models;
 
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +9,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import Connection.ConnectionDB;
+import controllers.RoomTypesController;
 
 public class ClientsModel {
 	 public int createClient(Client client) throws SQLException {
@@ -85,26 +96,61 @@ public class ClientsModel {
 		 }
 	}
 	  
-	 public List<Client> getAvailableClient() throws SQLException {
-	        List<Client> clients = new ArrayList<>();
-	        String sql = "SELECT id_client, phone_number, client_name, email, birth_date, profile_picture FROM client";
-	        
-	        try (Connection conn = ConnectionDB.getDataSource().getConnection();
-	             Statement stmt = conn.createStatement();
-	             ResultSet rs = stmt.executeQuery(sql)) {
-	            
-	            while (rs.next()) {
-	            	Client client = new Client(
-	        			rs.getInt("id_client"),
-	        			rs.getString("phone_number"),
-	                    rs.getString("client_name"),
-	                    rs.getString("email"),
-	                    rs.getDate("birth_date"),
-	                    rs.getBytes("profile_picture")
-	                );
-	            	clients.add(client);
-	            }
-	        }
-	        return clients;
-	    }
+	public List<Client> getAvailableClient() throws SQLException {
+        List<Client> clients = new ArrayList<>();
+        String sql = "SELECT id_client, phone_number, client_name, email, birth_date, profile_picture FROM client";
+        
+        try (Connection conn = ConnectionDB.getDataSource().getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+            	Client client = new Client(
+        			rs.getInt("id_client"),
+        			rs.getString("phone_number"),
+                    rs.getString("client_name"),
+                    rs.getString("email"),
+                    rs.getDate("birth_date"),
+                    rs.getBytes("profile_picture")
+                );
+            	clients.add(client);
+            }
+        }
+        return clients;
+    }
+	 public static void exportarTablaPDF(JTable table, String rutaArchivo) {
+        Document document = new Document();
+
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream(rutaArchivo));
+            document.open();
+
+            PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
+
+            TableModel model = table.getModel();
+            for (int i = 0; i < model.getColumnCount(); i++) {
+                pdfTable.addCell(new PdfPCell(new Phrase(model.getColumnName(i))));
+            }
+
+            for (int rows = 0; rows < model.getRowCount(); rows++) {
+                for (int cols = 0; cols < model.getColumnCount(); cols++) {
+                	 Object valor = model.getValueAt(rows, cols);
+                	 if (valor != null) {
+                		    pdfTable.addCell(valor.toString());
+                	 }
+                	 else {
+                		 pdfTable.addCell("");
+                	 }
+                }
+            }
+
+            document.add(pdfTable);
+            RoomTypesController rtc = new RoomTypesController();
+            rtc.successDownload();
+            document.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

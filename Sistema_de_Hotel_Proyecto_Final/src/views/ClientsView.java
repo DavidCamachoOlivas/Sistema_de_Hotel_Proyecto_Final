@@ -41,8 +41,12 @@ import controllers.RoomTypesController;
 import controllers.RoomsController;
 import models.Client;
 import models.ClientsModel;
+import models.Rental;
+import models.RentalsModel;
 import models.Room;
 import models.RoomType;
+import models.RoomTypesModel;
+import models.RoomsModel;
 
 public class ClientsView {
 
@@ -194,10 +198,19 @@ public class ClientsView {
 		            
 		            @Override
 		            public void onView(int row) {
-		            	ClientsController client = new ClientsController();
-						frame.dispose();
-						client.consultClient();
-		                System.out.println("View row : " + row);
+		            	int idClient = Integer.parseInt(clientsTable.getValueAt(row, 0).toString());
+				        System.out.println("Consultando cliente con ID: " + idClient);
+				        ClientsController rc = new ClientsController();
+				        ClientsModel cm = new ClientsModel();
+				        
+				        frame.dispose();
+				        try {
+							rc.consultClient(cm.getClientById(idClient));
+						}
+				        catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 		            }
 		        };
         clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender());
@@ -922,7 +935,7 @@ public class ClientsView {
 		frame.repaint();
 	}
 	
-	public void consultClient() {
+	public void consultClient(Client c) throws SQLException {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -977,7 +990,7 @@ public class ClientsView {
 		
 		JLabel lblImg = new JLabel();
 		lblImg.setBounds(130, 140, 200, 200);
-		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
+		ImageIcon lblImgOriginalIcon = new ImageIcon(c.getProfile_picture());
 		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
 		lblImg.setHorizontalAlignment(JLabel.CENTER);
@@ -992,52 +1005,101 @@ public class ClientsView {
 				"Tipo"
 		};
 		
-		Object [][] data = {
-				{"2025-01-01", "2025-01-02","101","Estandar"},
-				{"2025-01-01", "2025-01-02","101","Estandar"},
-				{"2025-01-01", "2025-01-02","101","Estandar"},
-				{"2025-01-01", "2025-01-02","101","Estandar"},
-				
-		};
+		List<Rental> rentals = new ArrayList<>();
+	    RentalsModel rm = new RentalsModel();
+	    RoomsModel roomModel = new RoomsModel();
+	    RoomTypesModel roomTypeModel = new RoomTypesModel();
+	    
+	    try {
+			rentals = rm.getAvailableRental();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		    
+	    Rental  rental = new Rental();
+
+	    Object[][] data = new Object[rentals.size()][4];
+
+		for (int i = 0; i < rentals.size(); i++) {
+			rental = rentals.get(i);
+			
+			data[i][0] = rental.getCheck_in();
+
+		    data[i][1] = rental.getCheck_out();
+
+		    data[i][2] = roomModel.getRoomById(rental.getId_room()).getNum_room();
+		    
+		    data[i][3] = roomTypeModel.getRoomTypeById(roomModel.getRoomById(rental.getId_room()).getId_room_type()).getRoom_type();
+		}
 		
 		JPanel clientsTablePanel = new JPanel();
 		clientsTablePanel.setBounds(130, 350, 1000, 230);
 		clientsTablePanel.setBackground(Color.decode("#071A2B"));
 		panel.add(clientsTablePanel);
 		clientsTablePanel.setLayout(null);
-				DefaultTableModel model = new DefaultTableModel(data, columnNames);
-				JTable clientsTable = new JTable(model);
-				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-				clientsTable.setRowHeight(30);
-				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
-				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-				clientsTable.setDefaultEditor(Object.class,null);
-				
-		        
-				JScrollPane scrollPane = new JScrollPane(clientsTable);
-				scrollPane.setBounds(0, 50, 1000, 230);
-				clientsTablePanel.add(scrollPane);
-				
-				JLabel lblTableTitle = new JLabel("Historial de rentas");
-				lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				lblTableTitle.setForeground(Color.decode("#FFFFFF"));
-				lblTableTitle.setBounds(430, 10, 400, 40);
-				clientsTablePanel.add(lblTableTitle);
 		
-		JButton btnCancel = new JButton("Descargar .pdf");
-		btnCancel.setBounds(130,600,1000,70);
-		btnCancel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		btnCancel.setForeground(Color.decode("#FFFFFF"));
-		btnCancel.setBackground(Color.decode("#0E651B"));
-		panel.add(btnCancel);
+		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+		JTable clientsTable = new JTable(model);
+		clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+		clientsTable.setRowHeight(30);
+		clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+		clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+		clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+		clientsTable.setDefaultEditor(Object.class,null);
+		
+		JScrollPane scrollPane = new JScrollPane(clientsTable);
+		scrollPane.setBounds(0, 50, 1000, 230);
+		clientsTablePanel.add(scrollPane);
+		
+		JLabel lblTableTitle = new JLabel("Historial de rentas");
+		lblTableTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+		lblTableTitle.setForeground(Color.decode("#FFFFFF"));
+		lblTableTitle.setBounds(430, 10, 400, 40);
+		clientsTablePanel.add(lblTableTitle);
+
+		 JButton btnPDF = new JButton("Descargar .pdf");
+		 btnPDF.setBounds(130, 580, 1000, 70);
+		 btnPDF.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+		 btnPDF.setForeground(Color.decode("#FFFFFF"));
+		 btnPDF.setBackground(Color.decode("#071A2B"));
+		 panel.add(btnPDF);
+		
+		 btnPDF.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				RoomTypesController rooms = new RoomTypesController();
+				RoomTypesModel rtm = new RoomTypesModel();
+				String url;
+				JFileChooser fileChooser = new JFileChooser();
+		        fileChooser.setDialogTitle("Selecciona una carpeta");
+		        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		        int resultado = fileChooser.showOpenDialog(null);
+		        if (resultado == JFileChooser.APPROVE_OPTION) {
+		            File carpeta = fileChooser.getSelectedFile();
+		            url = carpeta.getAbsolutePath() + "/tipoHabitacion.pdf";
+		            rtm.exportarTablaPDF(clientsTable, url);
+		        }
+		        else{
+		        	System.out.println("ruta no valida");
+		        }
+				
+			}
+			
+		});
+		panel.add(btnPDF);
 		
 		String name,email,phoneNumber;
 		int id;
-		name="Axdiael Trinidad Cardenas";
-		email="ax@diael.tc";
-		id=01;
-		phoneNumber = "6131234567";
+		
+		name = c.getClient_name();
+		email = c.getEmail();
+		id = c.getId_client();
+		phoneNumber = c.getPhone_number();
+		
 		JLabel lblNewLabel = new JLabel(name);
 		lblNewLabel.setBounds(400, 160, 606, 44);
 		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
@@ -1052,7 +1114,6 @@ public class ClientsView {
 		lblID2.setBounds(472, 214, 62, 27);
 		lblID2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
 		panel.add(lblID2);
-		
 		
 		JLabel lblEmail = new JLabel("Email:");
 		lblEmail.setBounds(400, 251, 150, 27);
@@ -1074,18 +1135,6 @@ public class ClientsView {
 		lblPhoneNumber2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 26));
 		panel.add(lblPhoneNumber2);
 		
-		
-		
-		btnCancel.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ClientsController download = new ClientsController();
-				download.successDownload();
-			}
-			
-		});
 		frame.revalidate();
 		frame.repaint();
 	}
