@@ -168,7 +168,8 @@ import models.AuthModel;
 					
 					if(flag1 && flag2) {
 						javax.swing.SwingUtilities.invokeLater(() -> {
-			                pop.loading(); 
+							btnAccess.setEnabled(false);
+							pop.loading(); 
 			            });
 
 			            
@@ -177,7 +178,8 @@ import models.AuthModel;
 
 			                
 			                javax.swing.SwingUtilities.invokeLater(() -> {
-			                    pop.closeLoading(); 
+			                    pop.closeLoading();
+			                    
 			                    if (user_auth) {
 			                        
 			                        javax.swing.SwingUtilities.invokeLater(() -> {
@@ -187,8 +189,9 @@ import models.AuthModel;
 			                    } else {
 			                        tfEmail.setBorder(BorderFactory.createLineBorder(Color.red, 2));
 			                        tfPassw.setBorder(BorderFactory.createLineBorder(Color.red, 2));
-			                        pop.incorrectSignIn();
+			                        pop.incorrectSignIn();			           
 			                    }
+			                    btnAccess.setEnabled(true);
 			                });
 			            }).start();
 						 

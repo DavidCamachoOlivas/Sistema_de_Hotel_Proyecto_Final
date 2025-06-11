@@ -19,6 +19,7 @@ public class PopUpsView {
 	JFrame frame = new JFrame();
 	JFrame loadingFrame;
 	private JDialog loadingDialog;
+	private JDialog signInDialog;
 	public void successDownload() {
 		frame = new JFrame();
 		frame.setSize(700, 500);
@@ -101,48 +102,55 @@ public class PopUpsView {
 	}
 	
 	public void incorrectSignIn() {
-		frame = new JFrame();
-		frame.setSize(700, 500);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setBackground(Color.decode("#FFFCF7"));//FBF3E6
-		panel.setLayout(null);
-		
-		JLabel title = new JLabel("Datos ingresados incorrectos");
-		title.setBounds(50,20,600,70);
-		title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		title.setVisible(true);
-		panel.add(title);
-		
-		JLabel img = new JLabel();
-		img.setBounds(225,90,250,250);
-		ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/error.png"));
-		Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
-		ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
-		img.setIcon(lblImgScaledIcon);
-		img.setVisible(true);
-		panel.add(img);
-		
-		JButton accept = new JButton("Aceptar");
-		accept.setBounds(350,370,300,70);
-		accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
-		accept.setForeground(Color.decode("#FFFFFF"));
-		accept.setBackground(Color.decode("#071A2B"));
-		panel.add(accept);
-		
-		accept.addActionListener(new ActionListener() {
+		if (loadingDialog == null) {
+	    	loadingDialog = new JDialog();
+	    	loadingDialog.setTitle("Cargando");
+	    	loadingDialog.setModal(false); // No bloquear otras ventanas
+	    	loadingDialog.setAlwaysOnTop(true);
+	        loadingDialog.setSize(700, 500);
+	        loadingDialog.setLocationRelativeTo(null);
+	        loadingDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	        loadingDialog.setAlwaysOnTop(true); // 🔥 Mantener por encima de otras ventanas
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				frame.dispose();
-			}
+	        JPanel panel = new JPanel();
+	        panel.setBackground(Color.decode("#FFFCF7"));
+	        panel.setLayout(null);
+
+	        JLabel title = new JLabel("Datos ingresados incorrectos");
+	        title.setBounds(50, 20, 600, 70);
+	        title.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+	        panel.add(title);
+	        
+	        JLabel img = new JLabel();
+	        img.setBounds(225,110,250,250);
+	        ImageIcon lblImgOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/error.png"));
+			Image lblImgScaledImage = lblImgOriginalIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+			ImageIcon lblImgScaledIcon = new ImageIcon(lblImgScaledImage);//btnConsult
+			img.setIcon(lblImgScaledIcon);
+			panel.add(img);
+
+			JButton accept = new JButton("Aceptar");
+			accept.setBounds(350,370,300,70);
+			accept.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
+			accept.setForeground(Color.decode("#FFFFFF"));
+			accept.setBackground(Color.decode("#071A2B"));
+			panel.add(accept);
 			
-		});
+			accept.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					loadingDialog.dispose();
+				}
+				
+			});
+			
+	        loadingDialog.getContentPane().add(panel, BorderLayout.CENTER);
+	    }
+
+	    loadingDialog.setVisible(true); // Mostrar el dialog
+		
 	}
 	
 
