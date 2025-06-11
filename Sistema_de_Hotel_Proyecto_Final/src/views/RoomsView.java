@@ -186,7 +186,7 @@ public class RoomsView {
 					        RoomsModel rm = new RoomsModel();
 					        
 					        frame.dispose();
-					        rc.editRoom(rm.getRoomById(idRoom));
+					        rc.editRoom(rm.getRoomByNum(idRoom));
 					    } catch (Exception ex) {
 					        ex.printStackTrace();
 					    }
@@ -214,7 +214,7 @@ public class RoomsView {
 					        RoomsModel rm = new RoomsModel();
 					        
 					        frame.dispose();
-					        rc.consultRoom(rm.getRoomById(idRoom));
+					        rc.consultRoom(rm.getRoomByNum(idRoom));
 					    } catch (Exception ex) {
 					        ex.printStackTrace();
 					    }

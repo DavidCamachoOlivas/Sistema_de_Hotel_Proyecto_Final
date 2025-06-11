@@ -74,7 +74,4 @@ public class PanelAction extends JPanel {
             }
         });
     }
-	
-	
-
 }

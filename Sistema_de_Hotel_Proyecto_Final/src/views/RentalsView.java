@@ -6,18 +6,28 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import com.toedter.calendar.JDateChooser;
 
 import buttonCells.TableActionCellEditor;
 import buttonCells.TableActionCellEditor2;
@@ -27,25 +37,44 @@ import buttonCells.TableActionEvent;
 import buttonCells.TableActionEvent2;
 import controllers.ClientsController;
 import controllers.HomeController;
-import controllers.PopUpsController;
 import controllers.RentalsController;
 import controllers.RoomTypesController;
 import controllers.RoomsController;
-import controllers.TariffsController;
+import models.Client;
 import models.ClientsModel;
+import models.Rental;
 import models.RentalsModel;
+import models.Room;
+import models.RoomImage;
+import models.RoomType;
+import models.RoomTypesModel;
+import models.RoomsModel;
 import models.Tariff;
+import models.TariffsModel;
 
 public class RentalsView {
 
 	private JFrame frame;
-	private RentalsModel functions;
-	private PopUpsController pop = new PopUpsController();
-	public RentalsView() {
-		RentalsModel functions = new RentalsModel();
-	}
 	
-	public void rentals() {
+	private RentalsModel functions = new RentalsModel();
+	RoomTypesModel rtm = new RoomTypesModel();
+	RoomsModel rm = new RoomsModel();
+	TariffsModel tm = new TariffsModel();
+	RoomType rt;
+	Room r;
+	Client c;
+    Tariff t;
+    float precio;
+    float total;
+    String nombre;
+    JLabel pricePerNight_label;
+    JLabel totalPrecio_label;
+    java.sql.Date sqlCheckIn;
+    java.sql.Date sqlCheckOut;
+    long diffMillis;
+    long diffDays;
+
+	public void rentals() throws SQLException {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -66,7 +95,7 @@ public class RentalsView {
 		header.setLayout(null);
 		
 		JButton btnHome = new JButton("");
-		btnHome.setBounds(110, 60, 56, 56);
+		btnHome.setBounds(130, 60, 56, 56);
 		header.add(btnHome);
 		btnHome.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 32));
 		btnHome.setForeground(Color.decode("#FFFFFF"));
@@ -90,7 +119,7 @@ public class RentalsView {
 		});
 		
 		JLabel lblTitle = new JLabel("Rentas");
-		lblTitle.setBounds(180, 42, 250, 82);
+		lblTitle.setBounds(200, 42, 250, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
 		lblTitle.setForeground(Color.decode("#FFFFFF"));
@@ -99,7 +128,6 @@ public class RentalsView {
 		
 		JTextField textField = new JTextField();
 		textField.setBounds(100, 160, 659, 58);
-		textField.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 24));
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -158,7 +186,6 @@ public class RentalsView {
 		
 		JTextField textField_1 = new JTextField();
 		textField_1.setBounds(100, 83, 200, 35);
-		textField_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_1);
 		textField_1.setColumns(10);
 		
@@ -179,90 +206,136 @@ public class RentalsView {
 		JTextField textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		textField_2.setBounds(325, 83, 200, 35);
-		textField_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_2);
 		
 		JTextField textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		textField_3.setBounds(557, 83, 200, 35);
-		textField_3.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_3);
 		
 		JTextField textField_4 = new JTextField();
 		textField_4.setColumns(10);
 		textField_4.setBounds(788, 83, 200, 35);
-		textField_4.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 16));
 		panel_1.add(textField_4);
+		
+		
+		List<Rental> rentals = functions.getAvailableRental();
+		
 		String[] columnNames = {
 				"ID renta",
 				"ID cliente",
-				"Habitación",
+				"ID room",
 				"Check-in",
 				"Check-out",
 				"Total",
 				"Acciones"
 		};
-		
-		Object [][] data = {
-				{"1", "26","101","12/07/24","12/07/24","$2000",""},
-				{"2", "12","102","12/07/24","12/07/24","$2000",""},
-				{"3", "1","103","12/07/24","12/07/24","$2000",""},
-				{"4", "3","104","12/07/24","12/07/24","$2000",""},
-				
-		};
+		Object[][] data = new Object[rentals.size()][7];
+
+		for (int i = 0; i < rentals.size(); i++) {
+		   
+			if(rentals.get(i) != null) {
+				Rental   r = rentals.get(i);
+
+			    data[i][0] = r.getId_rental();
+			    
+			    data[i][1] = r.getId_client();
+			    
+			    data[i][2] = r.getId_room();
+			    		    
+			    data[i][3] = r.getCheck_in();
+			    
+			    data[i][4] = r.getCheck_out();
+			    
+			    data[i][5] = r.getDias_totales();
+			    
+			    data[i][6] = "Acciones";
+			}
+		}
+		// Reemplaza esta sección en tu método rentals() donde creas la tabla:
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(100, 403, 1100, 270);
 		panel.add(panel_2);
 		panel_2.setLayout(null);
-				DefaultTableModel model = new DefaultTableModel(data, columnNames);
-				JTable clientsTable = new JTable(model);
-				clientsTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
-				clientsTable.setRowHeight(30);
-				clientsTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
-				clientsTable.getTableHeader().setBackground(Color.decode("#071A2B"));
-				clientsTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-				clientsTable.getColumnModel().getColumn(4).setPreferredWidth(150);
-				clientsTable.setDefaultEditor(Object.class,null);
-				TableActionEvent2 event = new TableActionEvent2() {
-		            @Override
-		            public void onEdit(int row) {
-		            	RentalsController rent = new RentalsController();
-		            	frame.dispose();
-		            	rent.editRental();
-		                System.out.println("Edit row : " + row);
+		
+		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+		JTable RentalTable = new JTable(model);
+		RentalTable.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 22));
+		RentalTable.setRowHeight(30);
+		RentalTable.getTableHeader().setFont(new Font("Inter_18pt Bold", Font.BOLD, 24));
+		RentalTable.getTableHeader().setBackground(Color.decode("#071A2B"));
+		RentalTable.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+		RentalTable.getColumnModel().getColumn(6).setPreferredWidth(150);
+		RentalTable.setDefaultEditor(Object.class,null);
+
+		// AQUÍ ESTÁ LA CORRECCIÓN:
+		TableActionEvent2 event = new TableActionEvent2() {
+		    @Override
+		    public void onEdit(int row) {
+		        try {
+		            int idRental = Integer.parseInt(RentalTable.getValueAt(row, 0).toString());
+		            System.out.println("Editando renta con ID: " + idRental);
+		            RentalsController rc = new RentalsController();
+		            RentalsModel rm = new RentalsModel();
+		            
+		            frame.dispose();
+		            rc.editRental(rm.getRentalById(idRental));
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		            JOptionPane.showMessageDialog(frame, "Error al editar la renta: " + ex.getMessage());
+		        }
+		    }
+
+		    @Override
+		    public void onDelete(int row) {
+		        try {
+		            int idRental = Integer.parseInt(RentalTable.getValueAt(row, 0).toString());
+		            int confirm = JOptionPane.showConfirmDialog(
+		                frame, 
+		                "¿Está seguro de que desea eliminar esta renta?", 
+		                "Confirmar eliminación", 
+		                JOptionPane.YES_NO_OPTION
+		            );
+		            
+		            if (confirm == JOptionPane.YES_OPTION) {
+		                RentalsModel rm = new RentalsModel();
+		                Rental rental = rm.getRentalById(idRental);
+		                
+		                rm.deleteRental(rental);
+		                
+		                // Remover la fila de la tabla
+		                model.removeRow(row);
+		                JOptionPane.showMessageDialog(frame, "Renta eliminada correctamente");
 		            }
+		        } catch (Exception ex) {
+		            ex.printStackTrace();
+		            JOptionPane.showMessageDialog(frame, "Error al eliminar la renta: " + ex.getMessage());
+		        }
+		    }
 
-		            @Override
-		            public void onDelete(int row) {
-		                if (clientsTable.isEditing()) {
-		                	clientsTable.getCellEditor().stopCellEditing();
-		                }
-		                //model.removeRow(row);
-		            }
+		    @Override
+		    public void onDelete(int row, Tariff t) {
+		        // Este método no se usa en este contexto
+		        onDelete(row);
+		    }
 
-					@Override
-					public void onDelete(int row, Tariff t) {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					public void onDelete(int row, Tariff t, DefaultTableModel model) {
-						// TODO Auto-generated method stub
-						
-					}
-
-		        };
-		        clientsTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());
-		        clientsTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event));
-				JScrollPane scrollPane = new JScrollPane(clientsTable);
-				scrollPane.setBounds(0, 0, 1100, 270);
-				panel_2.add(scrollPane);
+		    @Override
+		    public void onDelete(int row, Tariff t, DefaultTableModel model) {
+		        // Este método no se usa en este contexto
+		        onDelete(row);
+		    }
+		};
+		RentalTable.getColumn("Acciones").setCellRenderer(new TableActionCellRender2());
+		RentalTable.getColumn("Acciones").setCellEditor(new TableActionCellEditor2(event, new ArrayList<>(), model));
+		
+		JScrollPane scrollPane = new JScrollPane(RentalTable);
+		scrollPane.setBounds(0, 0, 1100, 270);
+		panel_2.add(scrollPane);
 		frame.revalidate();
 		frame.repaint();
 	}
 	
-	public void createRental() {
+	public void createRental() throws SQLException {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -307,10 +380,6 @@ public class RentalsView {
 		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(117, 219, 344, 44);
-		panel.add(comboBox);
-		
 		JButton btnNewButton = new JButton("Nuevo cliente");
 		btnNewButton.setBounds(481, 219, 146, 44);
 		btnNewButton.setForeground(Color.WHITE);
@@ -324,14 +393,32 @@ public class RentalsView {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
 				frame.dispose();
-				client.createClient2();
+				client.createClient();
 			}
 			
 		});
+
+		JComboBox<Client> client_Combo = new JComboBox<>();
+		client_Combo.setBounds(117, 219, 344, 44);
+		panel.add(client_Combo);
+
+		List<Client> clients = new ClientsModel().getAvailableClient();
+		DefaultComboBoxModel<Client> model_client = new DefaultComboBoxModel<>();
+		model_client.addElement(null); // optional null for no selection
+
+		for (Client client : clients) {
+			model_client.addElement(client);
+		}
+		client_Combo.setModel(model_client);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(117, 314, 510, 44);
-		panel.add(comboBox_1);
+		client_Combo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+				// TODO Auto-generated method stub
+				
+		});
 		
 		JLabel lblNewLabel_1 = new JLabel("Tipo de habitación");
 		lblNewLabel_1.setBounds(117, 270, 178, 34);
@@ -343,99 +430,175 @@ public class RentalsView {
 		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2);
 		
-		JTextField textField = new JTextField();
-		textField.setBounds(691, 219, 424, 44);
-		panel.add(textField);
-		textField.setColumns(10);
+		JDateChooser dateCheckIn = new JDateChooser();
+		dateCheckIn.setBounds(691, 219, 424, 44);
+		panel.add(dateCheckIn);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Check out");
 		lblNewLabel_2_1.setBounds(691, 270, 178, 34);
 		lblNewLabel_2_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2_1);
 		
-		JTextField textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(691, 314, 424, 44);
-		panel.add(textField_1);
+		JDateChooser dateCheckOut = new JDateChooser();
+		dateCheckOut.setBounds(691, 314, 424, 44);
+		panel.add(dateCheckOut);
+		
+		JComboBox<Room> room_Combo = new JComboBox<>();
+		room_Combo.setBounds(130, 300, 460, 60);
+		panel.add(room_Combo);
+
+		List<Room> rooms = new RoomsModel().getAvailableRoom();
+		DefaultComboBoxModel<Room> model = new DefaultComboBoxModel<>();
+		model.addElement(null); // optional null for no selection
+
+		for (Room room : rooms) {
+		    model.addElement(room);
+		}
+
+		room_Combo.setModel(model);
+
+		room_Combo.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        r = (Room) room_Combo.getSelectedItem();
+		        try {
+					rt = rtm.getRoomTypeById(r.getId_room_type());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		        
+		        if (rt != null) {
+
+		            try {
+		                
+		            	t = tm.getTariffById(rt.getId_tariff());
+		                System.out.println(t.getPrice_per_night());
+		                precio = t.getPrice_per_night();
+		                pricePerNight_label.setText("" + precio);
+		                
+		                if (dateCheckIn.getDate() != null && dateCheckOut.getDate() != null) {
+					        java.util.Date checkInDateUtil = dateCheckIn.getDate();
+					        java.util.Date checkOutDateUtil = dateCheckOut.getDate();
+
+					        sqlCheckIn = new java.sql.Date(checkInDateUtil.getTime());
+					        sqlCheckOut = new java.sql.Date(checkOutDateUtil.getTime());
+					        
+					        diffMillis = checkOutDateUtil.getTime() - checkInDateUtil.getTime();
+					        diffDays = diffMillis / (1000 * 60 * 60 * 24);
+
+					        if (diffDays < 0) {
+					            JOptionPane.showMessageDialog(null, "La fecha de check-out debe ser posterior al check-in.");
+					            return;
+					        }
+
+					        total = precio * diffDays;
+					        totalPrecio_label.setText("$" + total);
+					 }
+		                frame.repaint();
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		        } else {
+		            System.out.println("NO HICE NADA");
+		        }
+		    }
+		});
 		
 		JLabel lblNewLabel_2_1_1 = new JLabel("Precio por noche");
 		lblNewLabel_2_1_1.setBounds(691, 368, 178, 34);
 		lblNewLabel_2_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2_1_1);
 		
-		JTextField textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(691, 412, 424, 44);
-		panel.add(textField_2);
+		pricePerNight_label = new JLabel();
+		pricePerNight_label.setBackground(Color.gray);
+		pricePerNight_label.setBorder(BorderFactory.createLineBorder(Color.black));
+		pricePerNight_label.setBounds(691, 412, 424, 44);
+		panel.add(pricePerNight_label);
 		
 		JLabel lblNewLabel_2_1_1_1 = new JLabel("Total");
 		lblNewLabel_2_1_1_1.setBounds(691, 466, 178, 34);
 		lblNewLabel_2_1_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2_1_1_1);
 		
-		JTextField textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(691, 510, 424, 44);
-		panel.add(textField_3);
+		totalPrecio_label = new JLabel();
+		totalPrecio_label.setBackground(Color.gray);
+		totalPrecio_label.setBorder(BorderFactory.createLineBorder(Color.black));
+		totalPrecio_label.setBounds(691, 510, 424, 44);
+		panel.add(totalPrecio_label);
 		
-		JButton btnNewButton_1 = new JButton("Cancelar");
-		btnNewButton_1.setBounds(691, 601, 188, 51);
-		btnNewButton_1.setBackground(new Color(153, 89, 45));
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
-		panel.add(btnNewButton_1);
-		
-		btnNewButton_1.addActionListener(new ActionListener() {
-
+		JButton cancel_Button = new JButton("Cancelar");
+		cancel_Button.setBounds(691, 601, 188, 51);
+		cancel_Button.setBackground(new Color(153, 89, 45));
+		cancel_Button.setForeground(Color.WHITE);
+		cancel_Button.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		cancel_Button.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				javax.swing.SwingUtilities.invokeLater(() -> {
-		            pop.loading();
-		        });
-
-		        new Thread(() -> {
-		        	frame.dispose();
-		        	RentalsController rent = new RentalsController();
-		        	rent.rentals();
-		            javax.swing.SwingUtilities.invokeLater(() -> {
-		                pop.closeLoading();
-		            });
-		        }).start();
+				RentalsController rent = new RentalsController();
+				frame.dispose();
+				rent.rentals();
+				
 			}
+		});
+		panel.add(cancel_Button);
+		
+		JButton accept_Button = new JButton("Aceptar");
+		accept_Button.setBounds(927, 601, 188, 51);
+		accept_Button.setForeground(Color.WHITE);
+		accept_Button.setBackground(new Color(7, 26, 43));
+		accept_Button.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		accept_Button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			    Rental newRental = new Rental();
+			    RentalsModel rm = new RentalsModel();
+			    ClientsModel cm = new ClientsModel();
+			    Room selRoom;
+			    selRoom = (Room) room_Combo.getSelectedItem();
+			    Client selClient;
+			    selClient = (Client) client_Combo.getSelectedItem();
+
+			        newRental = new Rental();
+			        newRental.setId_room(selRoom.getId_room());
+			        newRental.setId_client(selClient.getId_client());
+			        newRental.setCheck_in(sqlCheckIn);
+			        newRental.setCheck_out(sqlCheckOut);
+			        newRental.setDias_totales((long) total);
+			        newRental.setStatus(false);
+			        
+			        try {
+			        	RentalsController rc = new RentalsController();
+						rm.createRental(newRental);
+						frame.dispose();
+						rc.rentals();
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		    }
 			
 		});
-		
-		JButton btnNewButton_1_1 = new JButton("Aceptar");
-		btnNewButton_1_1.setBounds(927, 601, 188, 51);
-		btnNewButton_1_1.setForeground(Color.WHITE);
-		btnNewButton_1_1.setBackground(new Color(7, 26, 43));
-		btnNewButton_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
-		panel.add(btnNewButton_1_1);
+
+		panel.add(accept_Button);
 		
 		btnHome.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				javax.swing.SwingUtilities.invokeLater(() -> {
-		            pop.loading();
-		        });
-
-		        new Thread(() -> {
-		        	frame.dispose();
-		        	TariffsController tariffs = new TariffsController();
-		        	tariffs.tariffs();
-		            javax.swing.SwingUtilities.invokeLater(() -> {
-		                pop.closeLoading();
-		            });
-		        }).start();
+				RentalsController rent = new RentalsController();
+				frame.dispose();
+				rent.rentals();
 			}
-			
 		});
-	}
+}
 	
-	public void editRental() {
+	public void editRental(Rental rental) throws SQLException {
 		frame = new JFrame();
 		frame.setTitle("Hotel Ancla de Paz");
 		frame.setResizable(false);
@@ -467,7 +630,7 @@ public class RentalsView {
 		ImageIcon btnHomeScaledIcon = new ImageIcon(btnHomeScaledImage);
 		btnHome.setIcon(btnHomeScaledIcon);
 		
-		JLabel lblTitle = new JLabel("Editar renta");
+		JLabel lblTitle = new JLabel("Añadir renta");
 		lblTitle.setBounds(200, 42, 350, 82);
 		header.add(lblTitle);
 		lblTitle.setFont(new Font("Inter_18pt Bold", Font.BOLD, 44));
@@ -479,10 +642,6 @@ public class RentalsView {
 		lblNewLabel.setBounds(117, 175, 178, 34);
 		lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(117, 219, 344, 44);
-		panel.add(comboBox);
 		
 		JButton btnNewButton = new JButton("Nuevo cliente");
 		btnNewButton.setBounds(481, 219, 146, 44);
@@ -497,14 +656,35 @@ public class RentalsView {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
 				frame.dispose();
-				client.createClient2();
+				client.createClient();
 			}
 			
 		});
+
+		JComboBox<Client> client_Combo = new JComboBox<>();
+		client_Combo.setBounds(117, 219, 344, 44);
+		panel.add(client_Combo);
+
+		List<Client> clients = new ClientsModel().getAvailableClient();
+		DefaultComboBoxModel<Client> model_client = new DefaultComboBoxModel<>();
+		model_client.addElement(null); // optional null for no selection
+
+		for (Client client : clients) {
+			model_client.addElement(client);
+		}
+		client_Combo.setModel(model_client);
+		for (int i = 0; i < client_Combo.getItemCount(); i++) {
+	        Client c = client_Combo.getItemAt(i);
+	        if (c != null && c.getId_client() == rental.getId_client()) {
+	        	client_Combo.setSelectedIndex(i);
+	            break;
+	        }
+	    }
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(117, 314, 510, 44);
-		panel.add(comboBox_1);
+		Room RentalRoom = rm.getRoomById(rental.getId_room());
+		RoomType RentalRoomType = rtm.getRoomTypeById(RentalRoom.getId_room_type());
+		Tariff RentalTariff = tm.getTariffById(RentalRoomType.getId_tariff()); 
+		precio = RentalTariff.getPrice_per_night();
 		
 		JLabel lblNewLabel_1 = new JLabel("Tipo de habitación");
 		lblNewLabel_1.setBounds(117, 270, 178, 34);
@@ -516,75 +696,177 @@ public class RentalsView {
 		lblNewLabel_2.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2);
 		
-		JTextField textField = new JTextField("31/12/24");
-		textField.setBounds(691, 219, 424, 44);
-		panel.add(textField);
-		textField.setColumns(10);
+		JDateChooser dateCheckIn = new JDateChooser();
+		dateCheckIn.setDate(rental.getCheck_in());
+		dateCheckIn.setBounds(691, 219, 424, 44);
+		panel.add(dateCheckIn);
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Check out");
 		lblNewLabel_2_1.setBounds(691, 270, 178, 34);
 		lblNewLabel_2_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2_1);
 		
-		JTextField textField_1 = new JTextField("12/01/25");
-		textField_1.setColumns(10);
-		textField_1.setBounds(691, 314, 424, 44);
-		panel.add(textField_1);
+		JDateChooser dateCheckOut = new JDateChooser();
+		dateCheckOut.setDate(rental.getCheck_out());
+		dateCheckOut.setBounds(691, 314, 424, 44);
+		panel.add(dateCheckOut);
+		
+		JComboBox<Room> room_Combo = new JComboBox<>();
+		room_Combo.setBounds(130, 300, 460, 60);
+		panel.add(room_Combo);
+
+		List<Room> rooms = new RoomsModel().getAvailableRoom();
+		DefaultComboBoxModel<Room> model = new DefaultComboBoxModel<>();
+		model.addElement(null);
+
+		for (Room room : rooms) {
+		    model.addElement(room);
+		}
+		room_Combo.setModel(model);
+		for (int i = 0; i < room_Combo.getItemCount(); i++) {
+	        Room r = room_Combo.getItemAt(i);
+	        if (r != null && r.getId_room() == rental.getId_room()) {
+	        	room_Combo.setSelectedIndex(i);
+	            break;
+	        }
+	    }
+		
+	
+		
+		room_Combo.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        r = (Room) room_Combo.getSelectedItem();
+		        RoomTypesModel rtm = new RoomTypesModel();
+		        t = new Tariff();
+		        tm = new TariffsModel();
+
+		        try {
+					rt = rtm.getRoomTypeById(r.getId_room_type());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		        
+		        if (rt != null) {
+
+		            try {
+		                
+		            	t = tm.getTariffById(rt.getId_tariff());
+		                precio = t.getPrice_per_night();
+		                
+		                
+		                if (dateCheckIn.getDate() != null && dateCheckOut.getDate() != null) {
+					        java.util.Date checkInDateUtil = dateCheckIn.getDate();
+					        java.util.Date checkOutDateUtil = dateCheckOut.getDate();
+
+					        sqlCheckIn = new java.sql.Date(checkInDateUtil.getTime());
+					        sqlCheckOut = new java.sql.Date(checkOutDateUtil.getTime());
+					        
+					        diffMillis = checkOutDateUtil.getTime() - checkInDateUtil.getTime();
+					        diffDays = diffMillis / (1000 * 60 * 60 * 24);
+
+					        if (diffDays < 0) {
+					            JOptionPane.showMessageDialog(null, "La fecha de check-out debe ser posterior al check-in.");
+					            return;
+					        }
+
+					        total = precio * diffDays;
+					        totalPrecio_label.setText("$" + total);
+					 }
+		                frame.repaint();
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		        } else {
+		            System.out.println("NO HICE NADA");
+		        }
+		    }
+		});
 		
 		JLabel lblNewLabel_2_1_1 = new JLabel("Precio por noche");
 		lblNewLabel_2_1_1.setBounds(691, 368, 178, 34);
 		lblNewLabel_2_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2_1_1);
 		
-		JTextField textField_2 = new JTextField("$2,000");
-		textField_2.setColumns(10);
-		textField_2.setBounds(691, 412, 424, 44);
-		panel.add(textField_2);
+		pricePerNight_label = new JLabel();
+		pricePerNight_label.setText("" + precio);
+		pricePerNight_label.setBackground(Color.gray);
+		pricePerNight_label.setBorder(BorderFactory.createLineBorder(Color.black));
+		pricePerNight_label.setBounds(691, 412, 424, 44);
+		panel.add(pricePerNight_label);
 		
 		JLabel lblNewLabel_2_1_1_1 = new JLabel("Total");
 		lblNewLabel_2_1_1_1.setBounds(691, 466, 178, 34);
 		lblNewLabel_2_1_1_1.setFont(new Font("Inter_18pt Bold", Font.PLAIN, 18));
 		panel.add(lblNewLabel_2_1_1_1);
 		
-		JTextField textField_3 = new JTextField("$24,000");
-		textField_3.setColumns(10);
-		textField_3.setBounds(691, 510, 424, 44);
-		panel.add(textField_3);
+		totalPrecio_label = new JLabel();
+		totalPrecio_label.setText("" + rental.getDias_totales());
+		totalPrecio_label.setBackground(Color.gray);
+		totalPrecio_label.setBorder(BorderFactory.createLineBorder(Color.black));
+		totalPrecio_label.setBounds(691, 510, 424, 44);
+		panel.add(totalPrecio_label);
 		
-		JButton btnNewButton_1 = new JButton("Cancelar");
-		btnNewButton_1.setBounds(691, 601, 188, 51);
-		btnNewButton_1.setBackground(new Color(153, 89, 45));
-		btnNewButton_1.setForeground(Color.WHITE);
-		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
-		panel.add(btnNewButton_1);
-		
-		btnNewButton_1.addActionListener(new ActionListener() {
-
+		JButton cancel_Button = new JButton("Cancelar");
+		cancel_Button.setBounds(691, 601, 188, 51);
+		cancel_Button.setBackground(new Color(153, 89, 45));
+		cancel_Button.setForeground(Color.WHITE);
+		cancel_Button.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		cancel_Button.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				javax.swing.SwingUtilities.invokeLater(() -> {
-		            pop.loading();
-		        });
-
-		        new Thread(() -> {
-		        	frame.dispose();
-		        	RentalsController rent = new RentalsController();
-		        	rent.rentals();
-		            javax.swing.SwingUtilities.invokeLater(() -> {
-		                pop.closeLoading();
-		            });
-		        }).start();
+				RentalsController rent = new RentalsController();
+				frame.dispose();
+				rent.rentals();
+				
 			}
+		});
+		panel.add(cancel_Button);
+		
+		JButton accept_Button = new JButton("Aceptar");
+		accept_Button.setBounds(927, 601, 188, 51);
+		accept_Button.setForeground(Color.WHITE);
+		accept_Button.setBackground(new Color(7, 26, 43));
+		accept_Button.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
+		accept_Button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			    Rental editRental = new Rental();
+			    RentalsModel rm = new RentalsModel();
+			    ClientsModel cm = new ClientsModel();
+			    Room selRoom;
+			    selRoom = (Room) room_Combo.getSelectedItem();
+			    
+			    Client selClient;
+			    selClient = (Client) client_Combo.getSelectedItem();
+	
+			    editRental = new Rental();
+			    editRental.setId_room(selRoom.getId_room());
+			    editRental.setId_client(selClient.getId_client());
+			    editRental.setCheck_in(sqlCheckIn);
+			    editRental.setCheck_out(sqlCheckOut);
+			    editRental.setDias_totales((long) total);
+			    editRental.setStatus(false);
+		        
+		        try {
+		        	RentalsController rc = new RentalsController();
+					rm.updateRental(editRental);
+					frame.dispose();
+					rc.rentals();
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		    }
 			
 		});
-		
-		JButton btnNewButton_1_1 = new JButton("Aceptar");
-		btnNewButton_1_1.setBounds(927, 601, 188, 51);
-		btnNewButton_1_1.setForeground(Color.WHITE);
-		btnNewButton_1_1.setBackground(new Color(7, 26, 43));
-		btnNewButton_1_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
-		panel.add(btnNewButton_1_1);
+
+		panel.add(accept_Button);
 		
 		btnHome.addActionListener(new ActionListener() {
 
@@ -595,13 +877,13 @@ public class RentalsView {
 				frame.dispose();
 				rent.rentals();
 			}
-			
 		});
-	}
+}
 	
 	
 	
-	public void deleteConfirm() {
+	
+	public void deleteConfirm(Rental r) {
 		frame = new JFrame();
 		frame.setSize(700, 500);
 		frame.setLocationRelativeTo(null);
@@ -715,4 +997,6 @@ public class RentalsView {
 		title.setVisible(true);
 		panel.add(title);
 	}
+	
+	
 }

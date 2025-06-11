@@ -1,5 +1,8 @@
 package controllers;
 
+import java.sql.SQLException;
+
+import models.Rental;
 import views.RentalsView;
 
 public class RentalsController {
@@ -11,19 +14,34 @@ public class RentalsController {
 	}
 	
 	public void rentals() {
-		view.rentals();
+		try {
+			view.rentals();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void createRental() {
-		view.createRental();
+		try {
+			view.createRental();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void editRental() {
-		view.editRental();
+	public void editRental(Rental r) {
+		try {
+			view.editRental(r);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void deleteConfirm() {
-		view.deleteConfirm();
+	public void deleteConfirm(Rental r) {
+		view.deleteConfirm(r);
 	}
 	
 	public void successDelete() {

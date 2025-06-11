@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.SQLException;
+
 public class Room {
 	int id_room;
 	int id_room_image;
@@ -10,6 +12,8 @@ public class Room {
 	int max_guest_qty;
 	String room_name;
 	String amenities;
+	
+	String print;
 	
 	public Room(int id_room, int id_room_image, int id_room_type, boolean status, int num_room, int beds_qty, int max_guest_qty, String room_name, String amenities){
 		
@@ -95,6 +99,23 @@ public class Room {
 
 	public void setAmenities(String amenities) {
 		this.amenities = amenities;
+	}
+	public String toString() {
+		RoomTypesModel rtm = new RoomTypesModel();
+		RoomType rt = new RoomType();
+		if(rt != null) {
+			try {
+				rt = rtm.getRoomTypeById(getId_room_type());
+				String nombreType = rt.getRoom_type();
+				print = "" + getNum_room() + " - " + nombreType;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}
+		return print;
+		
+				
 	}
 	
 }

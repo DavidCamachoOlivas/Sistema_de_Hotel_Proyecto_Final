@@ -108,8 +108,33 @@ public class RoomsModel {
 		return rooms;
     }
 	
-	public Room getRoomById(int idRoom) throws SQLException {
+	public Room getRoomByNum(int idRoom) throws SQLException {
 	    String sql = "SELECT * FROM room WHERE num_room = ?";
+	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+	        stmt.setInt(1, idRoom);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	                Room room = new Room();
+	                room.setId_room(rs.getInt("id_room"));
+	                room.setRoom_name(rs.getString("room_name"));
+	                room.setNum_room(rs.getInt("num_room"));
+	                room.setId_room_type(rs.getInt("id_room_type"));
+	                room.setId_room_image(rs.getInt("id_room_image"));
+	                room.setBeds_qty(rs.getInt("beds_qty"));
+	                room.setMax_guest_qty(rs.getInt("max_guest_qty"));
+	                room.setAmenities(rs.getString("amenities"));
+
+	                return room;
+	            }
+	        }
+	    }
+	    return null;
+	}
+	
+	public Room getRoomById(int idRoom) throws SQLException {
+	    String sql = "SELECT * FROM room WHERE id_room = ?";
 	    try (Connection conn = ConnectionDB.getDataSource().getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(sql)) {
 	        stmt.setInt(1, idRoom);

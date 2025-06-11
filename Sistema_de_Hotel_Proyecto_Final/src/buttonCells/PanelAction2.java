@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
+import models.Rental;
 import models.Tariff;
 import views.AuthView;
 
@@ -46,7 +47,7 @@ public class PanelAction2 extends JPanel {
 		
 	}
 	
-	public void initEvent(TableActionEvent2 event, int row) {
+	public void initEvent(TableActionEvent2 event, int row, Rental r, DefaultTableModel model) {
 		btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {

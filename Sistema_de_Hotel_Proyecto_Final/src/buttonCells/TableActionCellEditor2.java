@@ -1,6 +1,7 @@
 package buttonCells;
 
 import java.awt.Component;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.DefaultCellEditor;
@@ -9,6 +10,8 @@ import javax.swing.JTable;
 
 import javax.swing.table.DefaultTableModel;
 
+import models.Rental;
+import models.RentalsModel;
 import models.Tariff;
 
 public class TableActionCellEditor2 extends DefaultCellEditor {
@@ -25,17 +28,24 @@ public class TableActionCellEditor2 extends DefaultCellEditor {
         this.tarifas = tarifas;
     }
 
-    public TableActionCellEditor2(TableActionEvent2 event) {
-        super(new JCheckBox());
-        this.event = event;
-    }
-    
     @Override
-    public Component getTableCellEditorComponent(JTable jtable, Object o, boolean bln, int row, int column) {
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         PanelAction2 action = new PanelAction2();
-        Tariff t = tarifas.get(row);
-        action.initEvent(event, row, t, model);
-        action.setBackground(jtable.getSelectionBackground());
+        // Convierte el índice de vista a índice de modelo si usas sorter:
+        int modelRow = table.convertRowIndexToModel(row);
+        // Supongamos que tu Rental está en la columna 0 ó lo recuperas por ID:
+        Object id = model.getValueAt(modelRow, 0);
+        RentalsModel rm = new RentalsModel();
+        Rental r = new Rental();
+		try {
+			r = rm.getRentalById(Integer.parseInt(id.toString()));
+		} catch (NumberFormatException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        action.initEvent(event, modelRow, r, model);
         return action;
     }
+
+    
 }

@@ -8,10 +8,18 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 public class TableActionCellRender2 implements TableCellRenderer{
-	public Component getTableCellRendererComponent(JTable table, Object o, boolean isSelected, boolean bln1, int row, int column) {
+	
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object o, boolean isSelected, boolean hasFocus, int row, int column) {
 		PanelAction2 action = new PanelAction2();
-		return action;
 		
+		// Establecer el color de fondo según la selección
+		if (isSelected) {
+			action.setBackground(table.getSelectionBackground());
+		} else {
+			action.setBackground(table.getBackground());
+		}
+		
+		return action;
 	}
-
 }

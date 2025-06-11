@@ -71,4 +71,8 @@ public class Client {
 		this.profile_picture = profile_picture;
 	}
 	
+	public String toString() {
+		return getClient_name();
+	}
+	
 }
