@@ -7,11 +7,15 @@ import java.awt.Image;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.regex.Pattern;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 import buttonCells.TableActionCellEditor2;
@@ -380,12 +385,21 @@ public class TariffsView {
 		JLabel priceNight_lblNewLabel = new JLabel("Precio por noche:");
 		priceNight_lblNewLabel.setBounds(730, 160, 250, 42);
 		priceNight_lblNewLabel.setFont(new Font("Inter_18pt Bold", Font.BOLD, 26));
-		panel.add(priceNight_lblNewLabel);
+		panel.add(priceNight_lblNewLabel);		
 		
 		JTextField priceNight_textField = new JTextField();
 		priceNight_textField.setColumns(10);
 		priceNight_textField.setBounds(730, 210, 400, 56);
 		panel.add(priceNight_textField);
+		priceNight_textField.addKeyListener(new KeyAdapter() {
+		    @Override
+		    public void keyTyped(KeyEvent e) {
+		        char c = e.getKeyChar();
+		        if (!Character.isDigit(c)) {
+		            e.consume(); 
+		        }
+		    }
+		});		
 		
 		JLabel capacity_lblNewLabel = new JLabel("Capacidad:");
 		capacity_lblNewLabel.setBounds(130, 270, 400, 42);
@@ -429,33 +443,56 @@ public class TariffsView {
 		btnNewButton.setForeground(Color.decode("#FFFFFF"));
 		btnNewButton.setBackground(new Color(7, 26, 43));
 		btnNewButton.addActionListener(new ActionListener() {
-			
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        boolean isValid = true;
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		        priceNight_textField.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("TextField.border"));
+		        description_textArea.setBackground(Color.WHITE);
 
-				//Obtener datos
-				float price_night = Float.parseFloat(priceNight_textField.getText());
-				int capacity = (int) capacity_comboBox.getSelectedItem();
-				String tariffType = (String) tariffType_comboBox.getSelectedItem();
-				boolean refundable = isRefundable;
-				String description = description_textArea.getText();
-				Tariff t = new Tariff(0, 0, price_night, capacity, tariffType, refundable, description);
-				
-				// TODO Auto-generated method stub
-				TariffsModel tm = new TariffsModel();
-				try {
-					System.out.println("Entró");
-					tm.createTariff(t);
-					frame.dispose();
-					TariffsView tv = new TariffsView();
-					tv.tariff();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
+		        String priceText = priceNight_textField.getText().trim();
+		        String description = description_textArea.getText().trim();
+
+		        float price_night = 0;
+
+		        try {
+		            price_night = Float.parseFloat(priceText);
+		            if (price_night <= 0) {
+		                priceNight_textField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+		                isValid = false;
+		            }
+		        } catch (NumberFormatException ex) {
+		            priceNight_textField.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+		            isValid = false;
+		        }
+
+		        if (description.isEmpty() || description.length() < 10) {
+		            description_textArea.setBackground(new Color(255, 220, 220));
+		            isValid = false;
+		        }
+
+		        if (!isValid) {
+		            JOptionPane.showMessageDialog(null, "Por favor complete correctamente todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+		            return;
+		        }
+
+		        int capacity = (int) capacity_comboBox.getSelectedItem();
+		        String tariffType = (String) tariffType_comboBox.getSelectedItem();
+		        boolean refundable = comboBox.getSelectedItem().toString().equals("Si");
+
+		        Tariff t = new Tariff(0, 0, price_night, capacity, tariffType, refundable, description);
+
+		        TariffsModel tm = new TariffsModel();
+		        try {
+		            tm.createTariff(t);
+		            frame.dispose();
+		            TariffsView tv = new TariffsView();
+		            tv.tariff();
+		        } catch (SQLException e1) {
+		            e1.printStackTrace();
+		            JOptionPane.showMessageDialog(null, "Error al guardar la tarifa.", "Error", JOptionPane.ERROR_MESSAGE);
+		        }
+		    }
 		});
 		
 		JButton btnNewButton_1 = new JButton("Cancelar");
