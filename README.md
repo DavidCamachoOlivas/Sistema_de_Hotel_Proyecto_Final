@@ -34,24 +34,36 @@ Creación, edición, consulta y eliminación de tarifas.
 
 Frontend: Java (Eclipse)
 
-Base de Datos: [Upstash]
+Base de Datos: [AIVEN]
 
-# TERCER ENTREGABLE: CRUD de Tipos de Habitaciones
+**Entrega de Proyecto Final** — *Sistema_de_Hotel_Proyecto_Final*
+## ⚙️ Instrucciones de Instalación / Ejecución
 
-## Descripción General
+1. **Descargar el archivo:** `Sistema_de_Hotel_Proyecto_Final.jar`
+2. **Ubicar el archivo en tu equipo.**
+3. **Hacer clic derecho → Abrir con → JAVA.**
+4. ✅ **Requisito previo:** Tener instalado **Java**.
+5. **Iniciar sesión con las credenciales indicadas.**
 
-Este módulo permite la administración de los tipos de habitaciones que ofrece el hotel, integrando funcionalidades de creación, actualización y eliminación de registros. Además, se incorpora la gestión de imágenes relacionadas a cada tipo.
+## 📁 Estructura del proyecto
 
-## Funcionalidades principales implementadas
+├── controllers/ # Controladores principales del sistema
+├── models/ # Gestión de datos (Modelos)
+├── views/ # Vistas tradicionales (sistema básico)
+├── viewsWB/ # Vistas mejoradas (con estilos y diseño modernizado)
+├── buttonCells/ # Componentes personalizados de tabla
+├── resources/images/ # Recursos gráficos (íconos, imágenes)
+└── Main.java # Clase principal de arranque
 
-✅ **Agregar Tipo de Habitación:**
-Permite registrar nuevos tipos de habitación incluyendo sus datos descriptivos.
+## ✅ Estado Final del Proyecto
 
-✏️ **Editar Tipo de Habitación:**
-Habilita la modificación de la información existente de cada tipo de habitación, facilitando la actualización de datos.
+- ✅ **CRUD funcional** para Habitaciones, Clientes, Tarifas, Rentas y Tipos de habitaciones.
+- ✅ **Descarga en PDF implementada.**
+- ✅ **Autenticación funcional.**
 
-🗑️ **Eliminar Tipo de Habitación:**
-Permite borrar los registros seleccionados usando el botón de eliminar, asegurando que la acción se realice de forma segura.
+## 👥 Equipo de Desarrollo
 
-⬇️ **Descargar Información:**
-Posibilita la descarga de los datos del tipo de habitación, generando un archivo con la información necesaria.
+- **Luis Daniel Ontiveros Lares**
+- **Diego Careaga Celis**
+- **David Camacho Olivas**
+- **Axdiael Trinidad Cardenas**
