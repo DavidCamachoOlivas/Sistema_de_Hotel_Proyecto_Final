@@ -324,7 +324,7 @@ public class RentalsView {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
 				frame.dispose();
-				client.createClient();
+				client.createClient2();
 			}
 			
 		});
@@ -396,8 +396,8 @@ public class RentalsView {
 
 		        new Thread(() -> {
 		        	frame.dispose();
-		        	TariffsController tariffs = new TariffsController();
-		        	tariffs.tariffs();
+		        	RentalsController rent = new RentalsController();
+		        	rent.rentals();
 		            javax.swing.SwingUtilities.invokeLater(() -> {
 		                pop.closeLoading();
 		            });
@@ -497,7 +497,7 @@ public class RentalsView {
 				// TODO Auto-generated method stub
 				ClientsController client = new ClientsController();
 				frame.dispose();
-				client.createClient();
+				client.createClient2();
 			}
 			
 		});
@@ -557,6 +557,27 @@ public class RentalsView {
 		btnNewButton_1.setForeground(Color.WHITE);
 		btnNewButton_1.setFont(new Font("Inter_18pt Bold", Font.BOLD, 22));
 		panel.add(btnNewButton_1);
+		
+		btnNewButton_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				javax.swing.SwingUtilities.invokeLater(() -> {
+		            pop.loading();
+		        });
+
+		        new Thread(() -> {
+		        	frame.dispose();
+		        	RentalsController rent = new RentalsController();
+		        	rent.rentals();
+		            javax.swing.SwingUtilities.invokeLater(() -> {
+		                pop.closeLoading();
+		            });
+		        }).start();
+			}
+			
+		});
 		
 		JButton btnNewButton_1_1 = new JButton("Aceptar");
 		btnNewButton_1_1.setBounds(927, 601, 188, 51);
