@@ -121,18 +121,7 @@ public class HomeView extends JFrame{
 		            javax.swing.SwingUtilities.invokeLater(() -> {
 		                pop.closeLoading();
 		            });
-		        }).start();
-		    	
-		    	/*pop.loading();
-		    	dispose();
-		    	RoomTypesController rooms = new RoomTypesController();
-		    	try {
-					rooms.roomTypes();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-		    	pop.closeLoading();*/
+		        }).start();		    	
 		    }
 		});
 		

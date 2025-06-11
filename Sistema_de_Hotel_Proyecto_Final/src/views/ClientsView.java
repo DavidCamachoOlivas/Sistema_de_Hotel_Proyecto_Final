@@ -6,6 +6,10 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
@@ -384,16 +389,39 @@ public class ClientsView {
 		JLabel userImageLabel = new JLabel();
 	    userImageLabel.setBounds(130, 150, 400, 300);
 	    userImageLabel.setText(null);
-	    userImageLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-	    
+	    userImageLabel.setBorder(BorderFactory.createLineBorder(Color.black));	    
 	    ImageIcon userImageOriginalIcon = new ImageIcon(AuthView.class.getResource("/images/userImg.png"));
 	    Image userImageScaled = userImageOriginalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-	    ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);
-	    
+	    ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);	    
 	    userImageLabel.setHorizontalAlignment(JLabel.CENTER);
 	    userImageLabel.setVerticalAlignment(JLabel.CENTER);
 	    userImageLabel.setIcon(userImageScaledIcon);
 	    mainPanel.add(userImageLabel);
+	    userImageLabel.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		    	JFileChooser fileChooser = new JFileChooser();
+	    		fileChooser.setDialogTitle("Selecciona una imagen");
+	    		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	    		
+	    		int resultado = fileChooser.showOpenDialog(null);
+	    		if (resultado == JFileChooser.APPROVE_OPTION) {
+	    			File imagenSeleccionada = fileChooser.getSelectedFile();
+	    			
+	    			try (FileInputStream fis = new FileInputStream(imagenSeleccionada)) {
+	    				imageBytes = fis.readAllBytes();
+	    				System.out.println("Se leyo la imagen");
+	    				ImageIcon userImageSeleccionarIcon = new ImageIcon(imageBytes);
+	    				Image userImageScaled = userImageSeleccionarIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+	    				ImageIcon userImageScaledIcon = new ImageIcon(userImageScaled);
+	    				userImageLabel.setIcon(userImageScaledIcon);
+	    				
+	    			} catch (IOException e1) {
+	    				e1.printStackTrace();
+	    			}
+	    		}
+		    }
+		});
 	    
 	    JButton addImageButton = new JButton("Agregar imagen");
 	    addImageButton.setBounds(130, 450, 400, 70);
@@ -438,6 +466,15 @@ public class ClientsView {
 	    nameTextField.setBounds(700, 180, 460, 50);
 	    nameTextField.setColumns(10);
 	    mainPanel.add(nameTextField);
+	    nameTextField.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyTyped(KeyEvent e) {
+	            char c = e.getKeyChar();
+	            if (!Character.isLetter(c) && !Character.isWhitespace(c)) {
+	                e.consume(); 
+	            }
+	        }
+	    });
 	    
 	    JLabel phoneLabel = new JLabel("Telefono");
 	    phoneLabel.setBounds(700, 240, 100, 15);
@@ -448,6 +485,15 @@ public class ClientsView {
 	    phoneTextField.setBounds(700, 260, 460, 50);
 	    phoneTextField.setColumns(10);
 	    mainPanel.add(phoneTextField);
+	    phoneTextField.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyTyped(KeyEvent e) {
+	            char c = e.getKeyChar();
+	            if (!Character.isDigit(c)) {
+	                e.consume(); 
+	            }
+	        }
+	    });
 	    
 	    JLabel emailLabel = new JLabel("Email");
 	    emailLabel.setBounds(700, 320, 100, 15);
@@ -458,6 +504,16 @@ public class ClientsView {
 	    emailTextField.setBounds(700, 340, 460, 50);
 	    emailTextField.setColumns(10);
 	    mainPanel.add(emailTextField);
+	    emailTextField.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyTyped(KeyEvent e) {
+	            char c = e.getKeyChar();
+	            String allowed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@._";
+	            if (allowed.indexOf(c) == -1) {
+	                e.consume(); 
+	            }
+	        }
+	    });
 	    
 	    JLabel birthDateLabel = new JLabel("Fecha de nacimiento");
 	    birthDateLabel.setBounds(700, 400, 200, 15);
@@ -466,7 +522,7 @@ public class ClientsView {
 	    
 	    
 	    JDateChooser birthDateCalendar = new JDateChooser();
-	    birthDateCalendar.setBounds(700, 400, 460, 50);
+	    birthDateCalendar.setBounds(700, 420, 460, 50);
 	    mainPanel.add(birthDateCalendar);
 	   
 	    JButton saveButton = new JButton("Guardar");
@@ -477,35 +533,68 @@ public class ClientsView {
 	    mainPanel.add(saveButton);
 	    
 	    saveButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent e) {
-	    	ClientsController home = new ClientsController();
-	    	ClientsModel cm = new ClientsModel();
-	    	Client nuevaCliente = new Client();
-	    	java.util.Date fechaUtil = birthDateCalendar.getDate();
-	        java.sql.Date fechaNacimiento = null;
-	        
-	        if (fechaUtil != null) {
-	             fechaNacimiento = new java.sql.Date(fechaUtil.getTime());
+	        public void actionPerformed(ActionEvent e) {
+	            Border defaultBorder = nameTextField.getBorder();
+	            Border redBorder = BorderFactory.createLineBorder(Color.RED);
+
+	            boolean valid = true;
+
+	            if (nameTextField.getText().trim().isEmpty()) {
+	                nameTextField.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                nameTextField.setBorder(defaultBorder);
+	            }
+
+	            if (phoneTextField.getText().trim().isEmpty()) {
+	                phoneTextField.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                phoneTextField.setBorder(defaultBorder);
+	            }
+
+	            if (emailTextField.getText().trim().isEmpty()) {
+	                emailTextField.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                emailTextField.setBorder(defaultBorder);
+	            }
+
+	            java.util.Date fechaUtil = birthDateCalendar.getDate();
+	            java.sql.Date fechaNacimiento = null;
+	            if (fechaUtil == null) {
+	                birthDateCalendar.setBorder(redBorder);
+	                valid = false;
+	            } else {
+	                birthDateCalendar.setBorder(defaultBorder);
+	                fechaNacimiento = new java.sql.Date(fechaUtil.getTime());
+	            }
+
+	            if (!valid) {
+	                JOptionPane.showMessageDialog(frame, "Por favor, complete todos los campos obligatorios.", "Campos inválidos", JOptionPane.WARNING_MESSAGE);
+	                return;
+	            }
+
+	            Client nuevaCliente = new Client();
+	            nuevaCliente.setClient_name(nameTextField.getText().trim());
+	            nuevaCliente.setPhone_number(phoneTextField.getText().trim());
+	            nuevaCliente.setEmail(emailTextField.getText().trim());
+	            nuevaCliente.setBirth_date(fechaNacimiento);
+	            nuevaCliente.setProfile_picture(imageBytes);
+
+	            ClientsModel cm = new ClientsModel();
+	            ClientsController home = new ClientsController();
+
+	            try {
+	                cm.createClient(nuevaCliente);
+	                frame.dispose();
+	                home.clients();
+	            } catch (SQLException ex) {
+	                ex.printStackTrace();
+	                JOptionPane.showMessageDialog(frame, "Error al guardar cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	            }
 	        }
-	        
-	    	nuevaCliente.setClient_name(nameTextField.getText());
-	    	nuevaCliente.setPhone_number(phoneTextField.getText());
-	    	nuevaCliente.setEmail(emailTextField.getText());
-	    	nuevaCliente.setBirth_date(fechaNacimiento);
-	    	nuevaCliente.setProfile_picture(imageBytes);
-	    	
-	    	try {
-				cm.createClient(nuevaCliente);
-				frame.dispose();
-		        home.clients();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	    	
-	        
-	    }
-	});
+	    });
 
 	JButton cancelButton = new JButton("Cancelar");
 	cancelButton.setBounds(700, 540, 220, 70);
